@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-raleway: "Raleway", sans-serif;
+  --font-radio-canada: "Radio Canada", sans-serif;
+  --font-radio-canada-big: "Radio Canada Big", sans-serif;
+
+  --color-background: oklch(96.13% 0.0314 91.02);
+  --color-terre-cuite: oklch(61.48% 0.1505 53.25);
+  --color-saumon: oklch(82.98% 0.1049 64.61);
+  --color-rouge: oklch(65.07% 0.121 46.18);
+  --color-jaune: oklch(89.12% 0.1528 92.92);
+  --color-sable: oklch(89.67% 0.1123 87.98);
+}
+
+@layer base {
+  h1 {
+    @apply text-7xl font-radio-canada font-bold text-center;
+  }
+  h2 {
+    @apply text-4xl font-raleway font-bold text-center;
+  }
+  h3 {
+    @apply text-3xl font-radio-canada-big font-bold;
+  }
+  p {
+    @apply text-lg font-raleway;
+  }
+  ul {
+    @apply list-none;
+  }
+  a {
+    @apply no-underline;
+  }
+}
+
+@layer components {
+  .btn-landing-page {
+    @apply uppercase font-bold font-raleway bg-background px-12 py-3 rounded-lg shadow-[0px_4px_4px_0px_rgba(0,_0,_0,_0.25)] hover:opacity-80 transition-all duration-300 ease-in-out;
+  }
+}
+
+@layer utilities {
+  .position-center {
+    @apply flex justify-center items-center mx-auto;
+  }
+}
