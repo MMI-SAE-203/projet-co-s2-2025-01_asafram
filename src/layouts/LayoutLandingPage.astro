@@ -1,59 +1,26 @@
 ---
-import '../styles/global.css';
-import { ViewTransitions } from 'astro:transitions';
-const { title, description } = Astro.props;
-
-const baseUrl = "https://www.example.com";
-const pageUrl = `${baseUrl}${Astro.url.pathname}`;
-const siteName = "Landing Page ASAFRAM";
-
-import "@fontsource/raleway";
-import "@fontsource/radio-canada-big";
-import "@fontsource/radio-canada";
+import Layout from "./Layout.astro";
+import { Picture } from "astro:assets";
+const { title, description, src, alt, classContent = "" } = Astro.props;
 ---
-<!DOCTYPE html>
-<html lang="fr">
-	<head>
-		<!-- Encodage & viewport -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Meta -->
-    <title>{title ? `${title} — ${siteName}` : siteName}</title>
-    <meta name="description" content={description}>
-		<meta name="generator" content={Astro.generator}>
-    <meta name="robots" content="index, follow">
-    <ViewTransitions />
 
-    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
-    <meta property="og:title" content={title}>
-    <meta property="og:description" content={description}>
-    <meta property="og:url" content={pageUrl}>
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="fr_FR">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content={title}>
-    <meta name="twitter:description" content={description}>
-    <meta name="twitter:site" content="@yourtwitterhandle">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" content={pageUrl}>
-
-    <!-- Preconnect pour améliorer les performances -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href={pageUrl} crossorigin>
-    <link rel="dns-prefetch" href={pageUrl}>
-
-    <!-- Favicon et icônes -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
-	</head>
-	<body>
-    <main>
-      <slot/>
-    </main>
-	</body>
-</html>
+<Layout title={title} description={description}>
+    <section class="relative w-full h-[500px] lg:h-[1024px] overflow-hidden mt-20 lg:mt-0">
+        <header>
+            <h1 class="mt-34 lg:mt-102
+    ">{title}</h1>
+        </header>
+    <Picture 
+        pictureAttributes={{class: "inset-0 w-11/12 mx-auto mt-20 object-cover absolute z-0"}}
+        formats={['avif','webp']} 
+        src={src} 
+        alt={alt} 
+        widths={[540, 1024, src.width]} 
+        sizes={`(max-width: 540px) 540px, (max-width: 1024px) 1024px, ${src.width}px`}  
+        loading="eager"
+    />
+    </section>
+    <div class={classContent}>
+        <slot name="content" />
+    </div>
+</Layout>
