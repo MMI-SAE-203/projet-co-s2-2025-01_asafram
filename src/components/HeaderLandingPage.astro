@@ -1,0 +1,98 @@
+---
+import Logo from "../assets/icones/logo-asafram.webp";
+---
+
+<header
+  class="flex items-center justify-between px-4 gap-8 border-b-1 bg-white h-20 shadow-sm lg:fixed lg:inset-x-0 lg:top-0 lg:h-20 lg:gap-8 lg:items-center lg:justify-between lg:z-10 lg:px-12"
+>
+  <a href="/">
+    <img class="w-20" src={Logo.src} alt="">
+  </a>
+  <button
+    id="menu-btn"
+    class="group relative z-10 flex h-3 w-6 flex-col justify-between *:block *:ease *:h-0.5 *:w-full *:transform *:rounded-full *:bg-black *:transition *:duration-300 lg:hidden"
+    aria-label="Menu"
+    aria-controls="menu"
+    aria-expanded="false"
+  >
+    <span
+      class="group-aria-expanded:translate-y-[5px] group-aria-expanded:rotate-45"
+    ></span>
+    <span
+      class="group-aria-expanded:-translate-y-[5px] group-aria-expanded:-rotate-45"
+    ></span>
+  </button>
+
+  <nav
+    id="menu"
+    class="flex-1 px-6 py-12 flex mt-20 flex-col fixed z-10 inset-0 visible opacity-100 aria-hidden:invisible aria-hidden:opacity-0 lg:hidden bg-background"
+    aria-hidden="true"
+  >
+    <div class="flex flex-col items-center justify-center h-full">
+      <ul class="flex flex-col gap-24 items-center justify-center text-center mb-4">
+        <li>
+          <a class="uppercase text-xl font-bold" href="/mission">Notre Mission</a>
+        </li>
+        <li>
+          <a class="uppercase text-xl font-bold" href="/apropos">Qui Sommes-nous ?</a>
+        </li>
+        <li>
+          <a class="uppercase text-xl font-bold" href="/partenaires">Devenir Partenaire</a>
+        </li>
+      </ul>
+      <div class="mt-20">
+        <a class="btn-landing-page text-white bg-black" href="">S'inscrire</a>
+      </div>
+      <ul class="mt-26 flex gap-8 items-center justify-center">
+        <li><a href="">Insta</a></li>
+        <li><a href="">Facebook</a></li>
+        <li><a href="">TikTok</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <nav
+    class="hidden lg:flex lg:fixed lg:inset-x-0 lg:h-20 lg:px-12 lg:items-center lg:justify-between bg-white shadow-sm"
+  >
+    <div class="flex-none">
+        <a href="/">
+            <img class="w-20" src={Logo.src} alt="Logo Asafram">
+        </a>
+    </div>
+  
+    <ul class="flex flex-row gap-40 items-center justify-center flex-1">
+        <li><a href="/mission" class="font-bold xl:text-xl lg:text-lg">Notre Mission</a></li>
+        <li><a href="/apropos" class="font-bold xl:text-xl lg:text-lg"">Qui Sommes-nous ?</a></li>
+        <li><a href="/partenaires" class="font-bold xl:text-xl lg:text-lg"">Devenir Partenaire</a></li>
+    </ul>
+
+    <div class="flex-none">
+        <a class="btn-landing-page" href="">S'inscrire</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // On cible les éléments à modifier
+  const toggle = document.querySelector("#menu-btn");
+  const nav = document.querySelector("#menu");
+  const page = document.body;
+
+  // Vérifier si les éléments existent avant d'ajouter l'événement
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const isOpen = toggle.ariaExpanded === "true";
+      const isClosed = !isOpen;
+      // Mise à jour des attributs ARIA pour accessibilité
+      toggle.ariaExpanded = String(isClosed);
+      nav.ariaHidden = String(isOpen);
+      page.classList.toggle("noscroll", isClosed);
+    });
+  }
+</script>
+
+<style>
+    .noscroll {
+        overflow: hidden;
+    }
+</style>

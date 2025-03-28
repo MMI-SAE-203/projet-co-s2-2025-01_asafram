@@ -5,7 +5,7 @@ const { title, description, src, alt, classContent = "" } = Astro.props;
 ---
 
 <Layout title={title} description={description}>
-    <section class="relative w-full h-[500px] lg:h-[1024px] overflow-hidden mt-20 lg:mt-0">
+    <section class="relative w-full h-[500px] lg:h-[1024px] overflow-hidden mt-20">
         <header>
             <h1 class="mt-34 lg:mt-102
     ">{title}</h1>
@@ -20,7 +20,7 @@ const { title, description, src, alt, classContent = "" } = Astro.props;
         loading="eager"
     />
     </section>
-    <div class={classContent}>
+    <div  class={classContent}>
         <slot name="content" />
     </div>
 </Layout>

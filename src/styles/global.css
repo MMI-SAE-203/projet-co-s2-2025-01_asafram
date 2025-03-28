@@ -36,13 +36,16 @@
 
 @layer components {
   .btn-landing-page {
-    @apply uppercase font-bold font-raleway bg-background px-12 py-3 rounded-lg shadow-[0px_4px_4px_0px_rgba(0,_0,_0,_0.25)] hover:opacity-80 transition-all duration-300 ease-in-out;
+    @apply uppercase font-bold font-raleway bg-background px-10 py-2.5 rounded-xl shadow-[0px_4px_4px_0px_rgba(0,_0,_0,_0.25)] hover:opacity-80 transition-all duration-300 ease-in-out;
   }
 }
 
 @layer utilities {
   .position-center {
     @apply flex justify-center items-center mx-auto;
+  }
+  .section-content {
+    @apply mx-12 lg:mx-40 md:mx-24;
   }
 }
 

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { ViewTransitions } from 'astro:transitions';
+import HeaderLandingPage from '../components/HeaderLandingPage.astro';
 const { title, description } = Astro.props;
 
 const baseUrl = "https://www.example.com";
@@ -23,7 +24,6 @@ import "@fontsource/radio-canada";
     <meta name="description" content={description}>
 		<meta name="generator" content={Astro.generator}>
     <meta name="robots" content="index, follow">
-    <ViewTransitions />
 
     <!-- Open Graph (Facebook, LinkedIn, etc.) -->
     <meta property="og:title" content={title}>
@@ -52,6 +52,7 @@ import "@fontsource/radio-canada";
     <link rel="manifest" href="/site.webmanifest">
 	</head>
 	<body>
+    <HeaderLandingPage/>
     <main>
       <slot/>
     </main>
