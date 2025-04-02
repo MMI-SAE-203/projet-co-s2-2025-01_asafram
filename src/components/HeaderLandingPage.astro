@@ -1,5 +1,8 @@
 ---
 import Logo from "../assets/icones/logo-asafram.webp";
+import IconInstagram from "../assets/icones/instagram.svg";
+import IconFacebook from "../assets/icones/facebook.svg";
+import IconTikTok from "../assets/icones/tiktok.svg";
 ---
 
 <header
@@ -43,10 +46,16 @@ import Logo from "../assets/icones/logo-asafram.webp";
       <div class="mt-20">
         <a class="btn-landing-page text-white bg-black" href="">S'inscrire</a>
       </div>
-      <ul class="mt-26 flex gap-8 items-center justify-center">
-        <li><a href="">Insta</a></li>
-        <li><a href="">Facebook</a></li>
-        <li><a href="">TikTok</a></li>
+      <ul class="mt-26 flex gap-20 items-center justify-center">
+        <li>
+          <a href=""><img src={IconFacebook.src} alt="Icon Facebook"></a>
+        </li>
+        <li>
+          <a href=""><img src={IconInstagram.src} alt="Icon Instagram"></a>
+        </li>
+        <li>
+          <a href=""><img src={IconTikTok.src} alt="Icon Tiktok"></a>
+        </li>
       </ul>
     </div>
   </nav>

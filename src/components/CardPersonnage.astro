@@ -1,0 +1,8 @@
+---
+const { nom, prenom, role, image, alt} = Astro.props;
+---
+<div>
+    <img src={image.src} alt={alt} class="w-36" />
+    <h3 class="font-raleway text-center">{prenom} {nom}</h3>
+    <p class="text-center">{role}</p>
+</div>

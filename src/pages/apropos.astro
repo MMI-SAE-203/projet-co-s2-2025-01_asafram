@@ -1,6 +1,15 @@
 ---
 import LayoutLandingPage from "../layouts/LayoutLandingPage.astro";
 import fondPartenaire from "../assets/fond/partenaire-fond.webp";
+import CardPersonnage from "../components/CardPersonnage.astro";
+import AndreaPerso from "../assets/icones/andrea.webp";
+import NicoPerso from "../assets/icones/nicolas.webp";
+import FrancoisPerso from "../assets/icones/francois.webp";
+import IutMmi from "../assets/images/iut-mmi.webp";
+import IconDiversite from "../assets/icones/icone-diversite.webp";
+import IconAuthenticite from "../assets/icones/icone-authenticite.webp";	
+import IconSoutien from "../assets/icones/icone-commerce.webp";
+import IconPartage from "../assets/icones/icone-partage.webp";
 ---
 <LayoutLandingPage
     title="Qui sommes-nous ?"
@@ -10,7 +19,61 @@ import fondPartenaire from "../assets/fond/partenaire-fond.webp";
     classContent="bg-white text-black"
 >
 <Fragment slot="content">
+<section class="section-content">
+    <header>
+        <h2>Notre équipe</h2>
+    </header>
+    <ul class="flex flex-col justify-center items-center gap-8">
+        <li>
+            <CardPersonnage nom="Mestre" prenom="Andréa" role="Designer" image={AndreaPerso} alt="Image de Andréa Mestre" />
+        </li>
+        <li>
+            <CardPersonnage nom="Thai" prenom="Nicolas" role="Développeur" image={NicoPerso} alt="Image de Nicolas Thai" />
+        </li>
+        <li>
+            <CardPersonnage nom="Yang" prenom="François" role="Communication" image={FrancoisPerso} alt="Image de François Yang" />
+        </li>
+    </ul>
+</section>
 
+<section class="section-content bg-background">
+    <header>
+        <h2>Pourquoi Asafram ?</h2>
+    </header>
+    <div class="space-y-10 mt-6">
+        <p class="text-sm">Nous étions trois étudiants en première année de MMI, passionnés par le digital et la culture culinaire. Issus de familles chinoise, vietnamienne et portugaise, nous avions grandi avec des plats traditionnels qui faisaient partie de notre identité. Pourtant, nous étions souvent confrontés à une même difficulté : trouver facilement les ingrédients authentiques pour recréer ces recettes chez nous. Entre le manque de visibilité des épiceries spécialisées et la difficulté d’accéder à certaines informations, nous avions réalisé que ce besoin ne concernait pas seulement nos communautés, mais bien toutes les personnes attachées aux saveurs de leur culture d’origine.</p>
+        <p class="text-sm">ASAFRAM était d’abord né dans un cadre scolaire, comme un simple projet universitaire. Mais au fil de nos recherches et de nos échanges, nous avions compris qu’il répondait à une véritable problématique, bien au-delà de notre travail académique. Ce qui était au départ un exercice était devenu un projet concret, porté par l’envie de créer un véritable pont entre les cultures à travers la cuisine. Finalement, nous avions décidé d’aller plus loin et de lancer ASAFRAM pour de vrai, avec la conviction que la diversité culinaire méritait d’être accessible à tous.</p>
+    </div>
+    <div class="mt-10">
+        <img src={IutMmi.src} alt="">
+    </div>
+    <div class="position-center mt-10">
+        <a class="btn-landing-page bg-terre-cuite text-white" href="">Essayer Asafram</a>
+    </div>
+</section>
 
+<section class="section-content">
+    <header>
+        <h2>Valeurs & Engagements</h2>
+    </header>
+    <ul class="flex flex-col justify-center items-center mt-10 gap-14">
+        <li class="flex flex-col items-center justify-center space-y-4">
+            <img class="w-20" src={IconDiversite.src} alt="">
+            <h3>Diversité</h3>
+        </li>
+        <li class="flex flex-col items-center justify-center space-y-4">
+            <img class="w-20" src={IconAuthenticite.src} alt="">
+            <h3>Authenticité</h3>
+        </li>
+        <li class="flex flex-col items-center justify-center space-y-4">
+            <img class="w-20" src={IconSoutien.src} alt="">
+            <h3 class="w-60 text-center">Soutenir les petits commerces</h3>
+        </li>
+        <li class="flex flex-col items-center justify-center space-y-4">
+            <img class="w-20" src={IconPartage.src} alt="">
+            <h3>Partage</h3>
+        </li>
+    </ul>
+</section>
 
 </LayoutLandingPage>

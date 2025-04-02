@@ -2,6 +2,13 @@
 import LayoutLandingPage from "../layouts/LayoutLandingPage.astro";
 import fondPartenaire from "../assets/fond/partenaire-fond.webp";
 import whiteTransition from "../assets/fond/white-transition.webp";
+import JuanImage from "../assets/images/juan-veloza.webp";
+import BulleMission from "../components/BulleMission.astro";
+import ImagePlats from "../assets/images/plats-asafram.webp";
+import IconeCommerces from "../assets/icones/icone-commerce.webp";
+import IconeRecettes from "../assets/icones/icone-recette.webp" ;
+import IconeCommunautes from "../assets/icones/icone-communaute.webp";
+
 ---
 <LayoutLandingPage
     title="Notre Mission"
@@ -11,6 +18,147 @@ import whiteTransition from "../assets/fond/white-transition.webp";
     classContent="bg-white text-black"
 >
 <Fragment slot="content">
+<div class="section-content bg-background">
+        <div>
+            <div>
+                <h2>Tout part de Juan</h2>
+                <div class="space-y-8">
+                <p>Tout a commencé avec notre ami Juan, un étudiant colombien venu en France pour ses études. En arrivant, il a rapidement rencontré une difficulté : retrouver des produits alimentaires colombiens pour recréer les plats de son pays.</p>
+                <p>C'est ainsi qu'il a imaginé une plateforme capable de référencer tous les produits colombiens disponibles en France. Une solution qui lui permettrait de gagner du temps dans ses recherches et d’accéder plus facilement aux ingrédients essentiels de ses plats favoris.</p>
+            </div>
+            <div class="my-10">
+                <img src={JuanImage.src} alt="Image de Juan Veloza">
+            </div>
+        </div>
 
+        <div>
+            <h3 class="text-center">Et des Juans, on en trouve des millions en France...</h3>
+        
+            <ul class="flex flex-col gap-8 items-center justify-center mt-10 mb-20 lg:flex-row lg:gap-36">
+                <li><BulleMission circleColor="bg-jaune" nombre="30%" text="Des français sonts issus de familles immigrées ou immigré eux-même."/></li>
+                <li><BulleMission circleColor="bg-saumon" nombre="6M" text="Des français sonts issus de familles immigrées ou immigré eux-même."/></li>
+                <li><BulleMission circleColor="bg-rouge" nombre="+35%" text="Des français sonts issus de familles immigrées ou immigré eux-même."/></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
+<section class="section-content bg-white">
+    <div>
+        <header>
+            <h2>C'est quoi Asafram ?</h2>
+        </header>
+        <p>Une plateforme de référencement qui vise à aider les étrangers à retrouver les saveurs de chez-eux.</p>
+        <img class="mt-14" src={ImagePlats.src} alt="Image de plats typiques"/>
+    </div>
+    <div>
+        <ul class="flex flex-col gap-8 mt-16">
+            <li>
+                <div class="flex flex-col items-center justify-center">
+                    <img class="w-16" src={IconeCommerces.src} alt="">
+                    <h3 class="text-center">Réferencier des produits, boutiques et restaurants étrangers</h3>
+                </div>
+                <div>
+                    <p>Nous centralisons les meilleurs produits, boutiques et restaurants spécialisés pour que chacun puisse retrouver les goûts de son pays d’origine ou découvrir de nouvelles cuisines.</p>
+                </div>
+            </li>
+            <li>
+                <div class="flex flex-col items-center justify-center">
+                    <img class="w-16" src={IconeRecettes.src} alt="">
+                    <h3 class="text-center">Initiatier à la cuisine étrangère avec des recettes</h3>
+                </div>
+                <div>
+                    <p>Nous mettons à disposition un espace de partage de recettes authentiques pour vous initier aux cuisines étrangères et reproduire chez vous des plats emblématiques.</p>
+                </div>
+            </li>
+            <li>
+                <div class="flex flex-col items-center justify-center">
+                    <img class="w-16" src={IconeCommunautes.src} alt="">
+                    <h3 class="text-center">Créer une communauté engagé</h3>
+                </div>
+                <div>
+                    <p>Nous rassemblons amateurs et experts de la cuisine du monde pour partager recettes, conseils et bonnes adresses dans un esprit d’échange et de découverte. Tout se passe à travers des espaces de commentaires, de notations et de partages.</p>
+                </div>
+            </li>
+        </ul>
+        
+    </div>
+</section>
+<section class="section-content bg-background">
+    <header>
+        <h2>Continents Disponibles</h2>
+    </header>
+</section>
+<section class="section-content bg-background">
+    <header>
+        <h2>Les fonctionnalitées d'asafram</h2>
+    </header>
+    <ul>
+
+    </ul>
+    <ul>
+        <li>
+            <div class="flex items-center justify-center border-terre-cuite border bg-white rounded-md ">
+                <h3 class="text-sm font-light font-raleway text-terre-cuite">ASAFRAM est-il gratuit pour les utilisateurs ?</h3>
+                <div class="flex items-center justify-center w-16 h-16">
+                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
+                      <div class="w-3 h-3 rotate-45 border-r-2 border-t-2 border-terre-cuite transform -translate-x-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>
+                    Oui, ASAFRAM est entièrement gratuit pour les utilisateurs. Nous croyons en l'accès à la culture culinaire du monde entier sans frais.
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <div class="flex items-center justify-center border-terre-cuite border bg-white rounded-md ">
+                <h3 class="text-sm font-light font-raleway text-terre-cuite">Puis-je commander directement via ASAFRAM ?</h3>
+                <div class="flex items-center justify-center w-16 h-16">
+                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
+                      <div class="w-3 h-3 rotate-45 border-r-2 border-t-2 border-terre-cuite transform -translate-x-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>
+                    Non, ASAFRAM ne propose pas de service de commande. Nous vous redirigeons vers les boutiques et restaurants référencés pour passer vos commandes directement auprès d'eux.
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <div class="flex items-center justify-center border-terre-cuite border bg-white rounded-md ">
+                <h3 class="text-sm font-light font-raleway text-terre-cuite">Quels types de commerces sont référencés sur ASAFRAM ?</h3>
+                <div class="flex items-center justify-center w-16 h-16">
+                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
+                      <div class="w-3 h-3 rotate-45 border-r-2 border-t-2 border-terre-cuite transform -translate-x-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>
+                    ASAFRAM référence une variété de commerces, y compris des épiceries, des restaurants, des traiteurs et des marchés spécialisés dans les produits étrangers. Nous nous efforçons de couvrir un large éventail de cuisines du monde entier.
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <div class="flex items-center justify-center border-terre-cuite border bg-white rounded-md ">
+                <h3 class="text-sm font-light font-raleway text-terre-cuite">ASAFRAM propose-t-il des recommandations personnalisées ?</h3>
+                <div class="flex items-center justify-center w-16 h-16">
+                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
+                      <div class="w-3 h-3 rotate-45 border-r-2 border-t-2 border-terre-cuite transform -translate-x-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>
+                    Oui, ASAFRAM utilise des algorithmes de recommandation pour suggérer des produits et des recettes en fonction de vos préférences et de vos recherches précédentes. Plus vous utilisez la plateforme, plus les recommandations deviennent pertinentes.
+            </div>
+        </li>
+    </ul>
+</section>
 </LayoutLandingPage>

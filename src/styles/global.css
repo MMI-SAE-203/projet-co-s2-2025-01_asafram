@@ -45,7 +45,7 @@
     @apply flex justify-center items-center mx-auto;
   }
   .section-content {
-    @apply mx-12 lg:mx-40 md:mx-24;
+    @apply px-12 lg:px-40 md:px-24 pt-10 pb-20;
   }
 }
 
