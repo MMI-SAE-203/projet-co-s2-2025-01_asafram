@@ -7,6 +7,10 @@ import IconLien from "../assets/icones/icone-liens.webp"
 import IconProduit from "../assets/icones/icone-produits-partenaire.webp"
 import IconMarketing from "../assets/icones/icone-marketing.webp"
 import IconStats from "../assets/icones/icone-stats.webp"
+import CardTarifs from "../components/CardTarifs.astro";
+import IconForfaitGratuit from "../assets/icones/icone-forfait-gratuit.svg";
+import IconForfaitStandard from "../assets/icones/icone-forfait-standard.webp";
+import IconForfaitPro from "../assets/icones/icone-forfait-pro.svg";
 ---
 <LayoutLandingPage
     title="Devenir Partenaire"
@@ -41,6 +45,64 @@ import IconStats from "../assets/icones/icone-stats.webp"
     <header>
         <h2>Nos formules partenaires</h2>
         <p class="text-center text-terre-cuite">Ces formules sont uniquement encadrées par des contrats de sponsorings.</p>
+        <ul class="flex flex-wrap justify-center gap-6 mt-8">
+            <li><CardTarifs 
+                titre="Gratuit" 
+                icone={IconForfaitGratuit} 
+                description="Réferencement sur notre carte intéractive uniquement." 
+                prix="0€/mois" 
+                btnText="Acquis" 
+                bgColor="bg-white" 
+                titleColor="text-black" 
+                textColor="text-gray-700" 
+                labelColor="text-gray-600" 
+                iconColor="fill-current text-terre-cuite"
+                features={[
+                  { label: "Présence sur la carte", included: true },
+                  { label: "Page dédiée pour le commerce", included: false },
+                  { label: "Liens d'affiliation", included: false },
+                  { label: "Présence dans 'nos partenaires'", included: false },
+                ]} 
+              /></li>
+              
+            <li><CardTarifs 
+                titre="Standard" 
+                icone={IconForfaitStandard} 
+                description="Visibilité améliorée et premières fonctionnalités." 
+                prix="50€/mois" 
+                btnText="Souscrire" 
+                bgColor="bg-sable" 
+                titleColor="text-terre-cuite" 
+                textColor="text-gray-800" 
+                labelColor="text-gray-700" 
+                iconColor="fill-current text-black"
+                features={[
+                  { label: "Présence sur la carte", included: true },
+                  { label: "Page dédiée pour le commerce", included: true },
+                  { label: "Liens d'affiliation", included: true },
+                  { label: "Présence dans 'nos partenaires'", included: false },
+                ]} 
+              /></li>
+              
+            <li><CardTarifs 
+                titre="Premium" 
+                icone={IconForfaitPro} 
+                description="Partenariat complet avec visibilité maximale." 
+                prix="100€/mois" 
+                btnText="Souscrire" 
+                bgColor="bg-terre-cuite" 
+                titleColor="text-white" 
+                textColor="text-white" 
+                labelColor="text-sable" 
+                iconColor="fill-current text-white"
+                features={[
+                  { label: "Présence sur la carte", included: true },
+                  { label: "Page dédiée pour le commerce", included: true },
+                  { label: "Liens d'affiliation", included: true },
+                  { label: "Présence dans 'nos partenaires'", included: true },
+                ]} 
+              /></li>
+        </ul>
     </header>
 </section>
 

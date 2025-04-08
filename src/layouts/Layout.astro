@@ -14,15 +14,15 @@ import "@fontsource/radio-canada";
 ---
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<!-- Encodage & viewport -->
+    <head>
+        <!-- Encodage & viewport -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta -->
     <title>{title ? `${title} — ${siteName}` : siteName}</title>
     <meta name="description" content={description}>
-		<meta name="generator" content={Astro.generator}>
+        <meta name="generator" content={Astro.generator}>
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph (Facebook, LinkedIn, etc.) -->
@@ -50,11 +50,14 @@ import "@fontsource/radio-canada";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-	</head>
-	<body>
+    
+    <!-- Alpine.js -->
+    <script src="../js/alpine.js"></script>
+    </head>
+    <body>
     <HeaderLandingPage/>
     <main>
       <slot/>
     </main>
-	</body>
+    </body>
 </html>

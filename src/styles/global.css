@@ -11,6 +11,7 @@
   --color-rouge: oklch(65.07% 0.121 46.18);
   --color-jaune: oklch(89.12% 0.1528 92.92);
   --color-sable: oklch(89.67% 0.1123 87.98);
+  --color-gris: oklch(0.55 0.0557 288.23);
 }
 
 @layer base {

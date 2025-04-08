@@ -1,0 +1,38 @@
+---
+const { titre, description, icone, backgroundcolor, textcolor, prix, btnText, features = []} = Astro.props;
+import iconCheck from "../assets/icones/icone-check.svg";
+import iconCroix from "../assets/icones/icone-croix.svg";
+---
+<div class="mx-2 p-10 bg-white rounded-3xl shadow-lg">
+    <div class="flex gap-4 w-full">
+        <div class="flex justify-between items-center bg-saumon rounded-2xl p-3 mb-3 w-16">
+            <img src={icone.src} alt=`icone de la carte ${titre}` class="w-12" />
+        </div>
+        <div>
+            <p class="text-gris text-xs">Pour les boutiques</p>
+            <p class="text-terre-cuite font-bold text-xl">{titre}</p>
+        </div>
+    </div>
+    <p class="text-sm text-gris">{description}</p>
+    <p class="my-6">{prix}</p>
+    <div>
+        <p class="text-sm font-bold">Avantages</p>
+        <ul class="mt-3 space-y-2">
+            {features.map((f) => (
+                <li class="flex items-start gap-2 text-sm">
+                  {f.included ? (
+                    <img src={iconCheck.src} alt="Icone check">
+                  ) : (
+                  <img src={iconCroix.src} alt="Icone check">
+                  )}
+                  <span class={f.included ? "text-black" : "line-through text-gray-400"}>
+                    {f.label}
+                  </span>
+                </li>
+              ))}
+        </ul>
+    </div>
+    <div class="position-center mt-8">
+        <a href="" class="bg-terre-cuite text-white px-24 py-4 rounded-4xl uppercase">{btnText}</a>
+    </div>
+</div>
