@@ -1,0 +1,61 @@
+---
+import IconStar from "../assets/icones/icone-star.svg";
+const { image, commentaire, partenaire } = Astro.props;
+---
+
+<div
+  class="w-full max-w-7xl h-auto flex flex-col md:flex-row shadow-xl mx-auto"
+>
+  <!-- Image à gauche uniquement sur desktop, cachée sur mobile -->
+  <div class="hidden md:block md:w-1/2 md:min-h-[300px] relative">
+    <div class="absolute inset-0 bg-opacity-30"></div>
+    <img
+      src={image.src}
+      alt={`Image ${partenaire}`}
+      class="w-full h-full min-h-[300px] object-cover"
+    />
+  </div>
+
+  <!-- Image mobile uniquement visible sur petit écran -->
+  <div class="block md:hidden w-full h-[200px] relative">
+    <div class="absolute inset-0 bg-opacity-30"></div>
+    <img
+      src={image.src}
+      alt={`Image ${partenaire}`}
+      class="w-full h-full object-cover"
+    />
+  </div>
+
+  <!-- Contenu côté droit -->
+  <div class="w-full md:w-1/2 bg-background p-6 md:p-10 flex flex-col">
+    <!-- Image du partenaire visible uniquement sur mobile -->
+    <div class="flex flex-col h-full justify-between gap-4 md:gap-8">
+      <!-- Commentaire -->
+      <div
+        class="text-black text-center text-sm md:text-lg italic overflow-auto mt-6"
+      >
+        "{commentaire}"
+      </div>
+
+      <!-- Nom du partenaire -->
+      <div class="text-black font-bold text-lg md:text-2xl text-center">
+        {partenaire}
+      </div>
+
+      <!-- Étoiles de notation - utilisation de l'icône IconStar -->
+      <div class="flex justify-center mt-2">
+        <div class="flex space-x-2">
+          {
+            Array.from({ length: 5 }).map(() => (
+              <img
+                src={IconStar.src}
+                alt="Étoile"
+                class="w-5 h-5 md:w-6 md:h-6"
+              />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

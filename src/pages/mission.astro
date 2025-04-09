@@ -6,174 +6,379 @@ import JuanImage from "../assets/images/juan-veloza.webp";
 import BulleMission from "../components/BulleMission.astro";
 import ImagePlats from "../assets/images/plats-asafram.webp";
 import IconeCommerces from "../assets/icones/icone-commerce.webp";
-import IconeRecettes from "../assets/icones/icone-recette.webp" ;
+import IconeRecettes from "../assets/icones/icone-recette.webp";
 import IconeCommunautes from "../assets/icones/icone-communaute.webp";
-
+import CardFonctionnalites from "../components/CardFonctionnalites.astro";
+import IconePlan from "../assets/icones/icone-plan.webp";
+import IconeProduits from "../assets/icones/icone-produits.webp";
+import IconeFavoris from "../assets/icones/icone-favoris.webp";
+import IconeMessage from "../assets/icones/icone-message.webp";
+import IconeNewsletter from "../assets/icones/icone-newsletter.webp";
+import IconeSearchbar from "../assets/icones/icone-searchbar.webp";
+import IconeTraduction from "../assets/icones/icone-traduction.webp";
+import IconeTask from "../assets/icones/icone-task.webp";
 ---
+
 <LayoutLandingPage
-    title="Notre Mission"
-    description="Découvrez notre mission à travers le projet d'ASAFRAM"
-    src={fondPartenaire}
-    alt="Mission ASAFRAM"
-    classContent="bg-white text-black"
+  title="Notre Mission"
+  description="Découvrez notre mission à travers le projet d'ASAFRAM"
+  src={fondPartenaire}
+  alt="Mission ASAFRAM"
+  classContent="bg-white text-black"
 >
-<Fragment slot="content">
-<div class="section-content bg-background">
+  <Fragment slot="content">
+    <div class="section-content bg-background">
+      <div>
         <div>
-            <div>
-                <h2>Tout part de Juan</h2>
-                <div class="space-y-8">
-                <p>Tout a commencé avec notre ami Juan, un étudiant colombien venu en France pour ses études. En arrivant, il a rapidement rencontré une difficulté : retrouver des produits alimentaires colombiens pour recréer les plats de son pays.</p>
-                <p>C'est ainsi qu'il a imaginé une plateforme capable de référencer tous les produits colombiens disponibles en France. Une solution qui lui permettrait de gagner du temps dans ses recherches et d’accéder plus facilement aux ingrédients essentiels de ses plats favoris.</p>
-            </div>
-            <div class="my-10">
-                <img src={JuanImage.src} alt="Image de Juan Veloza">
-            </div>
+          <h2>Tout part de Juan</h2>
+          <div class="space-y-8">
+            <p>
+              Tout a commencé avec notre ami Juan, un étudiant colombien venu en
+              France pour ses études. En arrivant, il a rapidement rencontré une
+              difficulté : retrouver des produits alimentaires colombiens pour
+              recréer les plats de son pays.
+            </p>
+            <p>
+              C'est ainsi qu'il a imaginé une plateforme capable de référencer
+              tous les produits colombiens disponibles en France. Une solution
+              qui lui permettrait de gagner du temps dans ses recherches et
+              d'accéder plus facilement aux ingrédients essentiels de ses plats
+              favoris.
+            </p>
+          </div>
+          <div class="my-10">
+            <img src={JuanImage.src} alt="Image de Juan Veloza" />
+          </div>
         </div>
 
         <div>
-            <h3 class="text-center">Et des Juans, on en trouve des millions en France...</h3>
-        
-            <ul class="flex flex-col gap-8 items-center justify-center mt-10 mb-20 lg:flex-row lg:gap-36">
-                <li><BulleMission circleColor="bg-jaune" nombre="30%" text="Des français sonts issus de familles immigrées ou immigré eux-même."/></li>
-                <li><BulleMission circleColor="bg-saumon" nombre="6M" text="Des français sonts issus de familles immigrées ou immigré eux-même."/></li>
-                <li><BulleMission circleColor="bg-rouge" nombre="+35%" text="Des français sonts issus de familles immigrées ou immigré eux-même."/></li>
-            </ul>
+          <h3 class="text-center">
+            Et des Juans, on en trouve des millions en France...
+          </h3>
+
+          <ul
+            class="flex flex-col gap-8 items-center justify-center mt-10 mb-20 lg:flex-row lg:gap-36"
+          >
+            <li>
+              <BulleMission
+                circleColor="bg-jaune"
+                nombre="30%"
+                text="Des français sonts issus de familles immigrées ou immigré eux-même."
+              />
+            </li>
+            <li>
+              <BulleMission
+                circleColor="bg-saumon"
+                nombre="6M"
+                text="Des français sonts issus de familles immigrées ou immigré eux-même."
+              />
+            </li>
+            <li>
+              <BulleMission
+                circleColor="bg-rouge"
+                nombre="+35%"
+                text="Des français sonts issus de familles immigrées ou immigré eux-même."
+              />
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
-</div>
 
-<section class="section-content bg-white">
-    <div>
+    <section class="section-content bg-white">
+      <div>
         <header>
-            <h2>C'est quoi Asafram ?</h2>
+          <h2>C'est quoi Asafram ?</h2>
         </header>
-        <p>Une plateforme de référencement qui vise à aider les étrangers à retrouver les saveurs de chez-eux.</p>
-        <img class="mt-14" src={ImagePlats.src} alt="Image de plats typiques"/>
-    </div>
-    <div>
+        <p>
+          Une plateforme de référencement qui vise à aider les étrangers à
+          retrouver les saveurs de chez-eux.
+        </p>
+        <img class="mt-14" src={ImagePlats.src} alt="Image de plats typiques" />
+      </div>
+      <div>
         <ul class="flex flex-col gap-8 mt-16">
-            <li>
-                <div class="flex flex-col items-center justify-center">
-                    <img class="w-16" src={IconeCommerces.src} alt="">
-                    <h3 class="text-center">Réferencier des produits, boutiques et restaurants étrangers</h3>
-                </div>
-                <div>
-                    <p>Nous centralisons les meilleurs produits, boutiques et restaurants spécialisés pour que chacun puisse retrouver les goûts de son pays d’origine ou découvrir de nouvelles cuisines.</p>
-                </div>
-            </li>
-            <li>
-                <div class="flex flex-col items-center justify-center">
-                    <img class="w-16" src={IconeRecettes.src} alt="">
-                    <h3 class="text-center">Initiatier à la cuisine étrangère avec des recettes</h3>
-                </div>
-                <div>
-                    <p>Nous mettons à disposition un espace de partage de recettes authentiques pour vous initier aux cuisines étrangères et reproduire chez vous des plats emblématiques.</p>
-                </div>
-            </li>
-            <li>
-                <div class="flex flex-col items-center justify-center">
-                    <img class="w-16" src={IconeCommunautes.src} alt="">
-                    <h3 class="text-center">Créer une communauté engagé</h3>
-                </div>
-                <div>
-                    <p>Nous rassemblons amateurs et experts de la cuisine du monde pour partager recettes, conseils et bonnes adresses dans un esprit d’échange et de découverte. Tout se passe à travers des espaces de commentaires, de notations et de partages.</p>
-                </div>
-            </li>
+          <li>
+            <div class="flex flex-col items-center justify-center">
+              <img class="w-16" src={IconeCommerces.src} alt="" />
+              <h3 class="text-center">
+                Réferencier des produits, boutiques et restaurants étrangers
+              </h3>
+            </div>
+            <div>
+              <p>
+                Nous centralisons les meilleurs produits, boutiques et
+                restaurants spécialisés pour que chacun puisse retrouver les
+                goûts de son pays d'origine ou découvrir de nouvelles cuisines.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="flex flex-col items-center justify-center">
+              <img class="w-16" src={IconeRecettes.src} alt="" />
+              <h3 class="text-center">
+                Initiatier à la cuisine étrangère avec des recettes
+              </h3>
+            </div>
+            <div>
+              <p>
+                Nous mettons à disposition un espace de partage de recettes
+                authentiques pour vous initier aux cuisines étrangères et
+                reproduire chez vous des plats emblématiques.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="flex flex-col items-center justify-center">
+              <img class="w-16" src={IconeCommunautes.src} alt="" />
+              <h3 class="text-center">Créer une communauté engagé</h3>
+            </div>
+            <div>
+              <p>
+                Nous rassemblons amateurs et experts de la cuisine du monde pour
+                partager recettes, conseils et bonnes adresses dans un esprit
+                d'échange et de découverte. Tout se passe à travers des espaces
+                de commentaires, de notations et de partages.
+              </p>
+            </div>
+          </li>
         </ul>
-        
-    </div>
-</section>
-<section class="section-content bg-background">
-    <header>
+      </div>
+    </section>
+    <section class="section-content bg-background">
+      <header>
         <h2>Continents Disponibles</h2>
-    </header>
-</section>
-<section class="section-content bg-background">
-    <header>
+      </header>
+    </section>
+    <section class="section-content bg-background">
+      <header>
         <h2>Les fonctionnalitées d'asafram</h2>
-    </header>
-    
-    <div x-data="{ open: 0 }" class="w-full mx-auto space-y-4 mb-12">
+      </header>
+
+      <ul
+        class="md:grid md:grid-cols-2 lg:grid-cols-3 flex flex-col gap-4 my-8"
+      >
+        <li>
+          <CardFonctionnalites
+            image={IconePlan.src}
+            title="Carte Interactive"
+            description="Trouvez facilement les boutiques et restaurants spécialisés près de chez vous grâce à une carte intuitive."
+            color="bg-sable"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeProduits.src}
+            title="Catalogue de produits"
+            description="Explorez les produits disponibles dans chaque boutique et préparez vos achats en toute simplicité."
+            color="bg-saumon"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeRecettes.src}
+            title="Partage de recettes"
+            description="Découvrez et publiez des recettes authentiques pour cuisiner des plats du monde chez vous."
+            color="bg-terre-cuite"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeFavoris.src}
+            title="Liste de favoris"
+            description="Enregistrez vos boutiques, restaurants et produits préférés pour les retrouver rapidement."
+            color="bg-sable"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeMessage.src}
+            title="Commentaires & Notes"
+            description="Laissez des avis et consultez ceux des autres pour faire les meilleurs choix."
+            color="bg-saumon"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeNewsletter.src}
+            title="Newsletter"
+            description="Recevez les dernières nouveautés, promotions et recettes directement dans votre boîte mail."
+            color="bg-terre-cuite"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeSearchbar.src}
+            title="Recherche rapide"
+            description="Trouvez en un instant une boutique, un produit ou une recette grâce à notre moteur de recherche."
+            color="bg-sable"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeTask.src}
+            title="Générateur de liste de courses"
+            description="Sélectionnez vos produits et générez une liste prête à être utilisée en magasin."
+            color="bg-saumon"
+          />
+        </li>
+        <li>
+          <CardFonctionnalites
+            image={IconeTraduction.src}
+            title="Option de langue"
+            description="Naviguez sur la plateforme en plusieurs langues pour une accessibilité maximale."
+            color="bg-terre-cuite"
+          />
+        </li>
+      </ul>
+
+      <div x-data="{ open: 0 }" class="w-full mx-auto space-y-4 mb-12">
         <div class="w-full border border-terre-cuite bg-white rounded-md">
-            <div @click="open = open === 1 ? 0 : 1" class="flex justify-between items-center px-5 py-4 cursor-pointer">
-                <h3 class="text-sm font-light font-raleway text-terre-cuite">ASAFRAM est-il gratuit pour les utilisateurs ?</h3>
-                <div class="flex items-center justify-center w-10 h-10">
-                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
-                        <div 
-                            :class="open === 1 ? 'rotate-45' : ''"
-                            class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                        ></div>
-                    </div>
+          <div
+            @click="open = open === 1 ? 0 : 1"
+            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+          >
+            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+              ASAFRAM est-il gratuit pour les utilisateurs ?
+            </h3>
+            <div class="flex items-center justify-center w-10 h-10">
+              <div
+                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+              >
+                <div
+                  :class="open === 1 ? 'rotate-45' : ''"
+                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
+                >
                 </div>
+              </div>
             </div>
-            
-            <div x-show="open === 1" x-collapse x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0">
-                <p class="px-5 py-4 border-t border-terre-cuite">
-                    Oui, ASAFRAM est entièrement gratuit pour les utilisateurs. Nous croyons en l'accès à la culture culinaire du monde entier sans frais.
-                </p>
-            </div>
+          </div>
+
+          <div
+            x-show="open === 1"
+            x-collapse
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+          >
+            <p class="px-5 py-4 border-t border-terre-cuite">
+              Oui, ASAFRAM est entièrement gratuit pour les utilisateurs. Nous
+              croyons en l'accès à la culture culinaire du monde entier sans
+              frais.
+            </p>
+          </div>
         </div>
 
         <div class="w-full border border-terre-cuite bg-white rounded-md">
-            <div @click="open = open === 2 ? 0 : 2" class="flex justify-between items-center px-5 py-4 cursor-pointer">
-                <h3 class="text-sm font-light font-raleway text-terre-cuite">Puis-je commander directement via ASAFRAM ?</h3>
-                <div class="flex items-center justify-center w-10 h-10">
-                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
-                        <div 
-                            :class="open === 2 ? 'rotate-45' : ''"
-                            class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                        ></div>
-                    </div>
+          <div
+            @click="open = open === 2 ? 0 : 2"
+            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+          >
+            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+              Puis-je commander directement via ASAFRAM ?
+            </h3>
+            <div class="flex items-center justify-center w-10 h-10">
+              <div
+                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+              >
+                <div
+                  :class="open === 2 ? 'rotate-45' : ''"
+                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
+                >
                 </div>
+              </div>
             </div>
-            
-            <div x-show="open === 2" x-collapse x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0">
-                <p class="px-5 py-4 border-t border-terre-cuite">
-                    Non, ASAFRAM ne propose pas de service de commande. Nous vous redirigeons vers les boutiques et restaurants référencés pour passer vos commandes directement auprès d'eux.
-                </p>
-            </div>
+          </div>
+
+          <div
+            x-show="open === 2"
+            x-collapse
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+          >
+            <p class="px-5 py-4 border-t border-terre-cuite">
+              Non, ASAFRAM ne propose pas de service de commande. Nous vous
+              redirigeons vers les boutiques et restaurants référencés pour
+              passer vos commandes directement auprès d'eux.
+            </p>
+          </div>
         </div>
 
         <div class="w-full border border-terre-cuite bg-white rounded-md">
-            <div @click="open = open === 3 ? 0 : 3" class="flex justify-between items-center px-5 py-4 cursor-pointer">
-                <h3 class="text-sm font-light font-raleway text-terre-cuite">Quels types de commerces sont référencés sur ASAFRAM ?</h3>
-                <div class="flex items-center justify-center w-10 h-10">
-                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
-                        <div 
-                            :class="open === 3 ? 'rotate-45' : ''"
-                            class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                        ></div>
-                    </div>
+          <div
+            @click="open = open === 3 ? 0 : 3"
+            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+          >
+            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+              Quels types de commerces sont référencés sur ASAFRAM ?
+            </h3>
+            <div class="flex items-center justify-center w-10 h-10">
+              <div
+                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+              >
+                <div
+                  :class="open === 3 ? 'rotate-45' : ''"
+                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
+                >
                 </div>
+              </div>
             </div>
-            
-            <div x-show="open === 3" x-collapse x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0">
-                <p class="px-5 py-4 border-t border-terre-cuite">
-                    ASAFRAM référence une variété de commerces, y compris des épiceries, des restaurants, des traiteurs et des marchés spécialisés dans les produits étrangers. Nous nous efforçons de couvrir un large éventail de cuisines du monde entier.
-                </p>
-            </div>
+          </div>
+
+          <div
+            x-show="open === 3"
+            x-collapse
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+          >
+            <p class="px-5 py-4 border-t border-terre-cuite">
+              ASAFRAM référence une variété de commerces, y compris des
+              épiceries, des restaurants, des traiteurs et des marchés
+              spécialisés dans les produits étrangers. Nous nous efforçons de
+              couvrir un large éventail de cuisines du monde entier.
+            </p>
+          </div>
         </div>
 
         <div class="w-full border border-terre-cuite bg-white rounded-md">
-            <div @click="open = open === 4 ? 0 : 4" class="flex justify-between items-center px-5 py-4 cursor-pointer">
-                <h3 class="text-sm font-light font-raleway text-terre-cuite">ASAFRAM propose-t-il des recommandations personnalisées ?</h3>
-                <div class="flex items-center justify-center w-10 h-10">
-                    <div class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full">
-                        <div 
-                            :class="open === 4 ? 'rotate-45' : ''"
-                            class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                        ></div>
-                    </div>
+          <div
+            @click="open = open === 4 ? 0 : 4"
+            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+          >
+            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+              ASAFRAM propose-t-il des recommandations personnalisées ?
+            </h3>
+            <div class="flex items-center justify-center w-10 h-10">
+              <div
+                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+              >
+                <div
+                  :class="open === 4 ? 'rotate-45' : ''"
+                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
+                >
                 </div>
+              </div>
             </div>
-            
-            <div x-show="open === 4" x-collapse x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0">
-                <p class="px-5 py-4 border-t border-terre-cuite">
-                    Oui, ASAFRAM utilise des algorithmes de recommandation pour suggérer des produits et des recettes en fonction de vos préférences et de vos recherches précédentes. Plus vous utilisez la plateforme, plus les recommandations deviennent pertinentes.
-                </p>
-            </div>
+          </div>
+
+          <div
+            x-show="open === 4"
+            x-collapse
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+          >
+            <p class="px-5 py-4 border-t border-terre-cuite">
+              Oui, ASAFRAM utilise des algorithmes de recommandation pour
+              suggérer des produits et des recettes en fonction de vos
+              préférences et de vos recherches précédentes. Plus vous utilisez
+              la plateforme, plus les recommandations deviennent pertinentes.
+            </p>
+          </div>
         </div>
-    </div>
-</section>
-</LayoutLandingPage>
+      </div>
+    </section>
+  </Fragment></LayoutLandingPage
+>

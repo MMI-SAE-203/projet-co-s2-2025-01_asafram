@@ -1,0 +1,13 @@
+---
+const { description, title, image, color } = Astro.props;
+---
+
+<div
+  class={`flex flex-col h-[220px] w-full max-w-md mx-auto rounded-lg p-3 sm:p-4 transition-transform hover:scale-102 ${color}`}
+>
+  <div class="mb-2 flex-shrink-0">
+    {image && <img src={image} alt={title} class="w-6 h-6 mb-1" />}
+    <h3 class="text-lg font-bold mb-1">{title}</h3>
+  </div>
+  <p class="text-sm text-gray-800 flex-grow line-clamp-4">{description}</p>
+</div>
