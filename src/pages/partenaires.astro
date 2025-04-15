@@ -11,6 +11,10 @@ import CardTarifs from "../components/CardTarifs.astro";
 import IconForfaitGratuit from "../assets/icones/icone-forfait-gratuit.svg";
 import IconForfaitStandard from "../assets/icones/icone-forfait-standard.webp";
 import IconForfaitPro from "../assets/icones/icone-forfait-pro.svg";
+import CardCommentairePartenaire from "../components/CardCommentairePartenaire.astro";
+import ImgLeclerc from "../assets/images/leclerc.webp";
+import ImgTangFrere from "../assets/images/tang-frere.webp";
+import ImgIntermarche from "../assets/images/intermarche.webp";
 ---
 
 <LayoutLandingPage
@@ -21,184 +25,271 @@ import IconForfaitPro from "../assets/icones/icone-forfait-pro.svg";
   classContent="bg-white text-black"
 >
   <Fragment slot="content">
-    <div class="px-12 lg:px-40 md:px-24 pt-15 pb-20">
-      <div class="flex flex-col gap-20">
-        <div class="position-center flex-col">
-          <h3>À qui s'adresse nos partenariats ?</h3>
-          <p class="text-center">
-            Asafram s'adresse à tous les acteurs du secteur alimentaire qui
-            souhaitent gagner en visibilité et toucher une clientèle en quête de
-            saveurs authentiques. Pour être éligible, ces magasins doivent
-            proposer des produits d’une ou plusieurs cultures étrangères !
-          </p>
-          <a class="btn-landing-page" href="">Passez le test d'égibilité</a>
-        </div>
-        <div class="position-center flex-col">
-          <h3>Pourquoi devenir partenaire ?</h3>
-          <p class="text-center">
-            Rejoindre Asafram, c'est bénéficier d'une visibilité unique et
-            ciblée pour toucher des clients en quête de produits authentiques.
-          </p>
-          <a class="btn-landing-page" href="">Devenir Partenaire</a>
+    <div class="position-center flex-col pb-20">
+      <h3>À qui s'adresse nos partenariats ?</h3>
+      <p class="text-center">
+        Asafram s'adresse à tous les acteurs du secteur alimentaire qui
+        souhaitent gagner en visibilité et toucher une clientèle en quête de
+        saveurs authentiques. Pour être éligible, ces magasins doivent proposer
+        des produits d'une ou plusieurs cultures étrangères !
+      </p>
+      <a class="btn-landing-page" href="">Passez le test d'égibilité</a>
+    </div>
+
+    <div class="position-center flex-col pb-20">
+      <h3>Pourquoi devenir partenaire ?</h3>
+      <p class="text-center">
+        Rejoindre Asafram, c'est bénéficier d'une visibilité unique et ciblée
+        pour toucher des clients en quête de produits authentiques.
+      </p>
+      <a class="btn-landing-page" href="">Devenir Partenaire</a>
+    </div>
+
+    <ul class="flex flex-col justify-center items-center gap-8 mt-20">
+      <li>
+        <CardPartenaires
+          image={IconProduit}
+          description="Une Mise en avant des produits"
+        />
+      </li>
+      <li>
+        <CardPartenaires
+          image={IconLien}
+          description="des liens d'affiliations"
+        />
+      </li>
+      <li>
+        <CardPartenaires
+          image={IconMarketing}
+          description="Des possibilités de contenus sponsorisés"
+        />
+      </li>
+      <li>
+        <CardPartenaires
+          image={IconStats}
+          description="Des feedbacks statistiques"
+        />
+      </li>
+    </ul>
+
+    <section class="bg-background py-12">
+      <header>
+        <h2>Nos formules partenaires</h2>
+        <p class="text-center text-terre-cuite">
+          Ces formules sont uniquement encadrées par des contrats de
+          sponsorings.
+        </p>
+        <ul class="flex flex-wrap justify-center gap-6 mt-8">
+          <li>
+            <CardTarifs
+              titre="Gratuit"
+              icone={IconForfaitGratuit}
+              description="Réferencement sur notre carte intéractive uniquement."
+              prix="0€/mois"
+              btnText="Acquis"
+              bgColor="bg-white"
+              titleColor="text-terre-cuite"
+              textColor="text-gray-700"
+              labelColor="text-gray-600"
+              iconColor="fill-current text-terre-cuite"
+              features={[
+                { label: "Présence sur la carte", included: true },
+                {
+                  label: "Page dédiée pour le commerce",
+                  included: false,
+                },
+                { label: "Liens d'affiliation", included: false },
+                {
+                  label: "Présence dans 'nos partenaires'",
+                  included: false,
+                },
+              ]}
+            />
+          </li>
+
+          <li>
+            <CardTarifs
+              titre="Standard"
+              icone={IconForfaitStandard}
+              description="Visibilité améliorée et premières fonctionnalités."
+              prix="Prix défini sur contrats"
+              btnText="Souscrire"
+              bgColor="bg-terre-cuite"
+              titleColor="text-white"
+              textColor="text-gray-200"
+              labelColor="text-white"
+              iconColor="fill-current text-white"
+              features={[
+                { label: "Présence sur la carte", included: true },
+                {
+                  label: "Page dédiée pour le commerce",
+                  included: true,
+                },
+                { label: "Liens d'affiliation", included: true },
+                {
+                  label: "Présence dans 'nos partenaires'",
+                  included: true,
+                },
+                {
+                  label: "Produits ajoutés au catalogue",
+                  included: true,
+                },
+                {
+                  label: "Feedbacks & statistiques",
+                  included: true,
+                },
+                {
+                  label: "Post sur les réseaux sociaux",
+                  included: false,
+                },
+                {
+                  label: "Contenu sponsorisé",
+                  included: false,
+                },
+              ]}
+            />
+          </li>
+
+          <li>
+            <CardTarifs
+              titre="Premium"
+              icone={IconForfaitPro}
+              description="Partenariat complet avec visibilité maximale."
+              prix="Prix défini sur contrats"
+              btnText="Souscrire"
+              bgColor="bg-white"
+              titleColor="text-terre-cuite"
+              textColor="text-gray-700"
+              labelColor="text-terre-cuite"
+              iconColor="fill-current text-white"
+              features={[
+                { label: "Présence sur la carte", included: true },
+                {
+                  label: "Page dédiée pour le commerce",
+                  included: true,
+                },
+                { label: "Liens d'affiliation", included: true },
+                {
+                  label: "Présence dans 'nos partenaires'",
+                  included: true,
+                },
+              ]}
+            />
+          </li>
+        </ul>
+      </header>
+    </section>
+
+    <section class="py-12">
+      <header>
+        <h2>Les avis de nos partenaires de confiances</h2>
+      </header>
+
+      <div x-data="{ currentSlide: 1, totalSlides: 3 }" class="overflow-hidden">
+        <ul
+          class="mt-10 relative flex transition-transform duration-500"
+          x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'"
+        >
+          <li class="testimonial-slide w-full flex-shrink-0 pr-4">
+            <CardCommentairePartenaire
+              image={ImgLeclerc}
+              commentaire="ASAFRAM nous a offert une opportunité unique d'élargir notre clientèle en mettant en avant notre rayon international. Grâce à cette plateforme, nous avons pu attirer des consommateurs à la recherche de produits spécifiques qu'ils ne trouvaient pas ailleurs."
+              partenaire="LECLERC"
+            />
+          </li>
+          <li class="testimonial-slide w-full flex-shrink-0 pr-4">
+            <CardCommentairePartenaire
+              image={ImgTangFrere}
+              commentaire="ASAFRAM nous a permis de mieux connecter avec nos clients, notamment en leur offrant un moyen simple de localiser nos magasins et de découvrir nos nouveautés. Nous avons vu une vraie différence en termes de fréquentation !"
+              partenaire="TANG FRÈRE"
+            />
+          </li>
+          <li class="testimonial-slide w-full flex-shrink-0 pr-4">
+            <CardCommentairePartenaire
+              image={ImgIntermarche}
+              commentaire="Chez Intermarché, nous avons toujours eu à cœur de proposer une offre diversifiée répondant aux besoins de toutes les communautés. Grâce à ASAFRAM, nous avons pu mieux valoriser notre rayon produits du monde et toucher une clientèle en quête d'authenticité."
+              partenaire="INTERMARCHÉ"
+            />
+          </li>
+        </ul>
+
+        <div class="flex justify-center mt-8">
+          <div
+            class="flex items-center space-x-2 w-[232px] h-[56px] justify-center"
+          >
+            <!-- Zone cliquable gauche - 40x40px -->
+            <div class="w-[40px] h-[40px] flex items-center justify-center">
+              <div
+                class="w-[24px] h-[24px] flex items-center justify-center cursor-pointer"
+                @click="currentSlide = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z"
+                    fill="#999999"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Indicateurs de diapositives - espacés de 10px (3 au lieu de 5) -->
+            <div class="flex space-x-[10px] items-center h-[32px]">
+              <div
+                class="rounded-full transition-all duration-300 cursor-pointer"
+                :class="currentSlide === 0 ? 'w-[16px] h-[16px] bg-terre-cuite' : 'w-[12px] h-[12px] bg-gray-400'"
+                @click="currentSlide = 0"
+              >
+              </div>
+              <div
+                class="rounded-full transition-all duration-300 cursor-pointer"
+                :class="currentSlide === 1 ? 'w-[16px] h-[16px] bg-terre-cuite' : 'w-[12px] h-[12px] bg-gray-400'"
+                @click="currentSlide = 1"
+              >
+              </div>
+              <div
+                class="rounded-full transition-all duration-300 cursor-pointer"
+                :class="currentSlide === 2 ? 'w-[16px] h-[16px] bg-terre-cuite' : 'w-[12px] h-[12px] bg-gray-400'"
+                @click="currentSlide = 2"
+              >
+              </div>
+            </div>
+
+            <!-- Zone cliquable droite - 40x40px -->
+            <div class="w-[40px] h-[40px] flex items-center justify-center">
+              <div
+                class="w-[24px] h-[24px] flex items-center justify-center cursor-pointer"
+                @click="currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z"
+                    fill="#999999"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <ul class="flex flex-col justify-center items-center gap-8 mt-20">
-        <li>
-          <CardPartenaires
-            image={IconProduit}
-            description="Une Mise en avant des produits"
-          />
-        </li>
-        <li>
-          <CardPartenaires
-            image={IconLien}
-            description="des liens d'affiliations"
-            <
-            li
-          >
-            <li>
-              <CardPartenaires
-                image={IconMarketing}
-                description="Des possibilités de contenus sponsorisés"
-                <
-                li
-              >
-                <li>
-                  <CardPartenaires
-                    image={IconStats}
-                    description="Des feedbacks statistiques"
-                    <
-                    li
-                  />
-                </li>
+    </section>
 
-                <section class="bg-background section-content">
-                  <header>
-                    <h2>Nos formules partenaires</h2>
-                    <p class="text-center text-terre-cuite">
-                      Ces formules sont uniquement encadrées par des contrats de
-                      sponsorings.
-                    </p>
-                    <ul class="flex flex-wrap justify-center gap-6 mt-8">
-                      <li>
-                        <CardTarifs
-                          titre="Gratuit"
-                          icone={IconForfaitGratuit}
-                          description="Réferencement sur notre carte intéractive uniquement."
-                          prix="0€/mois"
-                          btnText="Acquis"
-                          bgColor="bg-white"
-                          titleColor="text-terre-cuite"
-                          textColor="text-gray-700"
-                          labelColor="text-gray-600"
-                          iconColor="fill-current text-terre-cuite"
-                          features={[
-                            { label: "Présence sur la carte", included: true },
-                            {
-                              label: "Page dédiée pour le commerce",
-                              included: false,
-                            },
-                            { label: "Liens d'affiliation", included: false },
-                            {
-                              label: "Présence dans 'nos partenaires'",
-                              included: false,
-                            },
-                          ]}
-                        />
-                      </li>
-
-                      <li>
-                        <CardTarifs
-                          titre="Standard"
-                          icone={IconForfaitStandard}
-                          description="Visibilité améliorée et premières fonctionnalités."
-                          prix="Prix défini sur contrats"
-                          btnText="Souscrire"
-                          bgColor="bg-terre-cuite"
-                          titleColor="text-white"
-                          textColor="text-gray-200"
-                          labelColor="text-white"
-                          iconColor="fill-current text-white"
-                          features={[
-                            { label: "Présence sur la carte", included: true },
-                            {
-                              label: "Page dédiée pour le commerce",
-                              included: true,
-                            },
-                            { label: "Liens d'affiliation", included: true },
-                            {
-                              label: "Présence dans 'nos partenaires'",
-                              included: true,
-                            },
-                            {
-                              label: "Produits ajoutés au catalogue",
-                              included: true,
-                            },
-                            {
-                              label: "Feedbacks & statistiques",
-                              included: true,
-                            },
-                            {
-                              label: "Post sur les réseaux sociaux",
-                              included: false,
-                            },
-                            {
-                              label: "Contenu sponsorisé",
-                              included: false,
-                            },
-                          ]}
-                        />
-                      </li>
-
-                      <li>
-                        <CardTarifs
-                          titre="Premium"
-                          icone={IconForfaitPro}
-                          description="Partenariat complet avec visibilité maximale."
-                          prix="Prix défini sur contrats"
-                          btnText="Souscrire"
-                          bgColor="bg-white"
-                          titleColor="text-terre-cuite"
-                          textColor="text-gray-700"
-                          labelColor="text-terre-cuite"
-                          iconColor="fill-current text-white"
-                          features={[
-                            { label: "Présence sur la carte", included: true },
-                            {
-                              label: "Page dédiée pour le commerce",
-                              included: true,
-                            },
-                            { label: "Liens d'affiliation", included: true },
-                            {
-                              label: "Présence dans 'nos partenaires'",
-                              included: true,
-                            },
-                          ]}
-                        />
-                      </li>
-                    </ul>
-                  </header>
-                </section>
-
-                <section class="section-content">
-                  <header>
-                    <h2>Les avis de nos partenaires de confiances</h2>
-                  </header>
-                </section>
-
-                <div class="flex flex-col gap-10 bg-sable pt-12 rounded-t-4xl">
-                  <p class="uppercase text-2xl font-bold text-center">
-                    N'attendez plus et profitez de cette opportunité
-                  </p>
-                  <div class="position-center">
-                    <a class="btn-landing-page" href="">Devenir Partenaire</a>
-                  </div>
-                </div>
-              </CardPartenaires>
-            </li></CardPartenaires
-          >
-        </li>
-      </ul>
-    </div></Fragment
-  ></LayoutLandingPage
->
+    <div class="flex flex-col gap-10 bg-sable pt-12 rounded-t-4xl">
+      <p class="uppercase text-2xl font-bold text-center">
+        N'attendez plus et profitez de cette opportunité
+      </p>
+      <div class="position-center mb-12">
+        <a class="btn-landing-page" href="">Devenir Partenaire</a>
+      </div>
+    </div>
+  </Fragment>
+</LayoutLandingPage>
