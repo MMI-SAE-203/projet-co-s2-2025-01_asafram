@@ -17,6 +17,7 @@ import IconeNewsletter from "../assets/icones/icone-newsletter.webp";
 import IconeSearchbar from "../assets/icones/icone-searchbar.webp";
 import IconeTraduction from "../assets/icones/icone-traduction.webp";
 import IconeTask from "../assets/icones/icone-task.webp";
+import IconeChevron from "../assets/icones/faq-chevron.webp";
 ---
 
 <LayoutLandingPage
@@ -27,32 +28,37 @@ import IconeTask from "../assets/icones/icone-task.webp";
   classContent="bg-white text-black"
 >
   <Fragment slot="content">
-    <div class="section-content bg-background">
-      <div>
-        <div>
-          <h2>Tout part de Juan</h2>
-          <div class="space-y-8">
-            <p>
-              Tout a commencé avec notre ami Juan, un étudiant colombien venu en
-              France pour ses études. En arrivant, il a rapidement rencontré une
-              difficulté : retrouver des produits alimentaires colombiens pour
-              recréer les plats de son pays.
-            </p>
-            <p>
-              C'est ainsi qu'il a imaginé une plateforme capable de référencer
-              tous les produits colombiens disponibles en France. Une solution
-              qui lui permettrait de gagner du temps dans ses recherches et
-              d'accéder plus facilement aux ingrédients essentiels de ses plats
-              favoris.
-            </p>
+    <div class="section-content bg-background !pt-0 !mt-0">
+      <div class="">
+        <div
+          class="flex flex-col lg:flex-row justify-center items-center mb-16"
+        >
+          <div class="lg:w-1/2">
+            <h2 class="md:!text-left mb-6">L'histoire de Juan</h2>
+
+            <div class="space-y-8">
+              <p class="w-full lg:w-3/4 lg:text-xl">
+                Tout a commencé avec notre ami Juan, un étudiant colombien venu
+                en France pour ses études. En arrivant, il a rapidement
+                rencontré une difficulté : retrouver des produits alimentaires
+                colombiens pour recréer les plats de son pays.
+              </p>
+              <p class="w-full lg:w-3/4 lg:text-xl">
+                C'est ainsi qu'il a imaginé une plateforme capable de référencer
+                tous les produits colombiens disponibles en France. Une solution
+                qui lui permettrait de gagner du temps dans ses recherches et
+                d'accéder plus facilement aux ingrédients essentiels de ses
+                plats favoris.
+              </p>
+            </div>
           </div>
-          <div class="my-10">
+          <div class="my-10 lg:w-[600px] md:w-[500px]">
             <img src={JuanImage.src} alt="Image de Juan Veloza" />
           </div>
         </div>
 
         <div>
-          <h3 class="text-center">
+          <h3 class="text-center md:mb-20">
             Et des Juans, on en trouve des millions en France...
           </h3>
 
@@ -85,64 +91,76 @@ import IconeTask from "../assets/icones/icone-task.webp";
       </div>
     </div>
 
-    <section class="section-content bg-white">
-      <div>
-        <header>
-          <h2>C'est quoi Asafram ?</h2>
-        </header>
-        <p>
-          Une plateforme de référencement qui vise à aider les étrangers à
-          retrouver les saveurs de chez-eux.
-        </p>
-        <img class="mt-14" src={ImagePlats.src} alt="Image de plats typiques" />
-      </div>
-      <div>
-        <ul class="flex flex-col gap-8 mt-16">
-          <li>
-            <div class="flex flex-col items-center justify-center">
-              <img class="w-16" src={IconeCommerces.src} alt="" />
-              <h3 class="text-center">
-                Réferencier des produits, boutiques et restaurants étrangers
-              </h3>
-            </div>
-            <div>
-              <p>
-                Nous centralisons les meilleurs produits, boutiques et
-                restaurants spécialisés pour que chacun puisse retrouver les
-                goûts de son pays d'origine ou découvrir de nouvelles cuisines.
-              </p>
-            </div>
-          </li>
-          <li>
-            <div class="flex flex-col items-center justify-center">
-              <img class="w-16" src={IconeRecettes.src} alt="" />
-              <h3 class="text-center">
-                Initiatier à la cuisine étrangère avec des recettes
-              </h3>
-            </div>
-            <div>
-              <p>
-                Nous mettons à disposition un espace de partage de recettes
-                authentiques pour vous initier aux cuisines étrangères et
-                reproduire chez vous des plats emblématiques.
-              </p>
-            </div>
-          </li>
-          <li>
-            <div class="flex flex-col items-center justify-center">
-              <img class="w-16" src={IconeCommunautes.src} alt="" />
-              <h3 class="text-center">Créer une communauté engagé</h3>
-            </div>
-            <div>
-              <p>
-                Nous rassemblons amateurs et experts de la cuisine du monde pour
-                partager recettes, conseils et bonnes adresses dans un esprit
-                d'échange et de découverte. Tout se passe à travers des espaces
-                de commentaires, de notations et de partages.
-              </p>
-            </div>
-          </li>
-        </ul>
+    <section class="section-content bg-white !mt-0">
+      <div class="flex flex-col lg:flex-row lg:gap-30 items-center">
+        <div class="flex flex-col lg:w-2/5">
+          <h2 class="text-left mb-4">C'est quoi ASAFRAM ?</h2>
+          <p class="mb-8">
+            Une plateforme de référencement qui vise à aider les étrangers à
+            retrouver les saveurs de chez-eux.
+          </p>
+          <div class="mt-6">
+            <img
+              class="w-full rounded-lg"
+              src={ImagePlats.src}
+              alt="Image de plats typiques"
+            />
+          </div>
+        </div>
+
+        <div class="lg:w-3/5 mt-16 lg:mt-0">
+          <ul class="flex flex-col gap-8 lg:mt-30">
+            <li class="flex flex-row items-start">
+              <div class="min-w-[64px] flex items-start justify-center mr-4">
+                <img class="w-16" src={IconeCommerces.src} alt="" />
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Référencier des produits, boutiques et restaurants étrangers
+                </h3>
+                <p class="text-base">
+                  Nous centralisons les meilleurs produits, boutiques et
+                  restaurants spécialisés pour que chacun puisse retrouver les
+                  goûts de son pays d'origine ou découvrir de nouvelles
+                  cuisines.
+                </p>
+              </div>
+            </li>
+
+            <li class="flex flex-row items-start">
+              <div class="min-w-[64px] flex items-start justify-center mr-4">
+                <img class="w-16" src={IconeRecettes.src} alt="" />
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Initiatier à la cuisine étrangère avec des recettes
+                </h3>
+                <p class="text-base">
+                  Nous mettons à disposition un espace de partage de recettes
+                  authentiques pour vous initier aux cuisines étrangères et
+                  reproduire chez vous des plats emblématiques.
+                </p>
+              </div>
+            </li>
+
+            <li class="flex flex-row items-start">
+              <div class="min-w-[64px] flex items-start justify-center mr-4">
+                <img class="w-16" src={IconeCommunautes.src} alt="" />
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Créer une communauté engagée
+                </h3>
+                <p class="text-base">
+                  Nous rassemblons amateurs et experts de la cuisine du monde
+                  pour partager recettes, conseils et bonnes adresses dans un
+                  esprit d'échange et de découverte. Tout se passe à travers des
+                  espaces de commentaires, de notations et de partages.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
     <section class="section-content bg-background">
@@ -152,16 +170,16 @@ import IconeTask from "../assets/icones/icone-task.webp";
     </section>
     <section class="section-content bg-background">
       <header>
-        <h2>Les fonctionnalitées d'asafram</h2>
+        <h2>Les fonctionnalités d'asafram</h2>
       </header>
 
       <ul
-        class="md:grid md:grid-cols-2 lg:grid-cols-3 flex flex-col gap-4 my-8"
+        class="md:grid md:grid-cols-2 lg:grid-cols-3 flex flex-col gap-8 my-12"
       >
         <li>
           <CardFonctionnalites
             image={IconePlan.src}
-            title="Carte Interactive"
+            title="Carte interactive"
             description="Trouvez facilement les boutiques et restaurants spécialisés près de chez vous grâce à une carte intuitive."
             color="bg-sable"
           />
@@ -209,7 +227,7 @@ import IconeTask from "../assets/icones/icone-task.webp";
         <li>
           <CardFonctionnalites
             image={IconeSearchbar.src}
-            title="Recherche rapide"
+            title="Recherches Rapide"
             description="Trouvez en un instant une boutique, un produit ou une recette grâce à notre moteur de recherche."
             color="bg-sable"
           />
@@ -217,7 +235,7 @@ import IconeTask from "../assets/icones/icone-task.webp";
         <li>
           <CardFonctionnalites
             image={IconeTask.src}
-            title="Générateur de liste de courses"
+            title="Générateur de liste de course"
             description="Sélectionnez vos produits et générez une liste prête à être utilisée en magasin."
             color="bg-saumon"
           />
@@ -232,24 +250,34 @@ import IconeTask from "../assets/icones/icone-task.webp";
         </li>
       </ul>
 
-      <div x-data="{ open: 0 }" class="w-full mx-auto space-y-4 mb-12">
-        <div class="w-full border border-terre-cuite bg-white rounded-md">
+      <div
+        x-data="{ open: 0 }"
+        class="w-full mx-auto space-y-4 mb-12 flex flex-col items-center md:mt-40 mt-20 gap-2"
+      >
+        <div
+          class="w-full lg:w-3/4 border border-terre-cuite bg-white rounded-md shadow-sm"
+        >
           <div
             @click="open = open === 1 ? 0 : 1"
-            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+            class="flex justify-between items-center px-5 py-4 sm:py-5 cursor-pointer"
           >
-            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+            <h3
+              class="!text-base sm:!text-xl !font-light font-raleway text-terre-cuite pr-4"
+            >
               ASAFRAM est-il gratuit pour les utilisateurs ?
             </h3>
-            <div class="flex items-center justify-center w-10 h-10">
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10"
+            >
               <div
-                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+                class="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border-2 border-terre-cuite rounded-full"
               >
-                <div
-                  :class="open === 1 ? 'rotate-45' : ''"
-                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                >
-                </div>
+                <img
+                  src={IconeChevron.src}
+                  alt="Chevron"
+                  class="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 object-contain"
+                  :class="open === 1 ? 'rotate-90' : ''"
+                />
               </div>
             </div>
           </div>
@@ -261,7 +289,9 @@ import IconeTask from "../assets/icones/icone-task.webp";
             x-transition:enter-start="opacity-0 transform -translate-y-2"
             x-transition:enter-end="opacity-100 transform translate-y-0"
           >
-            <p class="px-5 py-4 border-t border-terre-cuite">
+            <p
+              class="px-5 py-4 border-t border-terre-cuite text-sm sm:text-base"
+            >
               Oui, ASAFRAM est entièrement gratuit pour les utilisateurs. Nous
               croyons en l'accès à la culture culinaire du monde entier sans
               frais.
@@ -269,23 +299,30 @@ import IconeTask from "../assets/icones/icone-task.webp";
           </div>
         </div>
 
-        <div class="w-full border border-terre-cuite bg-white rounded-md">
+        <div
+          class="w-full lg:w-3/4 border border-terre-cuite bg-white rounded-md shadow-sm"
+        >
           <div
             @click="open = open === 2 ? 0 : 2"
-            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+            class="flex justify-between items-center px-5 py-4 sm:py-5 cursor-pointer"
           >
-            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+            <h3
+              class="!text-base sm:!text-xl !font-light font-raleway text-terre-cuite pr-4"
+            >
               Puis-je commander directement via ASAFRAM ?
             </h3>
-            <div class="flex items-center justify-center w-10 h-10">
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10"
+            >
               <div
-                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+                class="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border-2 border-terre-cuite rounded-full"
               >
-                <div
-                  :class="open === 2 ? 'rotate-45' : ''"
-                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                >
-                </div>
+                <img
+                  src={IconeChevron.src}
+                  alt="Chevron"
+                  class="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 object-contain"
+                  :class="open === 2 ? 'rotate-90' : ''"
+                />
               </div>
             </div>
           </div>
@@ -297,7 +334,9 @@ import IconeTask from "../assets/icones/icone-task.webp";
             x-transition:enter-start="opacity-0 transform -translate-y-2"
             x-transition:enter-end="opacity-100 transform translate-y-0"
           >
-            <p class="px-5 py-4 border-t border-terre-cuite">
+            <p
+              class="px-5 py-4 border-t border-terre-cuite text-sm sm:text-base"
+            >
               Non, ASAFRAM ne propose pas de service de commande. Nous vous
               redirigeons vers les boutiques et restaurants référencés pour
               passer vos commandes directement auprès d'eux.
@@ -305,23 +344,30 @@ import IconeTask from "../assets/icones/icone-task.webp";
           </div>
         </div>
 
-        <div class="w-full border border-terre-cuite bg-white rounded-md">
+        <div
+          class="w-full lg:w-3/4 border border-terre-cuite bg-white rounded-md shadow-sm"
+        >
           <div
             @click="open = open === 3 ? 0 : 3"
-            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+            class="flex justify-between items-center px-5 py-4 sm:py-5 cursor-pointer"
           >
-            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+            <h3
+              class="!text-base sm:!text-xl !font-light font-raleway text-terre-cuite pr-4"
+            >
               Quels types de commerces sont référencés sur ASAFRAM ?
             </h3>
-            <div class="flex items-center justify-center w-10 h-10">
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10"
+            >
               <div
-                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+                class="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border-2 border-terre-cuite rounded-full"
               >
-                <div
-                  :class="open === 3 ? 'rotate-45' : ''"
-                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                >
-                </div>
+                <img
+                  src={IconeChevron.src}
+                  alt="Chevron"
+                  class="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 object-contain"
+                  :class="open === 3 ? 'rotate-90' : ''"
+                />
               </div>
             </div>
           </div>
@@ -333,7 +379,9 @@ import IconeTask from "../assets/icones/icone-task.webp";
             x-transition:enter-start="opacity-0 transform -translate-y-2"
             x-transition:enter-end="opacity-100 transform translate-y-0"
           >
-            <p class="px-5 py-4 border-t border-terre-cuite">
+            <p
+              class="px-5 py-4 border-t border-terre-cuite text-sm sm:text-base"
+            >
               ASAFRAM référence une variété de commerces, y compris des
               épiceries, des restaurants, des traiteurs et des marchés
               spécialisés dans les produits étrangers. Nous nous efforçons de
@@ -342,23 +390,30 @@ import IconeTask from "../assets/icones/icone-task.webp";
           </div>
         </div>
 
-        <div class="w-full border border-terre-cuite bg-white rounded-md">
+        <div
+          class="w-full lg:w-3/4 border border-terre-cuite bg-white rounded-md shadow-sm"
+        >
           <div
             @click="open = open === 4 ? 0 : 4"
-            class="flex justify-between items-center px-5 py-4 cursor-pointer"
+            class="flex justify-between items-center px-5 py-4 sm:py-5 cursor-pointer"
           >
-            <h3 class="text-sm font-light font-raleway text-terre-cuite">
+            <h3
+              class="!text-base sm:!text-xl !font-light font-raleway text-terre-cuite pr-4"
+            >
               ASAFRAM propose-t-il des recommandations personnalisées ?
             </h3>
-            <div class="flex items-center justify-center w-10 h-10">
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10"
+            >
               <div
-                class="relative flex items-center justify-center w-8 h-8 border-2 border-terre-cuite rounded-full"
+                class="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 border-2 border-terre-cuite rounded-full"
               >
-                <div
-                  :class="open === 4 ? 'rotate-45' : ''"
-                  class="w-2 h-2 border-r-2 border-b-2 border-terre-cuite transform transition-transform duration-300"
-                >
-                </div>
+                <img
+                  src={IconeChevron.src}
+                  alt="Chevron"
+                  class="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 object-contain"
+                  :class="open === 4 ? 'rotate-90' : ''"
+                />
               </div>
             </div>
           </div>
@@ -370,7 +425,9 @@ import IconeTask from "../assets/icones/icone-task.webp";
             x-transition:enter-start="opacity-0 transform -translate-y-2"
             x-transition:enter-end="opacity-100 transform translate-y-0"
           >
-            <p class="px-5 py-4 border-t border-terre-cuite">
+            <p
+              class="px-5 py-4 border-t border-terre-cuite text-sm sm:text-base"
+            >
               Oui, ASAFRAM utilise des algorithmes de recommandation pour
               suggérer des produits et des recettes en fonction de vos
               préférences et de vos recherches précédentes. Plus vous utilisez

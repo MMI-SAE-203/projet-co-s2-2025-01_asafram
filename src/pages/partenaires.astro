@@ -25,27 +25,57 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
   classContent="bg-white text-black"
 >
   <Fragment slot="content">
-    <div class="position-center flex-col pb-20">
-      <h3>À qui s'adresse nos partenariats ?</h3>
-      <p class="text-center">
-        Asafram s'adresse à tous les acteurs du secteur alimentaire qui
-        souhaitent gagner en visibilité et toucher une clientèle en quête de
-        saveurs authentiques. Pour être éligible, ces magasins doivent proposer
-        des produits d'une ou plusieurs cultures étrangères !
-      </p>
-      <a class="btn-landing-page" href="">Passez le test d'égibilité</a>
+    <div
+      class="flex flex-col md:flex-row items-center justify-between gap-10 lg:mb-40 mb-20 lg:mx-40 mx-20 pt-40"
+    >
+      <div
+        class="w-full md:w-1/2 flex flex-col gap-6 items-center md:items-start"
+      >
+        <h3 class="text-center md:text-left">
+          À qui s'adresse nos partenariats ?
+        </h3>
+        <p class="text-center md:text-left mb-6">
+          Asafram s'adresse à tous les acteurs du secteur alimentaire qui
+          souhaitent gagner en visibilité et toucher une clientèle en quête de
+          saveurs authentiques. Pour être éligible, ces magasins doivent
+          proposer des produits d'une ou plusieurs cultures étrangères !
+        </p>
+        <div>
+          <a class="btn-landing-page" href="">Passez le test d'égibilité</a>
+        </div>
+      </div>
+      <div
+        class="w-full md:w-1/2 h-[300px] bg-gray-200 flex items-center justify-center rounded-lg"
+      >
+        <p class="text-gray-500 italic">Image à venir</p>
+      </div>
     </div>
 
-    <div class="position-center flex-col pb-20">
-      <h3>Pourquoi devenir partenaire ?</h3>
-      <p class="text-center">
-        Rejoindre Asafram, c'est bénéficier d'une visibilité unique et ciblée
-        pour toucher des clients en quête de produits authentiques.
-      </p>
-      <a class="btn-landing-page" href="">Devenir Partenaire</a>
+    <div
+      class="flex flex-col md:flex-row-reverse items-center justify-between gap-10 lg:mb-40 mb-20 lg:mx-40 mx-20"
+    >
+      <div
+        class="w-full md:w-1/2 flex flex-col gap-6 items-center md:items-start"
+      >
+        <h3 class="text-center md:text-left">Pourquoi devenir partenaire ?</h3>
+        <p class="text-center md:text-left mb-6">
+          Rejoindre Asafram, c'est bénéficier d'une visibilité unique et ciblée
+          pour toucher des clients en quête de produits authentiques.
+        </p>
+        <div>
+          <a class="btn-landing-page" href="">Devenir Partenaire</a>
+        </div>
+      </div>
+      <div
+        class="w-full md:w-1/2 h-[300px] bg-gray-200 flex items-center justify-center rounded-lg"
+      >
+        <p class="text-gray-500 italic">Image à venir</p>
+      </div>
     </div>
 
-    <ul class="flex flex-col justify-center items-center gap-8 mt-20">
+    <ul
+      class="flex flex-col justify-center items-center gap-8 lg:mt-40 mt-20 lg:flex-row md:flex-row lg:mb-40 mb-20"
+    >
       <li>
         <CardPartenaires
           image={IconProduit}
@@ -72,7 +102,7 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
       </li>
     </ul>
 
-    <section class="bg-background py-12">
+    <section class="bg-background py-12 lg:pt-40 pt-20 lg:pb-40 pb-10">
       <header>
         <h2>Nos formules partenaires</h2>
         <p class="text-center text-terre-cuite">
@@ -180,7 +210,7 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
       </header>
     </section>
 
-    <section class="py-12">
+    <section class="py-12 lg:pt-40 pt-20 lg:pb-40 pb-10">
       <header>
         <h2>Les avis de nos partenaires de confiances</h2>
       </header>
@@ -213,7 +243,7 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
           </li>
         </ul>
 
-        <div class="flex justify-center mt-8">
+        <div class="flex justify-center mt-16">
           <div
             class="flex items-center space-x-2 w-[232px] h-[56px] justify-center"
           >
