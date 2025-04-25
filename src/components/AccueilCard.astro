@@ -1,0 +1,32 @@
+---
+const { title, description, image, color = "bg-jaune" } = Astro.props;
+---
+
+<div
+  class={`w-[300px] sm:w-[320px] md:w-[350px] h-[380px] sm:h-[400px] rounded-[22px] p-5 sm:p-6 md:p-8 shadow-lg flex flex-col justify-between transition-transform hover:scale-[1.02] ${color}`}
+>
+  <div class="flex flex-col gap-4 sm:gap-6">
+    <div class="flex justify-center">
+      <div
+        class="w-[85px] h-[85px] sm:w-[95px] sm:h-[95px] md:w-[104px] md:h-[104px] rounded-[18px] sm:rounded-[22px] bg-background flex items-center justify-center"
+      >
+        <img
+          src={image}
+          alt={title}
+          class="w-[50px] h-[50px] sm:w-[55px] sm:h-[55px] md:w-[60px] md:h-[60px] object-contain"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4 px-2 sm:px-4">
+      <h3 class="text-xl sm:text-2xl font-bold text-gray-800 text-center">
+        {title}
+      </h3>
+      <p
+        class="text-sm sm:text-base md:text-lg text-gray-800 text-center line-clamp-6"
+      >
+        {description}
+      </p>
+    </div>
+  </div>
+</div>

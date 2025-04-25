@@ -1,7 +1,326 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutLandingPage from "../layouts/LayoutLandingPage.astro";
+import fondPartenaire from "../assets/fond/partenaire-fond.webp";
+import IconeRecette from "../assets/icones/book-food.webp";
+import IconeCommunaute from "../assets/icones/communaute.webp";
+import IconeFavoris from "../assets/icones/star-favoris.webp";
+import AccueilCard from "../components/AccueilCard.astro";
+import CardCommentaires from "../components/CardCommentaires.astro";
+import ImageLinh from "../assets/images/linh.webp";
+import ImageThomas from "../assets/images/thomas.webp";
+import ImageAicha from "../assets/images/aicha.webp";
+import ImageYanis from "../assets/images/yanis.webp";
 ---
 
-<Layout>
-    
-</Layout>
+<LayoutLandingPage
+  title="Retrouver le goût de chez soi !"
+  description="ASAFRAM est une plateforme de partage de recettes de cuisine."
+  src={fondPartenaire}
+  alt="Qui sommes nous ASAFRAM"
+  classContent="bg-white text-black"
+>
+  <Fragment slot="content">
+    <div
+      class="flex flex-col gap-12 md:gap-16 lg:gap-24 justify-center items-center px-6 sm:px-12 lg:px-40 md:px-24 pb-20 lg:pt-40 pt-20 lg:pb-40"
+    >
+      <div
+        class="flex flex-col md:flex-row md:items-center gap-8 md:gap-12 lg:gap-16 w-full"
+      >
+        <div class="md:w-1/2 order-1">
+          <h3 class="text-center md:text-left mb-4">
+            Des catalogues de produits du monde entiers
+          </h3>
+          <p class="text-sm md:text-lg xl:text-xl">
+            Découvrez une large sélection de produits issus des quatre coins du
+            globe. Que vous cherchiez des épices d'Inde, des sauces asiatiques
+            ou des fromages portugais, ASAFRAM vous permet d'accéder facilement
+            aux ingrédients essentiels pour cuisiner vos plats préférés.
+          </p>
+        </div>
+        <div class="md:w-1/2 order-2">
+          <div
+            class="w-full h-[200px] md:h-[250px] lg:h-[300px] bg-gray-200 flex items-center justify-center rounded-lg shadow-sm"
+          >
+            <p class="text-gray-500 italic">Image à venir</p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col md:flex-row-reverse md:items-center gap-8 md:gap-12 lg:gap-16 w-full"
+      >
+        <div class="md:w-1/2">
+          <h3 class="text-center md:text-left mb-4">
+            Une carte interactive de toutes les boutiques
+          </h3>
+          <p class="text-sm md:text-lg xl:text-xl">
+            Trouvez en un clin d'œil les boutiques et restaurants spécialisés
+            près de chez vous. Grâce à notre carte interactive, explorez
+            facilement les adresses proposant des produits authentiques du monde
+            entier et laissez-vous guider vers de nouvelles découvertes
+            culinaires.
+          </p>
+        </div>
+        <div class="md:w-1/2">
+          <div
+            class="w-full h-[200px] md:h-[250px] lg:h-[300px] bg-gray-200 flex items-center justify-center rounded-lg shadow-sm"
+          >
+            <p class="text-gray-500 italic">Image à venir</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-background rounded-lg p-6 md:p-10 lg:p-16 w-[80%] sm:w-[85%] md:w-[85%] lg:w-[90%] xl:w-[85%] 2xl:max-w-[1590px] mx-auto my-12 md:my-20"
+    >
+      <header class="mb-8 md:mb-10 lg:mb-16">
+        <h3
+          class="text-center !font-raleway text-xl sm:text-2xl md:text-3xl mb-4"
+        >
+          Une plateforme communautaire et une expérience utilisateur
+          personnalisée
+        </h3>
+      </header>
+
+      <div
+        class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-8 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-36"
+      >
+        <AccueilCard
+          title="Recettes"
+          description="Découvrez et partagez des milliers de recettes du globe grâce à des rubriques de cusines."
+          image={IconeRecette.src}
+          color="bg-sable"
+        />
+
+        <AccueilCard
+          title="Communauté"
+          description="Engagé avec des milliers d'utilisateurs d'origines et cultures différentes avec nos espaces commentaires."
+          image={IconeCommunaute.src}
+          color="bg-saumon"
+        />
+
+        <AccueilCard
+          title="Favoris"
+          description="Vivez une expérience personnalisé via des suggestions automatiques et des listes de vos produits favoris !"
+          image={IconeFavoris.src}
+          color="bg-orange-300"
+        />
+      </div>
+    </div>
+
+    <div class="mt-12 md:mt-40 pb-12 md:pb-30">
+      <header class="mb-20 text-center">
+        <h3
+          class="text-center !font-raleway text-xl sm:text-2xl md:text-3xl mb-4 w-[80%] sm:w-[80%] md:w-[60%] lg:w-[70%] xl:w-[60%] mx-auto"
+        >
+          Lisez les avis de nos utilisateurs de confiances qui utilisent ASAFRAM
+          au quotidien pour retrouver leurs produits préférés !
+        </h3>
+      </header>
+
+      <div
+        class="relative w-full overflow-hidden"
+        x-data="{
+          position: 0,
+          cardWidth: 65,
+          speed: 0.07,
+          animationFrame: null,
+          isPaused: false,
+          isTransitioning: false,
+          
+          calculateSpeed() {
+            const baseSpeed = 0.07;
+            const screenWidth = window.innerWidth;
+            
+            if (screenWidth < 640) {
+              return baseSpeed * 2.5;
+            } else if (screenWidth < 1024) {
+              return baseSpeed * 1.8;
+            } else {
+              return baseSpeed;
+            }
+          },
+          
+          startContinuousSlide() {
+            this.speed = this.calculateSpeed();
+            
+            window.addEventListener('resize', () => {
+              this.speed = this.calculateSpeed();
+            });
+            
+            const animate = () => {
+              if (!this.isPaused && !this.isTransitioning) {
+                this.position -= this.speed;
+                
+                if (this.position <= -260) {
+                  this.isTransitioning = true;
+                  
+                  const carousel = document.getElementById('infinite-carousel');
+                  if (carousel) {
+                    carousel.style.transition = 'none';
+                    
+                    void carousel.offsetWidth;
+                    
+                    this.position = 0;
+                    carousel.style.transform = `translateX(0%)`;
+                    
+                    setTimeout(() => {
+                      carousel.style.transition = 'transform 500ms linear';
+                      this.isTransitioning = false;
+                    }, 50);
+                  }
+                }
+              }
+              
+              this.animationFrame = requestAnimationFrame(animate);
+            };
+            
+            this.animationFrame = requestAnimationFrame(animate);
+          },
+          
+          stopAnimation() {
+            if (this.animationFrame) {
+              cancelAnimationFrame(this.animationFrame);
+              this.animationFrame = null;
+            }
+          },
+          
+          pauseAnimation() {
+            this.isPaused = true;
+          },
+          
+          resumeAnimation() {
+            this.isPaused = false;
+          },
+          
+          goToPosition(pos) {
+            this.position = -pos * this.cardWidth;
+            
+            const carousel = document.getElementById('infinite-carousel');
+            if (carousel) {
+              carousel.style.transform = `translateX(${this.position}%)`;
+            }
+            
+            setTimeout(() => this.resumeAnimation(), 1500);
+          }
+        }"
+        x-init="startContinuousSlide()"
+      >
+        <div class="relative w-full py-4">
+          <ul
+            id="infinite-carousel"
+            class="flex will-change-transform gap-x-60"
+            style="transition: transform 500ms linear;"
+            :style="'transform: translateX(' + position + '%)'"
+          >
+            <li class="w-[65%] -mx-[5%] first:ml-0">
+              <CardCommentaires
+                name="Linh"
+                profession="Étudiante"
+                title="Retrouver les saveurs de mon enfance"
+                content="Grâce à ASAFRAM, j'ai pu localiser une boutique spécialisée à côté de chez moi. Cette plateforme me permet de garder un lien fort avec ma culture ! Je recommande !"
+                imageUrl={ImageLinh.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%]">
+              <CardCommentaires
+                name="Thomas"
+                profession="Apprenti cuisinier"
+                title="Une mine d'or pour les amateurs de cuisine !"
+                content="J'adore expérimenter avec des saveurs du monde entier. ASAFRAM m'a aidé à trouver des fournisseurs de qualité pour mes recettes. C'est une ressource précieuse pour tous les passionnés de gastronomie."
+                imageUrl={ImageThomas.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%]">
+              <CardCommentaires
+                name="Aïcha"
+                profession="Infirmière"
+                title="Enfin des produits authentiques !"
+                content=" Avec ASAFRAM, j'ai découvert plusieurs épiceries africaines près de chez moi que je ne connaissais pas du tout ! Maintenant, je peux acheter mes ingrédients sans faire des kilomètres et retrouver facilement les saveurs de mon enfance."
+                imageUrl={ImageAicha.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%]">
+              <CardCommentaires
+                name="Yanis"
+                profession="Consultant"
+                title="Une plateforme qui rassemble tout"
+                content="Avant, je devais faire le tour de plusieurs épiceries pour mettre la main sur des épices ou des produits spécifiques. ASAFRAM m'a énormément facilité la tâche en regroupant toutes les boutiques spécialisées sur une seule plateforme."
+                imageUrl={ImageYanis.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%] first:ml-0">
+              <CardCommentaires
+                name="Linh"
+                profession="Étudiante"
+                title="Retrouver les saveurs de mon enfance"
+                content="Grâce à ASAFRAM, j'ai pu localiser une boutique spécialisée à côté de chez moi. Cette plateforme me permet de garder un lien fort avec ma culture ! Je recommande !"
+                imageUrl={ImageLinh.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%]">
+              <CardCommentaires
+                name="Thomas"
+                profession="Apprenti cuisinier"
+                title="Une mine d'or pour les amateurs de cuisine !"
+                content="J'adore expérimenter avec des saveurs du monde entier. ASAFRAM m'a aidé à trouver des fournisseurs de qualité pour mes recettes. C'est une ressource précieuse pour tous les passionnés de gastronomie."
+                imageUrl={ImageThomas.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%]">
+              <CardCommentaires
+                name="Aïcha"
+                profession="Infirmière"
+                title="Enfin des produits authentiques !"
+                content=" Avec ASAFRAM, j'ai découvert plusieurs épiceries africaines près de chez moi que je ne connaissais pas du tout ! Maintenant, je peux acheter mes ingrédients sans faire des kilomètres et retrouver facilement les saveurs de mon enfance."
+                imageUrl={ImageAicha.src}
+              />
+            </li>
+
+            <li class="w-[65%] -mx-[5%]">
+              <CardCommentaires
+                name="Yanis"
+                profession="Consultant"
+                title="Une plateforme qui rassemble tout"
+                content="Avant, je devais faire le tour de plusieurs épiceries pour mettre la main sur des épices ou des produits spécifiques. ASAFRAM m'a énormément facilité la tâche en regroupant toutes les boutiques spécialisées sur une seule plateforme."
+                imageUrl={ImageYanis.src}
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <section class="bg-background section-content">
+      <header>
+        <h2>ASAFRAM, C'EST :</h2>
+      </header>
+      <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </section>
+
+    <section class="bg-sable">
+      <header>
+        <h2>Commencer à retrouver les saveurs !</h2>
+      </header>
+      <p>
+        Brisez les frontières de la cuisine et inscrivez-vous sur notre
+        plateforme dès maintenant.
+      </p>
+      <div>
+        <a href="">S'inscrire</a>
+      </div>
+    </section>
+  </Fragment>
+</LayoutLandingPage>

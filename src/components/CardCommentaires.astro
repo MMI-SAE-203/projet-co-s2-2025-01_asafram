@@ -1,0 +1,61 @@
+---
+const { name, profession, title, content, imageUrl } = Astro.props;
+---
+
+<div
+  class="w-[500px] max-w-[800px] h-[350px] bg-white rounded-xl shadow-lg p-8 mx-auto flex flex-col"
+>
+  <div class="flex items-center mb-6">
+    <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+      <img src={imageUrl} alt={name} class="w-full h-full object-cover" />
+    </div>
+
+    <div class="flex flex-col">
+      <span class="text-black font-bold text-lg">{name}</span>
+      <div class="flex justify-center items-end gap-6">
+        <span class="text-sm text-gray-500">{profession}</span>
+        <div class="flex mt-1">
+          <svg width="24" height="24" viewBox="0 0 24 24" class="mr-1">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              fill="#FFD700"
+              stroke="#000000"
+              stroke-width="1"></path>
+          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" class="mr-1">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              fill="#FFD700"
+              stroke="#000000"
+              stroke-width="1"></path>
+          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" class="mr-1">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              fill="#FFD700"
+              stroke="#000000"
+              stroke-width="1"></path>
+          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" class="mr-1">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              fill="#FFD700"
+              stroke="#000000"
+              stroke-width="1"></path>
+          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" class="mr-1">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              fill="#FFD700"
+              stroke="#000000"
+              stroke-width="1"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3 class="!text-xl font-bold mb-4 text-black">{title}</h3>
+  <div class="flex-grow">
+    <p class="text-gray-600 text-base leading-relaxed">{content}</p>
+  </div>
+</div>
