@@ -1,7 +1,6 @@
 ---
 import LayoutLandingPage from "../layouts/LayoutLandingPage.astro";
-import fondPartenaire from "../assets/fond/partenaire-fond.webp";
-import whiteTransition from "../assets/fond/white-transition.webp";
+import FondMission from "../assets/fond/mission-desktop.svg";
 import JuanImage from "../assets/images/juan-veloza.webp";
 import BulleMission from "../components/BulleMission.astro";
 import ImagePlats from "../assets/images/plats-asafram.webp";
@@ -18,23 +17,27 @@ import IconeSearchbar from "../assets/icones/icone-searchbar.webp";
 import IconeTraduction from "../assets/icones/icone-traduction.webp";
 import IconeTask from "../assets/icones/icone-task.webp";
 import IconeChevron from "../assets/icones/faq-chevron.webp";
+import WorldMap from "../components/WorldMap.astro";
+import Transition from "../components/Transition.astro";
 ---
 
 <LayoutLandingPage
   title="Notre Mission"
   description="Découvrez notre mission à travers le projet d'ASAFRAM"
-  src={fondPartenaire}
+  src={FondMission}
   alt="Mission ASAFRAM"
   classContent="bg-white text-black"
 >
   <Fragment slot="content">
-    <div class="section-content bg-background !pt-0 !mt-0">
+    <div class="section-content bg-background !pt-0 !mt-0 lg:pb-20">
       <div class="">
         <div
           class="flex flex-col lg:flex-row justify-center items-center mb-16"
         >
           <div class="lg:w-1/2">
-            <h2 class="md:!text-left mb-6">L'histoire de Juan</h2>
+            <h2 class="md:!text-left mb-6 mt-40 md:mt-20">
+              L'histoire de Juan
+            </h2>
 
             <div class="space-y-8">
               <p class="w-full lg:w-3/4 lg:text-xl">
@@ -90,6 +93,8 @@ import IconeChevron from "../assets/icones/faq-chevron.webp";
         </div>
       </div>
     </div>
+
+    <Transition className="bottom-10 md:bottom-14 lg:bottom-20 xl:bottom-32" />
 
     <section class="section-content bg-white !mt-0">
       <div class="flex flex-col lg:flex-row lg:gap-30 items-center">
@@ -163,11 +168,27 @@ import IconeChevron from "../assets/icones/faq-chevron.webp";
         </div>
       </div>
     </section>
-    <section class="section-content bg-background">
+
+    <Transition
+      isReversed="true"
+      className="top-10 md:top-14 lg:top-20 xl:top-32"
+    />
+
+    <section class="section-content bg-background pt-20">
       <header>
         <h2>Continents Disponibles</h2>
       </header>
+      <div class="flex flex-col items-center mt-10">
+        <p class="text-center max-w-3xl mb-10 lg:text-xl">
+          Pour l'instant, ASAFRAM se concentre sur trois régions du monde riches
+          en diversité culinaire : l'Amérique latine, l'Afrique et l'Asie. Notre
+          objectif est d'étendre progressivement notre couverture à d'autres
+          régions.
+        </p>
+        <WorldMap className="w-full max-w-4xl" />
+      </div>
     </section>
+
     <section class="section-content bg-background">
       <header>
         <h2>Les fonctionnalités d'asafram</h2>

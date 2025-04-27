@@ -1,0 +1,217 @@
+---
+// Définition des propriétés avec des valeurs par défaut
+interface Props {
+  width?: string;
+  height?: string;
+  className?: string;
+}
+
+const { width = "100%", height = "auto", className = "" } = Astro.props;
+---
+
+<div class={`world-map-container ${className}`}>
+  <div class="map-wrapper">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1000 500"
+      width={width}
+      height={height}
+      class="world-map"
+    >
+      <!-- Amérique du Nord -->
+      <path
+        d="M130,50 L210,40 L280,50 L350,70 L350,130 L330,170 L270,190 L240,220 L220,200 L200,220 L190,200 L170,210 L150,200 L130,170 L110,160 L100,120 L120,90 Z"
+        class="continent fill-gray-300"
+        data-continent="north-america"></path>
+
+      <!-- Amérique latine -->
+      <path
+        d="M200,220 L220,200 L240,220 L230,270 L250,300 L270,340 L260,380 L230,410 L210,390 L200,360 L180,340 L170,310 L190,270 Z"
+        class="continent fill-saumon"
+        data-continent="latin-america"></path>
+
+      <!-- Europe -->
+      <path
+        d="M450,70 L490,50 L530,60 L560,80 L540,120 L520,130 L490,140 L460,130 L440,110 L430,90 Z"
+        class="continent fill-gray-300"
+        data-continent="europe"></path>
+
+      <!-- Afrique -->
+      <path
+        d="M460,130 L490,140 L520,130 L550,150 L570,180 L550,240 L520,280 L490,310 L460,290 L430,250 L410,210 L420,170 Z"
+        class="continent fill-terre-cuite"
+        data-continent="africa"></path>
+
+      <!-- Asie -->
+      <path
+        d="M540,120 L560,80 L600,60 L650,50 L700,60 L750,80 L800,110 L820,150 L810,190 L780,210 L750,220 L700,210 L680,250 L650,270 L620,240 L580,220 L550,190 L540,150 L520,130 Z"
+        class="continent fill-jaune"
+        data-continent="asia"></path>
+
+      <!-- Océanie -->
+      <path
+        d="M790,280 L820,290 L850,310 L870,340 L850,370 L820,360 L800,340 L780,320 Z"
+        class="continent fill-gray-300"
+        data-continent="oceania"></path>
+
+      <!-- Étiquettes des continents avec fond -->
+      <!-- Amérique du Nord -->
+      <g class="continent-label" data-continent="north-america">
+        <rect
+          x="170"
+          y="110"
+          width="100"
+          height="22"
+          rx="11"
+          class="label-bg fill-gray-300 opacity-90"></rect>
+        <text x="220" y="126" class="label-text text-center"
+          >Amérique du Nord</text
+        >
+      </g>
+
+      <!-- Amérique latine -->
+      <g class="continent-label" data-continent="latin-america">
+        <rect
+          x="165"
+          y="310"
+          width="100"
+          height="22"
+          rx="11"
+          class="label-bg fill-saumon opacity-90"></rect>
+        <text x="215" y="326" class="label-text text-center"
+          >Amérique latine</text
+        >
+      </g>
+
+      <!-- Europe -->
+      <g class="continent-label" data-continent="europe">
+        <rect
+          x="445"
+          y="85"
+          width="60"
+          height="22"
+          rx="11"
+          class="label-bg fill-gray-300 opacity-90"></rect>
+        <text x="475" y="101" class="label-text text-center">Europe</text>
+      </g>
+
+      <!-- Afrique -->
+      <g class="continent-label" data-continent="africa">
+        <rect
+          x="455"
+          y="220"
+          width="60"
+          height="22"
+          rx="11"
+          class="label-bg fill-terre-cuite opacity-90"></rect>
+        <text x="485" y="236" class="label-text text-center">Afrique</text>
+      </g>
+
+      <!-- Asie -->
+      <g class="continent-label" data-continent="asia">
+        <rect
+          x="650"
+          y="140"
+          width="50"
+          height="22"
+          rx="11"
+          class="label-bg fill-jaune opacity-90"></rect>
+        <text x="675" y="156" class="label-text text-center">Asie</text>
+      </g>
+
+      <!-- Océanie -->
+      <g class="continent-label" data-continent="oceania">
+        <rect
+          x="795"
+          y="320"
+          width="60"
+          height="22"
+          rx="11"
+          class="label-bg fill-gray-300 opacity-90"></rect>
+        <text x="825" y="336" class="label-text text-center">Océanie</text>
+      </g>
+
+      <!-- Légende statut des continents -->
+      <g class="map-status-legend" transform="translate(40, 430)">
+        <rect
+          x="0"
+          y="0"
+          width="180"
+          height="30"
+          rx="5"
+          class="status-bg fill-white opacity-80"></rect>
+        <circle cx="15" cy="15" r="6" class="fill-saumon"></circle>
+        <circle cx="65" cy="15" r="6" class="fill-terre-cuite"></circle>
+        <circle cx="115" cy="15" r="6" class="fill-jaune"></circle>
+        <circle cx="165" cy="15" r="6" class="fill-gray-300"></circle>
+        <text x="15" y="30" class="status-text">●</text>
+        <text x="35" y="15" class="status-text small">Disponible</text>
+        <text x="145" y="15" class="status-text small">À venir</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<style>
+  .world-map-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .map-wrapper {
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .world-map {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .continent {
+    transition: transform 0.3s ease;
+    stroke: white;
+    stroke-width: 1.5;
+    filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
+  }
+
+  .continent:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+  }
+
+  .label-text {
+    font-size: 11px;
+    font-weight: 600;
+    fill: #333;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .status-text {
+    font-size: 10px;
+    fill: #333;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .status-text.small {
+    font-size: 9px;
+  }
+
+  @media (max-width: 640px) {
+    .label-text {
+      font-size: 9px;
+    }
+
+    .status-text {
+      font-size: 8px;
+    }
+
+    .status-text.small {
+      font-size: 7px;
+    }
+  }
+</style>

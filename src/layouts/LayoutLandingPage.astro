@@ -1,26 +1,35 @@
 ---
 import Layout from "./Layout.astro";
-import { Picture } from "astro:assets";
+import DegradeLandingPage from "../assets/fond/degrade-landingpage.svg";
 const { title, description, src, alt, classContent = "" } = Astro.props;
 ---
 
 <Layout title={title} description={description}>
-    <section class="relative w-full h-[500px] lg:h-[1024px] overflow-hidden mt-20">
-        <header>
-            <h1 class="mt-34 lg:mt-102
-    ">{title}</h1>
-        </header>
-    <Picture 
-        pictureAttributes={{class: "inset-0 w-11/12 mx-auto mt-20 object-cover absolute z-0"}}
-        formats={['avif','webp']} 
-        src={src} 
-        alt={alt} 
-        widths={[540, 1024, src.width]} 
-        sizes={`(max-width: 540px) 540px, (max-width: 1024px) 1024px, ${src.width}px`}  
-        loading="eager"
-    />
-    </section>
-    <div  class={classContent}>
-        <slot name="content" />
+  <section
+    class="relative w-full h-[500px] lg:h-[1024px] overflow-hidden mt-20 bg-background"
+  >
+    <div class="absolute inset-0 w-full h-full z-0">
+      <img
+        src={DegradeLandingPage.src}
+        alt=""
+        class="w-full h-full object-cover"
+      />
     </div>
+    <header>
+      <h1 class="mt-36 lg:mt-[425px]">{title}</h1>
+    </header>
+    <img
+      src={src.src}
+      alt={alt}
+      class="absolute inset-0 w-full h-full object-cover object-center z-0 mx-auto max-w-[1900px]"
+      loading="eager"
+    />
+  </section>
+  <div class={classContent}>
+    <slot name="content" />
+  </div>
 </Layout>
+
+<style>
+  /* Nous pouvons supprimer ce style global car nous ciblons directement l'image */
+</style>

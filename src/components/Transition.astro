@@ -1,0 +1,14 @@
+---
+import TransitionNormal from "../assets/fond/transition-normal.svg";
+import TransitionReverse from "../assets/fond/transition-reverse.svg";
+
+const { isReversed = false, className = "" } = Astro.props;
+---
+
+<div class={`relative z-0 w-full  ${className}`}>
+  <img
+    src={isReversed ? TransitionReverse.src : TransitionNormal.src}
+    alt={isReversed ? "Transition inversée" : "Transition normale"}
+    class="w-full h-auto block"
+  />
+</div>
