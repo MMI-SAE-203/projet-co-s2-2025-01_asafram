@@ -1,7 +1,6 @@
 ---
 import LayoutLandingPage from "../layouts/LayoutLandingPage.astro";
 import fondPartenaire from "../assets/fond/partenaire-fond.webp";
-import whiteTransition from "../assets/fond/white-transition.webp";
 import CardPartenaires from "../components/CardPartenaires.astro";
 import IconLien from "../assets/icones/icone-liens.webp";
 import IconProduit from "../assets/icones/icone-produits-partenaire.webp";
@@ -15,6 +14,7 @@ import CardCommentairePartenaire from "../components/CardCommentairePartenaire.a
 import ImgLeclerc from "../assets/images/leclerc.webp";
 import ImgTangFrere from "../assets/images/tang-frere.webp";
 import ImgIntermarche from "../assets/images/intermarche.webp";
+import Transition from "../components/Transition.astro";
 ---
 
 <LayoutLandingPage
@@ -25,8 +25,13 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
   classContent="bg-white text-black"
 >
   <Fragment slot="content">
+    <div class="h-40 w-full bg-background"></div>
+    <Transition
+      class="absolute"
+      className="bottom-10 md:bottom-14 lg:bottom-20 xl:bottom-32"
+    />
     <div
-      class="flex flex-col md:flex-row items-center justify-between gap-10 lg:mb-40 mb-20 lg:mx-40 mx-20 pt-40"
+      class="flex flex-col md:flex-row items-center justify-between gap-10 lg:mb-40 mb-20 lg:mx-40 mx-20"
     >
       <div
         class="w-full md:w-1/2 flex flex-col gap-6 items-center md:items-start"
@@ -74,7 +79,7 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
     </div>
 
     <ul
-      class="flex flex-col justify-center items-center gap-8 lg:mt-40 mt-20 lg:flex-row md:flex-row lg:mb-40 mb-20"
+      class="flex flex-col justify-center items-center gap-8 lg:mt-40 mt-20 lg:flex-row md:flex-row"
     >
       <li>
         <CardPartenaires
@@ -102,6 +107,10 @@ import ImgIntermarche from "../assets/images/intermarche.webp";
       </li>
     </ul>
 
+    <Transition
+      isReversed="true"
+      className="top-10 md:top-14 lg:top-20 xl:top-32"
+    />
     <section class="bg-background py-12 lg:pt-40 pt-20 lg:pb-40 pb-10">
       <header>
         <h2>Nos formules partenaires</h2>

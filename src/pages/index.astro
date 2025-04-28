@@ -18,6 +18,7 @@ import BulleAccueil from "../components/BulleAccueil.astro";
 import FondAccueil from "../assets/fond/accueil-desktop.svg";
 import IconeFirst from "../assets/icones/icone-first.svg";
 import Transition from "../components/Transition.astro";
+import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
 ---
 
 <Layout>
@@ -72,7 +73,7 @@ import Transition from "../components/Transition.astro";
       </div>
     </div>
   </section>
-  <Transition className="bottom-10 md:bottom-14 lg:bottom-20 xl:bottom-32" />
+  <Transition className="bottom-8 md:bottom-14 lg:bottom-20 xl:bottom-32" />
   <div
     class="flex flex-col gap-12 md:gap-16 lg:gap-50 justify-center items-center px-6 sm:px-12 lg:px-40 md:px-24 pb-20 lg:pb-40"
   >
@@ -351,14 +352,14 @@ import Transition from "../components/Transition.astro";
 
   <Transition
     isReversed="true"
-    className="top-10 md:top-14 lg:top-20 xl:top-32"
+    className="top-10 md:top-20 lg:top-20 xl:top-32"
   />
   <section class="bg-background section-content">
     <header class="py-12">
-      <h2 class="mb-20">ASAFRAM, C'EST :</h2>
+      <h2 class="mt-20 lg:mt-40 md:mb-20 lg:mb-32">ASAFRAM, C'EST :</h2>
     </header>
     <ul
-      class="flex justify-center items-center flex-col gap-8 md:flex-row md:gap-12 lg:gap-24 xl:gap-36"
+      class="flex justify-center items-center flex-col gap-8 md:flex-row md:gap-12 lg:gap-24 xl:gap-36 pb-12 md:pb-24 lg:pb-32 xl:pb-60"
     >
       <li>
         <BulleAccueil
@@ -395,8 +396,8 @@ import Transition from "../components/Transition.astro";
     </ul>
   </section>
 
-  <div class="bg-white py-12 md:py-24 lg:py-32">
-    <section class="bg-sable mx-12 md:mx-24 lg:mx-32 rounded-lg">
+  <div class="bg-white pt-12 md:pt-24 lg:pt-32">
+    <section class="bg-sable mx-12 md:mx-24 lg:mx-32 rounded-t-lg">
       <header>
         <h2 class="text-center pt-16">Commencer à retrouver les saveurs !</h2>
       </header>
@@ -405,7 +406,13 @@ import Transition from "../components/Transition.astro";
         plateforme dès maintenant.
       </p>
       <div class="position-center py-12">
-        <a class="btn-landing-page" href="">S'inscrire</a>
+        <a
+          class="btn-landing-page flex items-center justify-center gap-4"
+          href=""
+        >
+          <img class="w-6" src={IconeEnvoyer.src} alt="Icone Envoyer" />
+          <p>S'inscrire</p>
+        </a>
       </div>
     </section>
   </div>

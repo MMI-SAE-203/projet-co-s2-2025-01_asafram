@@ -3,13 +3,14 @@ import Logo from "../assets/icones/logo-asafram.webp";
 import IconInstagram from "../assets/icones/instagram.svg";
 import IconFacebook from "../assets/icones/facebook.svg";
 import IconTikTok from "../assets/icones/tiktok.svg";
+import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
 ---
 
 <header
   class="flex items-center justify-between px-4 gap-8 border-b-1 bg-white h-20 shadow-sm lg:fixed lg:inset-x-0 lg:top-0 lg:h-20 lg:gap-8 lg:items-center lg:justify-between lg:z-10 lg:px-12"
 >
   <a href="/">
-    <img class="w-20" src={Logo.src} alt="">
+    <img class="w-20" src={Logo.src} alt="" />
   </a>
   <button
     id="menu-btn"
@@ -32,15 +33,23 @@ import IconTikTok from "../assets/icones/tiktok.svg";
     aria-hidden="true"
   >
     <div class="flex flex-col items-center justify-center h-full">
-      <ul class="flex flex-col gap-24 items-center justify-center text-center mb-4">
+      <ul
+        class="flex flex-col gap-24 items-center justify-center text-center mb-4"
+      >
         <li>
-          <a class="uppercase text-xl font-bold" href="/mission">Notre Mission</a>
+          <a class="uppercase text-xl font-bold" href="/mission"
+            >Notre Mission</a
+          >
         </li>
         <li>
-          <a class="uppercase text-xl font-bold" href="/apropos">Qui Sommes-nous ?</a>
+          <a class="uppercase text-xl font-bold" href="/apropos"
+            >Qui Sommes-nous ?</a
+          >
         </li>
         <li>
-          <a class="uppercase text-xl font-bold" href="/partenaires">Devenir Partenaire</a>
+          <a class="uppercase text-xl font-bold" href="/partenaires"
+            >Devenir Partenaire</a
+          >
         </li>
       </ul>
       <div class="mt-20">
@@ -48,13 +57,13 @@ import IconTikTok from "../assets/icones/tiktok.svg";
       </div>
       <ul class="mt-26 flex gap-20 items-center justify-center">
         <li>
-          <a href=""><img src={IconFacebook.src} alt="Icon Facebook"></a>
+          <a href=""><img src={IconFacebook.src} alt="Icon Facebook" /></a>
         </li>
         <li>
-          <a href=""><img src={IconInstagram.src} alt="Icon Instagram"></a>
+          <a href=""><img src={IconInstagram.src} alt="Icon Instagram" /></a>
         </li>
         <li>
-          <a href=""><img src={IconTikTok.src} alt="Icon Tiktok"></a>
+          <a href=""><img src={IconTikTok.src} alt="Icon Tiktok" /></a>
         </li>
       </ul>
     </div>
@@ -64,19 +73,37 @@ import IconTikTok from "../assets/icones/tiktok.svg";
     class="hidden lg:flex lg:fixed lg:inset-x-0 lg:h-20 lg:px-12 lg:items-center lg:justify-between bg-white shadow-sm"
   >
     <div class="flex-none">
-        <a href="/">
-            <img class="w-20" src={Logo.src} alt="Logo Asafram">
-        </a>
+      <a href="/">
+        <img class="w-20" src={Logo.src} alt="Logo Asafram" />
+      </a>
     </div>
-  
+
     <ul class="flex flex-row gap-40 items-center justify-center flex-1">
-        <li><a href="/mission" class="font-bold xl:text-xl lg:text-lg">Notre Mission</a></li>
-        <li><a href="/apropos" class="font-bold xl:text-xl lg:text-lg"">Qui Sommes-nous ?</a></li>
-        <li><a href="/partenaires" class="font-bold xl:text-xl lg:text-lg"">Devenir Partenaire</a></li>
+      <li>
+        <a href="/mission" class="font-bold xl:text-xl lg:text-lg"
+          >Notre Mission</a
+        >
+      </li>
+      <li>
+        <a href="/apropos" class="font-bold xl:text-xl lg:text-lg" "
+          >Qui Sommes-nous ?</a
+        >
+      </li>
+      <li>
+        <a href="/partenaires" class="font-bold xl:text-xl lg:text-lg" "
+          >Devenir Partenaire</a
+        >
+      </li>
     </ul>
 
     <div class="flex-none">
-        <a class="btn-landing-page" href="">S'inscrire</a>
+      <a
+        class="btn-landing-page flex items-center justify-center gap-4"
+        href=""
+      >
+        <img class="w-6" src={IconeEnvoyer.src} alt="Icone Envoyer" />
+        <p>S'inscrire</p>
+      </a>
     </div>
   </nav>
 </header>
@@ -101,7 +128,7 @@ import IconTikTok from "../assets/icones/tiktok.svg";
 </script>
 
 <style>
-    .noscroll {
-        overflow: hidden;
-    }
+  .noscroll {
+    overflow: hidden;
+  }
 </style>
