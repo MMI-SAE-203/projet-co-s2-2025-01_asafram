@@ -1,0 +1,283 @@
+---
+import LogoAsafram from "../assets/icones/logo-asafram.webp";
+import IconeLocalisation from "../assets/icones/icone-localisation.svg";
+import IconeRecherche from "../assets/icones/icone-recherche.svg";
+import IconeProfil from "../assets/icones/icone-compte.webp";
+import IconeBurger from "../assets/icones/icone-burger.svg";
+import IconeEtoile from "../assets/icones/icone-etoile.svg";
+---
+
+<header
+  class="bg-white border-b border-gray-200 py-3 pt-10 relative px-16 shadow-md"
+  role="banner"
+>
+  <div class="flex items-center">
+    <div class="mr-10 flex-shrink-0">
+      <a
+        href="/site-applicatif"
+        class="flex items-center"
+        aria-label="Accueil ASAFRAM"
+      >
+        <img
+          src={LogoAsafram.src}
+          alt="ASAFRAM"
+          class="h-18 w-auto hover:scale-102 transition-all duration-300"
+        />
+      </a>
+    </div>
+
+    <div class="flex-grow">
+      <div class="container flex flex-col">
+        <div class="flex items-center justify-between mb-6 relative">
+          <div class="flex items-center">
+            <div class="flex items-center gap-2">
+              <img
+                src={IconeLocalisation.src}
+                alt=""
+                class="w-5 h-5"
+                aria-hidden="true"
+              />
+              <span class="text-black text-sm">Adresse : Paris</span>
+            </div>
+          </div>
+
+          <div class="absolute left-1/2 transform -translate-x-1/2 w-[485px]">
+            <div class="relative">
+              <div
+                class="flex items-center border border-black-light rounded-full overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+              >
+                <div class="pl-6">
+                  <img
+                    src={IconeRecherche.src}
+                    alt=""
+                    class="w-4 h-4"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="search"
+                  placeholder="CHERCHER UN PRODUIT OU UNE RECETTE"
+                  class="w-full py-3 px-6 text-base text-gray-700 focus:outline-none font-raleway"
+                  aria-label="Rechercher un produit ou une recette"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-8">
+            <button
+              aria-label="Accéder aux favoris"
+              class="p-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+            >
+              <img src={IconeEtoile.src} alt="" class="w-7 h-7" />
+            </button>
+
+            <button
+              aria-label="Accéder au profil"
+              class="p-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+            >
+              <img src={IconeProfil.src} alt="" class="w-7 h-7" />
+            </button>
+
+            <div
+              class="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+            >
+              <span class="text-lg font-bold">FR</span>
+              <img
+                src="https://flagcdn.com/w40/fr.png"
+                alt="Drapeau français"
+                class="w-6 h-4"
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <div class="w-full flex justify-between items-center">
+            <nav
+              aria-label="Menu principal"
+              class="flex-grow flex justify-center"
+            >
+              <ul class="grid grid-cols-4 gap-x-28 w-3/4 mx-auto">
+                <li class="flex justify-center">
+                  <a
+                    href="/magasins"
+                    class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2 whitespace-nowrap"
+                  >
+                    Trouver un magasin
+                  </a>
+                </li>
+                <li class="flex justify-center">
+                  <a
+                    href="/continents"
+                    class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2"
+                  >
+                    Continent
+                  </a>
+                </li>
+                <li class="flex justify-center">
+                  <a
+                    href="/recettes"
+                    class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2"
+                  >
+                    Recettes
+                  </a>
+                </li>
+                <li class="flex justify-center">
+                  <a
+                    href="/apropos"
+                    class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2"
+                  >
+                    A Propos
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <div>
+              <button
+                id="produits-btn"
+                class="flex items-center gap-6 px-6 py-2.5 rounded-full transition-all duration-300 bg-background shadow-sm hover:shadow-md hover:scale-102 cursor-pointer"
+                aria-label="Voir tous les produits"
+                aria-expanded="false"
+                aria-controls="menu-produits"
+              >
+                <img
+                  src={IconeBurger.src}
+                  alt=""
+                  class="w-4 h-3"
+                  aria-hidden="true"
+                />
+                <span class="font-bold uppercase">Tous les produits</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div
+  id="menu-produits"
+  class="fixed top-0 right-0 bottom-0 w-72 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col"
+  aria-hidden="true"
+>
+  <div class="flex justify-between items-center p-6 border-b border-gray-100">
+    <h2 class="text-2xl font-medium tracking-wide">CATÉGORIES</h2>
+    <button
+      id="close-menu-btn"
+      class="p-1 hover:bg-gray-50 rounded-full transition-colors duration-200"
+      aria-label="Fermer le menu"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-7 w-7"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="flex-1 pt-8 px-8">
+    <ul class="space-y-6">
+      <li>
+        <a
+          href="/categorie/boissons"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Boissons
+        </a>
+      </li>
+      <li>
+        <a
+          href="/categorie/fruits-legumes"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Fruits & légumes
+        </a>
+      </li>
+      <li>
+        <a
+          href="/categorie/viandes"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Viandes
+        </a>
+      </li>
+      <li>
+        <a
+          href="/categorie/epices"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Épices
+        </a>
+      </li>
+      <li>
+        <a
+          href="/categorie/snacks"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Snacks
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .border-black-light {
+    border-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .bg-background {
+    background-color: #f8f5f0;
+  }
+
+  .text-terre-cuite {
+    color: #b7562a;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuBtn = document.getElementById("produits-btn");
+    const menuProduits = document.getElementById("menu-produits");
+    const closeMenuBtn = document.getElementById("close-menu-btn");
+
+    function openMenu() {
+      if (menuBtn) menuBtn.setAttribute("aria-expanded", "true");
+      if (menuProduits) {
+        menuProduits.classList.remove("translate-x-full");
+        menuProduits.setAttribute("aria-hidden", "false");
+      }
+    }
+
+    function closeMenu() {
+      if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+      if (menuProduits) {
+        menuProduits.classList.add("translate-x-full");
+        menuProduits.setAttribute("aria-hidden", "true");
+      }
+    }
+
+    if (menuBtn && menuProduits && closeMenuBtn) {
+      menuBtn.addEventListener("click", openMenu);
+      closeMenuBtn.addEventListener("click", closeMenu);
+
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          menuBtn.getAttribute("aria-expanded") === "true"
+        ) {
+          closeMenu();
+        }
+      });
+    }
+  });
+</script>

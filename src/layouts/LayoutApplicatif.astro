@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css";
-import { ViewTransitions } from "astro:transitions";
-import HeaderLandingPage from "../components/HeaderLandingPage.astro";
+import HeaderApplicatif from "../components/HeaderApplicatif.astro";
 import FooterLandingPage from "../components/FooterLandingPage.astro";
 const { title, description } = Astro.props;
 
@@ -57,11 +56,9 @@ import "@fontsource/radio-canada";
     <script src="../js/alpine.js"></script>
   </head>
   <body>
-    <HeaderLandingPage />
+    <HeaderApplicatif />
     <main>
-      <div class="bg-white">
-        <slot />
-      </div>
+      <slot />
     </main>
     <FooterLandingPage />
   </body>
