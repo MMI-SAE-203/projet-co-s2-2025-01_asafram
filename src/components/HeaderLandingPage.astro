@@ -4,6 +4,10 @@ import IconInstagram from "../assets/icones/instagram.svg";
 import IconFacebook from "../assets/icones/facebook.svg";
 import IconTikTok from "../assets/icones/tiktok.svg";
 import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
+import FondMenu from "../assets/fond/degrade-menu-mobile.svg";
+import LigneMenu1 from "../assets/fond/line1-menu.svg";
+import LigneMenu2 from "../assets/fond/line2-menu.svg";
+import IconeCroix from "../assets/icones/icone-croix-menu.svg";
 ---
 
 <header
@@ -29,12 +33,22 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
 
   <nav
     id="menu"
-    class="flex-1 px-6 py-12 flex mt-20 flex-col fixed z-10 inset-0 visible opacity-100 aria-hidden:invisible aria-hidden:opacity-0 lg:hidden bg-background"
+    class="flex-1 px-6 py-12 flex mt-20 flex-col fixed z-10 inset-0 visible transition-transform duration-300 transform translate-x-full aria-expanded:translate-x-0 lg:hidden bg-background"
     aria-hidden="true"
   >
-    <div class="flex flex-col items-center justify-center h-full">
+    <div class="absolute inset-0 w-full h-full z-0">
+      <img src={FondMenu.src} alt="" class="w-full h-full object-cover" />
+    </div>
+    <div
+      class="flex flex-col items-center justify-center h-full relative w-full"
+    >
+      <img
+        src={LigneMenu1.src}
+        alt=""
+        class="absolute top-[-36px] left-0 w-30 md:left-30 md:w-36 lg:w-48 z-0"
+      />
       <ul
-        class="flex flex-col gap-24 items-center justify-center text-center mb-4"
+        class="flex flex-col gap-24 items-center justify-center text-center mb-4 z-10"
       >
         <li>
           <a class="uppercase text-xl font-bold" href="/mission"
@@ -55,7 +69,7 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
       <div class="mt-20">
         <a class="btn-landing-page text-white bg-black" href="">S'inscrire</a>
       </div>
-      <ul class="mt-26 flex gap-20 items-center justify-center">
+      <ul class="mt-26 flex gap-20 items-center justify-center z-10">
         <li>
           <a href=""><img src={IconFacebook.src} alt="Icon Facebook" /></a>
         </li>
@@ -66,6 +80,11 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
           <a href=""><img src={IconTikTok.src} alt="Icon Tiktok" /></a>
         </li>
       </ul>
+      <img
+        src={LigneMenu2.src}
+        alt=""
+        class="absolute bottom-[-160px] right-4 w-20 md:w-24 md:right-50 md:bottom-[-220px] z-0"
+      />
     </div>
   </nav>
 
@@ -85,12 +104,12 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
         >
       </li>
       <li>
-        <a href="/apropos" class="font-bold xl:text-xl lg:text-lg" "
+        <a href="/apropos" class="font-bold xl:text-xl lg:text-lg"
           >Qui Sommes-nous ?</a
         >
       </li>
       <li>
-        <a href="/partenaires" class="font-bold xl:text-xl lg:text-lg" "
+        <a href="/partenaires" class="font-bold xl:text-xl lg:text-lg"
           >Devenir Partenaire</a
         >
       </li>
@@ -114,21 +133,75 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
   const nav = document.querySelector("#menu");
   const page = document.body;
 
+  // Variable pour stocker la position de défilement initiale
+  let scrollPosition = 0;
+
+  // Fonction pour bloquer le défilement
+  function disableScroll() {
+    // Enregistrer la position de défilement actuelle
+    scrollPosition = window.scrollY || document.documentElement.scrollTop || 0;
+
+    // Ajouter plusieurs styles pour bloquer le défilement
+    page.classList.add("noscroll");
+    page.style.top = `-${scrollPosition}px`;
+    page.style.position = "fixed";
+    page.style.width = "100%";
+    page.style.overflowY = "hidden";
+  }
+
+  // Fonction pour réactiver le défilement
+  function enableScroll() {
+    // Supprimer les styles de blocage
+    page.classList.remove("noscroll");
+    page.style.position = "";
+    page.style.top = "";
+    page.style.width = "";
+    page.style.overflowY = "";
+
+    // Restaurer la position de défilement
+    window.scrollTo({
+      top: scrollPosition,
+      behavior: "instant",
+    });
+  }
+
   // Vérifier si les éléments existent avant d'ajouter l'événement
   if (toggle && nav) {
     toggle.addEventListener("click", () => {
       const isOpen = toggle.ariaExpanded === "true";
       const isClosed = !isOpen;
+
       // Mise à jour des attributs ARIA pour accessibilité
       toggle.ariaExpanded = String(isClosed);
-      nav.ariaHidden = String(isOpen);
-      page.classList.toggle("noscroll", isClosed);
+
+      if (isClosed) {
+        // Ouverture du menu
+        nav.ariaHidden = "false";
+        nav.ariaExpanded = "true";
+        disableScroll();
+      } else {
+        // Fermeture du menu - on retarde la disparition
+        nav.ariaExpanded = "false";
+        enableScroll();
+
+        // On attend que l'animation soit terminée avant de cacher le menu
+        setTimeout(() => {
+          if (toggle.ariaExpanded === "false") {
+            nav.ariaHidden = "true";
+          }
+        }, 300); // Durée correspondant à duration-300
+      }
     });
   }
 </script>
 
 <style>
   .noscroll {
-    overflow: hidden;
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
   }
 </style>

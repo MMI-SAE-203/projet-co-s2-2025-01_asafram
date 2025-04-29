@@ -3,13 +3,27 @@ const { description, title, image, color } = Astro.props;
 ---
 
 <div
-  class={`flex flex-col w-3/4 max-w-md mx-auto rounded-[24px] p-6 transition-transform hover:scale-102 ${color}`}
+  class={`flex flex-col w-3/4 max-w-sm md:max-w-md lg:max-w-md xl:max-w-lg mx-auto rounded-[20px] md:rounded-[22px] lg:rounded-[24px] xl:rounded-[24px] p-4 md:p-5 lg:p-6 xl:p-6 transition-transform hover:scale-102 ${color}`}
 >
   <div class="mb-2 flex-shrink-0">
-    {image && <img src={image} alt={title} class="w-[50px] h-[50px] mb-3" />}
-    <h3 class="!text-xl font-bold mb-2">{title}</h3>
+    {
+      image && (
+        <img
+          src={image}
+          alt={title}
+          class="w-[40px] h-[40px] md:w-[45px] md:h-[45px] lg:w-[50px] lg:h-[50px] xl:w-[55px] xl:h-[55px] mb-2 md:mb-2 lg:mb-3 xl:mb-3"
+        />
+      )
+    }
+    <h3
+      class="!text-lg md:!text-lg lg:!text-xl xl:!text-2xl font-bold mb-1 md:mb-2 lg:mb-2 xl:mb-2"
+    >
+      {title}
+    </h3>
   </div>
   <div>
-    <p class="!text-base text-gray-800">{description}</p>
+    <p class="!text-sm md:!text-base lg:!text-base xl:!text-lg text-gray-800">
+      {description}
+    </p>
   </div>
 </div>

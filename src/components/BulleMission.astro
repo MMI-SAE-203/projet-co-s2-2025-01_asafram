@@ -2,20 +2,26 @@
 const { circleColor, nombre, text } = Astro.props;
 ---
 
-<div class="flex flex-col items-center text-center max-w-xs mx-auto my-6">
-  <div class="flex items-center justify-center mb-4">
+<div
+  class="flex flex-col items-center text-center max-w-xs mx-auto my-4 sm:my-5 md:my-6 lg:my-7 xl:my-8"
+>
+  <div
+    class="flex items-center justify-center mb-3 sm:mb-3 md:mb-3 lg:mb-4 xl:mb-4"
+  >
     <div
-      class={` w-40 h-40 ${circleColor} rounded-full flex items-center justify-center relative`}
+      class={`w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-38 lg:h-38 xl:w-40 xl:h-40 ${circleColor} rounded-full flex items-center justify-center relative`}
     >
       <div class="z-0">
         <span
-          class="text-7xl text-black font-semibold uppercase font-radio-canada"
+          class="text-5xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl text-black font-semibold uppercase font-radio-canada"
           >{nombre}</span
         >
       </div>
     </div>
   </div>
   <div>
-    <p class="text-lg">{text}</p>
+    <p class="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg">
+      {text}
+    </p>
   </div>
 </div>
