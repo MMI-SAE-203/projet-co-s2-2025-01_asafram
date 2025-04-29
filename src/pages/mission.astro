@@ -19,12 +19,14 @@ import IconeTask from "../assets/icones/icone-task.webp";
 import IconeChevron from "../assets/icones/faq-chevron.webp";
 import WorldMap from "../components/WorldMap.astro";
 import Transition from "../components/Transition.astro";
+import FondMissionMobile from "../assets/fond/mission-mobile.svg";
 ---
 
 <LayoutLandingPage
   title="Notre Mission"
   description="Découvrez notre mission à travers le projet d'ASAFRAM"
   src={FondMission}
+  srcMobile={FondMissionMobile}
   alt="Mission ASAFRAM"
   classContent="bg-white text-black"
 >
@@ -35,9 +37,7 @@ import Transition from "../components/Transition.astro";
           class="flex flex-col lg:flex-row justify-center items-center mb-16 pt-20 lg:pt-40 md:pb-20"
         >
           <div class="lg:w-1/2">
-            <h2 class="md:!text-left mb-6 mt-40 md:mt-20">
-              L'histoire de Juan
-            </h2>
+            <h2 class="md:!text-left mb-6 !mt-0 !pt-0">L'histoire de Juan</h2>
 
             <div class="space-y-8">
               <p class="w-full lg:w-3/4 lg:text-xl">
@@ -55,8 +55,12 @@ import Transition from "../components/Transition.astro";
               </p>
             </div>
           </div>
-          <div class="my-10 lg:w-[600px] md:w-[500px]">
-            <img src={JuanImage.src} alt="Image de Juan Veloza" />
+          <div class="my-10 lg:w-[600px] md:w-[500px] overflow-hidden">
+            <img
+              src={JuanImage.src}
+              alt="Image de Juan Veloza"
+              class="transition-transform duration-300 hover:scale-[1.02]"
+            />
           </div>
         </div>
 
@@ -68,21 +72,27 @@ import Transition from "../components/Transition.astro";
           <ul
             class="flex flex-col gap-8 items-center justify-center pt-10 pb-20 lg:flex-row lg:gap-36"
           >
-            <li>
+            <li
+              class="transition-all duration-300 hover:transform hover:translate-y-[-10px]"
+            >
               <BulleMission
                 circleColor="bg-jaune"
                 nombre="30%"
                 text="Des français sonts issus de familles immigrées ou immigré eux-même."
               />
             </li>
-            <li>
+            <li
+              class="transition-all duration-300 hover:transform hover:translate-y-[-10px]"
+            >
               <BulleMission
                 circleColor="bg-saumon"
                 nombre="6M"
                 text="Des français sonts issus de familles immigrées ou immigré eux-même."
               />
             </li>
-            <li>
+            <li
+              class="transition-all duration-300 hover:transform hover:translate-y-[-10px]"
+            >
               <BulleMission
                 circleColor="bg-rouge"
                 nombre="+35%"
@@ -104,9 +114,9 @@ import Transition from "../components/Transition.astro";
             Une plateforme de référencement qui vise à aider les étrangers à
             retrouver les saveurs de chez-eux.
           </p>
-          <div class="mt-6">
+          <div class="mt-6 overflow-hidden rounded-lg">
             <img
-              class="w-full rounded-lg"
+              class="w-full rounded-lg transition-transform duration-300 hover:scale-[1.02]"
               src={ImagePlats.src}
               alt="Image de plats typiques"
             />
@@ -115,8 +125,12 @@ import Transition from "../components/Transition.astro";
 
         <div class="lg:w-3/5 mt-16 lg:mt-0">
           <ul class="flex flex-col gap-8 lg:mt-30">
-            <li class="flex flex-row items-start">
-              <div class="min-w-[64px] flex items-start justify-center mr-4">
+            <li
+              class="flex flex-row items-start transition-all duration-300 hover:transform hover:translate-x-[5px] hover:shadow-md rounded-md p-2"
+            >
+              <div
+                class="min-w-[64px] flex items-start justify-center mr-4 transition-transform duration-300 hover:rotate-6"
+              >
                 <img class="w-16" src={IconeCommerces.src} alt="" />
               </div>
               <div>
@@ -132,8 +146,12 @@ import Transition from "../components/Transition.astro";
               </div>
             </li>
 
-            <li class="flex flex-row items-start">
-              <div class="min-w-[64px] flex items-start justify-center mr-4">
+            <li
+              class="flex flex-row items-start transition-all duration-300 hover:transform hover:translate-x-[5px] hover:shadow-md rounded-md p-2"
+            >
+              <div
+                class="min-w-[64px] flex items-start justify-center mr-4 transition-transform duration-300 hover:rotate-6"
+              >
                 <img class="w-16" src={IconeRecettes.src} alt="" />
               </div>
               <div>
@@ -148,8 +166,12 @@ import Transition from "../components/Transition.astro";
               </div>
             </li>
 
-            <li class="flex flex-row items-start">
-              <div class="min-w-[64px] flex items-start justify-center mr-4">
+            <li
+              class="flex flex-row items-start transition-all duration-300 hover:transform hover:translate-x-[5px] hover:shadow-md rounded-md p-2"
+            >
+              <div
+                class="min-w-[64px] flex items-start justify-center mr-4 transition-transform duration-300 hover:rotate-6"
+              >
                 <img class="w-16" src={IconeCommunautes.src} alt="" />
               </div>
               <div>
@@ -185,7 +207,6 @@ import Transition from "../components/Transition.astro";
           objectif est d'étendre progressivement notre couverture à d'autres
           régions.
         </p>
-        <WorldMap className="w-full max-w-4xl" />
       </div>
     </section>
 
@@ -197,9 +218,9 @@ import Transition from "../components/Transition.astro";
       </header>
 
       <ul
-        class="md:grid md:grid-cols-2 lg:grid-cols-3 flex flex-col gap-8 my-12"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6 md:px-2 lg:px-4 xl:px-6 mx-auto my-12 max-w-7xl"
       >
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconePlan.src}
             title="Carte interactive"
@@ -207,7 +228,7 @@ import Transition from "../components/Transition.astro";
             color="bg-sable"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeProduits.src}
             title="Catalogue de produits"
@@ -215,15 +236,15 @@ import Transition from "../components/Transition.astro";
             color="bg-saumon"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeRecettes.src}
             title="Partage de recettes"
             description="Découvrez et publiez des recettes authentiques pour cuisiner des plats du monde chez vous."
-            color="bg-terre-cuite"
+            color="bg-rouge"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeFavoris.src}
             title="Liste de favoris"
@@ -231,7 +252,7 @@ import Transition from "../components/Transition.astro";
             color="bg-sable"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeMessage.src}
             title="Commentaires & Notes"
@@ -239,15 +260,15 @@ import Transition from "../components/Transition.astro";
             color="bg-saumon"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeNewsletter.src}
             title="Newsletter"
             description="Recevez les dernières nouveautés, promotions et recettes directement dans votre boîte mail."
-            color="bg-terre-cuite"
+            color="bg-rouge"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeSearchbar.src}
             title="Recherches Rapide"
@@ -255,7 +276,7 @@ import Transition from "../components/Transition.astro";
             color="bg-sable"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeTask.src}
             title="Générateur de liste de course"
@@ -263,12 +284,12 @@ import Transition from "../components/Transition.astro";
             color="bg-saumon"
           />
         </li>
-        <li>
+        <li class="flex justify-center">
           <CardFonctionnalites
             image={IconeTraduction.src}
             title="Option de langue"
             description="Naviguez sur la plateforme en plusieurs langues pour une accessibilité maximale."
-            color="bg-terre-cuite"
+            color="bg-rouge"
           />
         </li>
       </ul>

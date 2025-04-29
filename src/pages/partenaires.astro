@@ -1,6 +1,6 @@
 ---
 import LayoutLandingPage from "../layouts/LayoutLandingPage.astro";
-import fondPartenaire from "../assets/fond/partenaire-fond.webp";
+import fondPartenaire from "../assets/fond/partenaire-desktop.svg";
 import CardPartenaires from "../components/CardPartenaires.astro";
 import IconLien from "../assets/icones/icone-liens.webp";
 import IconProduit from "../assets/icones/icone-produits-partenaire.webp";
@@ -15,12 +15,14 @@ import ImgLeclerc from "../assets/images/leclerc.webp";
 import ImgTangFrere from "../assets/images/tang-frere.webp";
 import ImgIntermarche from "../assets/images/intermarche.webp";
 import Transition from "../components/Transition.astro";
+import FondPartenaireMobile from "../assets/fond/partenaire-mobile.svg";
 ---
 
 <LayoutLandingPage
   title="Devenir Partenaire"
   description="Devenez partenaire de l'ASAFRAM et rejoignez notre communauté dynamique."
   src={fondPartenaire}
+  srcMobile={FondPartenaireMobile}
   alt="Partenaire ASAFRAM"
   classContent="bg-white text-black"
 >
@@ -79,7 +81,7 @@ import Transition from "../components/Transition.astro";
     </div>
 
     <ul
-      class="flex flex-col justify-center items-center gap-8 lg:mt-40 mt-20 lg:flex-row md:flex-row"
+      class="flex flex-wrap justify-center items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-16 md:mt-20 lg:mt-24 xl:mt-40 px-4 sm:px-8 md:px-12 lg:px-16"
     >
       <li>
         <CardPartenaires
@@ -114,108 +116,120 @@ import Transition from "../components/Transition.astro";
     <section class="bg-background py-12 lg:pt-40 pt-20 lg:pb-40 pb-10">
       <header>
         <h2>Nos formules partenaires</h2>
-        <p class="text-center text-terre-cuite">
+        <p class="text-center text-terre-cuite mt-6">
           Ces formules sont uniquement encadrées par des contrats de
           sponsorings.
         </p>
-        <ul class="flex flex-wrap justify-center gap-6 mt-8">
-          <li>
-            <CardTarifs
-              titre="Gratuit"
-              icone={IconForfaitGratuit}
-              description="Réferencement sur notre carte intéractive uniquement."
-              prix="0€/mois"
-              btnText="Acquis"
-              bgColor="bg-white"
-              titleColor="text-terre-cuite"
-              textColor="text-gray-700"
-              labelColor="text-gray-600"
-              iconColor="fill-current text-terre-cuite"
-              features={[
-                { label: "Présence sur la carte", included: true },
-                {
-                  label: "Page dédiée pour le commerce",
-                  included: false,
-                },
-                { label: "Liens d'affiliation", included: false },
-                {
-                  label: "Présence dans 'nos partenaires'",
-                  included: false,
-                },
-              ]}
-            />
-          </li>
+        <div
+          class="px-4 sm:px-6 md:px-8 lg:px-10 max-w-[1200px] mx-auto mt-10 md:mt-20 lg:mt-32"
+        >
+          <ul
+            class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-4 lg:gap-6 mt-8 relative"
+          >
+            <li>
+              <CardTarifs
+                titre="Gratuit"
+                icone={IconForfaitGratuit}
+                description="Réferencement sur notre carte intéractive uniquement."
+                prix="0€/mois"
+                btnText="Acquis"
+                iconBgColor="bg-terre-cuite"
+                bgColor="bg-white"
+                titleColor="text-terre-cuite"
+                textColor="text-gray-700"
+                labelColor="text-gray-600"
+                iconColor="fill-current text-terre-cuite"
+                features={[
+                  { label: "Présence sur la carte", included: true },
+                  {
+                    label: "Page dédiée pour le commerce",
+                    included: false,
+                  },
+                  { label: "Liens d'affiliation", included: false },
+                  {
+                    label: "Présence dans 'nos partenaires'",
+                    included: false,
+                  },
+                ]}
+              />
+            </li>
 
-          <li>
-            <CardTarifs
-              titre="Standard"
-              icone={IconForfaitStandard}
-              description="Visibilité améliorée et premières fonctionnalités."
-              prix="Prix défini sur contrats"
-              btnText="Souscrire"
-              bgColor="bg-terre-cuite"
-              titleColor="text-white"
-              textColor="text-gray-200"
-              labelColor="text-white"
-              iconColor="fill-current text-white"
-              features={[
-                { label: "Présence sur la carte", included: true },
-                {
-                  label: "Page dédiée pour le commerce",
-                  included: true,
-                },
-                { label: "Liens d'affiliation", included: true },
-                {
-                  label: "Présence dans 'nos partenaires'",
-                  included: true,
-                },
-                {
-                  label: "Produits ajoutés au catalogue",
-                  included: true,
-                },
-                {
-                  label: "Feedbacks & statistiques",
-                  included: true,
-                },
-                {
-                  label: "Post sur les réseaux sociaux",
-                  included: false,
-                },
-                {
-                  label: "Contenu sponsorisé",
-                  included: false,
-                },
-              ]}
-            />
-          </li>
+            <li class="md:-mx-3 lg:-mx-4 z-0">
+              <CardTarifs
+                titre="Standard"
+                icone={IconForfaitStandard}
+                description="Visibilité améliorée et premières fonctionnalités."
+                prix="Prix défini sur contrats"
+                btnText="Souscrire"
+                bgColor="bg-terre-cuite"
+                btnBgColor="bg-white"
+                btnTextColor="text-terre-cuite"
+                iconBgColor="bg-white"
+                titleColor="text-white"
+                textColor="text-gray-200"
+                labelColor="text-white"
+                iconColor="fill-current text-white"
+                isMiddle={true}
+                features={[
+                  { label: "Présence sur la carte", included: true },
+                  {
+                    label: "Page dédiée pour le commerce",
+                    included: true,
+                  },
+                  { label: "Liens d'affiliation", included: true },
+                  {
+                    label: "Présence dans 'nos partenaires'",
+                    included: true,
+                  },
+                  {
+                    label: "Produits ajoutés au catalogue",
+                    included: true,
+                  },
+                  {
+                    label: "Feedbacks & statistiques",
+                    included: true,
+                  },
+                  {
+                    label: "Post sur les réseaux sociaux",
+                    included: false,
+                  },
+                  {
+                    label: "Contenu sponsorisé",
+                    included: false,
+                  },
+                ]}
+              />
+            </li>
 
-          <li>
-            <CardTarifs
-              titre="Premium"
-              icone={IconForfaitPro}
-              description="Partenariat complet avec visibilité maximale."
-              prix="Prix défini sur contrats"
-              btnText="Souscrire"
-              bgColor="bg-white"
-              titleColor="text-terre-cuite"
-              textColor="text-gray-700"
-              labelColor="text-terre-cuite"
-              iconColor="fill-current text-white"
-              features={[
-                { label: "Présence sur la carte", included: true },
-                {
-                  label: "Page dédiée pour le commerce",
-                  included: true,
-                },
-                { label: "Liens d'affiliation", included: true },
-                {
-                  label: "Présence dans 'nos partenaires'",
-                  included: true,
-                },
-              ]}
-            />
-          </li>
-        </ul>
+            <li>
+              <CardTarifs
+                titre="Premium"
+                icone={IconForfaitPro}
+                description="Partenariat complet avec visibilité maximale."
+                prix="Prix défini sur contrats"
+                btnText="Souscrire"
+                bgColor="bg-white"
+                iconBgColor="bg-terre-cuite"
+                titleColor="text-terre-cuite"
+                textColor="text-gray-700"
+                labelColor="text-terre-cuite"
+                iconColor="fill-current text-white"
+                features={[
+                  { label: "Présence sur la carte", included: true },
+                  {
+                    label: "Page dédiée pour le commerce",
+                    included: true,
+                  },
+                  { label: "Liens d'affiliation", included: true },
+                  {
+                    label: "Présence dans 'nos partenaires'",
+                    included: true,
+                  },
+                ]}
+              />
+            </li>
+          </ul>
+        </div>
       </header>
     </section>
 

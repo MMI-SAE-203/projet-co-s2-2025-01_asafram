@@ -1,29 +1,62 @@
 ---
 import Layout from "./Layout.astro";
 import DegradeLandingPage from "../assets/fond/degrade-landingpage.svg";
-const { title, description, src, alt, classContent = "" } = Astro.props;
+import DegradeLandingPageMobile from "../assets/fond/degrade-menu-mobile.svg";
+const {
+  title,
+  description,
+  src,
+  srcMobile,
+  alt,
+  classContent = "",
+} = Astro.props;
 ---
 
 <Layout title={title} description={description}>
   <section
-    class="relative w-full h-[550px] lg:h-[1024px] overflow-hidden mt-20 bg-background"
+    class="relative w-full h-[550px] lg:h-[1024px] overflow-hidden mt-0 lg:mt-20 bg-background"
   >
     <div class="absolute inset-0 w-full h-full z-0">
       <img
+        src={DegradeLandingPageMobile.src}
+        alt=""
+        class="w-full h-full block lg:hidden"
+      />
+      <img
         src={DegradeLandingPage.src}
         alt=""
-        class="w-full h-full object-cover"
+        class="w-full h-full hidden lg:block"
       />
     </div>
     <header>
-      <h1 class="mt-36 lg:mt-[425px]">{title}</h1>
+      <h1 class="mt-57 lg:mt-[425px] relative z-0">{title}</h1>
     </header>
-    <img
-      src={src.src}
-      alt={alt}
-      class="absolute inset-0 w-full h-full object-cover object-center z-0 mx-auto max-w-[1900px]"
-      loading="eager"
-    />
+    {
+      srcMobile ? (
+        <>
+          <img
+            src={srcMobile.src}
+            alt={alt}
+            class="absolute top-10 left-0 right-0 bottom-0 w-full h-full object-contain object-center z-0 mx-auto block lg:hidden"
+            loading="eager"
+            style="max-height: 100%; width: 100%; object-position: center top;"
+          />
+          <img
+            src={src.src}
+            alt={alt}
+            class="absolute inset-0 w-full h-full object-cover object-center z-0 mx-auto max-w-[1900px] hidden lg:block"
+            loading="eager"
+          />
+        </>
+      ) : (
+        <img
+          src={src.src}
+          alt={alt}
+          class="absolute inset-0 w-full h-full object-cover object-center z-0 mx-auto max-w-[1900px]"
+          loading="eager"
+        />
+      )
+    }
   </section>
   <div class={classContent}>
     <slot name="content" />

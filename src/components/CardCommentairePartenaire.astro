@@ -5,16 +5,16 @@ const { image, commentaire, partenaire } = Astro.props;
 
 <!-- Version desktop -->
 <div
-  class="hidden md:flex w-full max-w-4xl lg:max-w-5xl xl:max-w-7xl h-auto shadow-md lg:shadow-lg xl:shadow-xl mx-auto"
+  class="hidden md:flex w-full max-w-4xl lg:max-w-5xl xl:max-w-7xl h-auto shadow-md lg:shadow-lg xl:shadow-xl mx-auto transition-all duration-500 hover:shadow-xl hover:translate-y-[-8px] rounded-lg overflow-hidden"
 >
   <div
-    class="w-1/2 min-h-[250px] md:min-h-[270px] lg:min-h-[280px] xl:min-h-[300px] relative"
+    class="w-1/2 min-h-[250px] md:min-h-[270px] lg:min-h-[280px] xl:min-h-[300px] relative overflow-hidden"
   >
     <div class="absolute inset-0 bg-opacity-30"></div>
     <img
       src={image.src}
       alt={`Image ${partenaire}`}
-      class="w-full h-full min-h-[250px] md:min-h-[270px] lg:min-h-[280px] xl:min-h-[300px] object-cover"
+      class="w-full h-full min-h-[250px] md:min-h-[270px] lg:min-h-[280px] xl:min-h-[300px] object-cover transition-transform duration-700 hover:scale-110"
     />
   </div>
 
@@ -69,13 +69,13 @@ const { image, commentaire, partenaire } = Astro.props;
 
 <!-- Version mobile -->
 <div
-  class="md:hidden w-full max-w-[360px] sm:max-w-[400px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-md"
+  class="md:hidden w-full max-w-[360px] sm:max-w-[400px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-md transition-all duration-500 hover:shadow-xl hover:translate-y-[-8px]"
 >
-  <div class="w-full h-[180px] sm:h-[200px] relative">
+  <div class="w-full h-[180px] sm:h-[200px] relative overflow-hidden">
     <img
       src={image.src}
       alt={`Image ${partenaire}`}
-      class="w-full h-full object-cover"
+      class="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
     />
   </div>
 

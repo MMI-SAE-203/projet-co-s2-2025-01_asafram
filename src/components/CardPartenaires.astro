@@ -3,14 +3,16 @@ const { image, alt, description } = Astro.props;
 ---
 
 <div
-  class="border rounded-lg flex flex-col items-center justify-center w-40 h-40 xs:w-56 sm:w-60 max-w-60 overflow-hidden p-3 sm:p-4 shadow-sm m-2 sm:m-4 transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-primary cursor-pointer"
+  class="border rounded-lg flex flex-col items-center justify-center w-36 h-36 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 overflow-hidden p-2 sm:p-3 md:p-4 shadow-sm m-1 sm:m-2 md:m-3 lg:m-4 transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-primary"
 >
   <img
-    class="w-12 sm:w-16 mb-2 sm:mb-4 transition-transform duration-300 hover:scale-101"
+    class="w-10 sm:w-12 md:w-14 lg:w-16 xl:w-20 mb-2 sm:mb-3 md:mb-4 transition-transform duration-300 hover:scale-105"
     src={image.src}
     alt={alt}
   />
-  <p class="text-center uppercase font-bold text-sm sm:text-base">
+  <p
+    class="text-center uppercase font-bold text-xs sm:text-sm md:text-base lg:text-base xl:text-lg px-1"
+  >
     {description}
   </p>
 </div>

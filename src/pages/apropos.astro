@@ -11,12 +11,14 @@ import IconAuthenticite from "../assets/icones/icone-authenticite.webp";
 import IconSoutien from "../assets/icones/icone-commerce.webp";
 import IconPartage from "../assets/icones/icone-partage.webp";
 import Transition from "../components/Transition.astro";
+import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
 ---
 
 <LayoutLandingPage
   title="Qui sommes-nous ?"
   description="Découvrez qui se cache derrière l'ASAFRAM."
   src={FondApropos}
+  srcMobile={FondAproposMobile}
   alt="Qui sommes nous ASAFRAM"
   classContent="bg-white text-black"
 >
@@ -30,7 +32,7 @@ import Transition from "../components/Transition.astro";
       <ul
         class="flex flex-col justify-center items-center gap-8 md:flex-row md:gap-30 lg:gap-60 xl:gap-80"
       >
-        <li>
+        <li class="transition-transform duration-300 hover:translate-y-[-5px]">
           <CardPersonnage
             nom="Mestre"
             prenom="Andréa"
@@ -39,7 +41,7 @@ import Transition from "../components/Transition.astro";
             alt="Image de Andréa Mestre"
           />
         </li>
-        <li>
+        <li class="transition-transform duration-300 hover:translate-y-[-5px]">
           <CardPersonnage
             nom="Thai"
             prenom="Nicolas"
@@ -48,7 +50,7 @@ import Transition from "../components/Transition.astro";
             alt="Image de Nicolas Thai"
           />
         </li>
-        <li>
+        <li class="transition-transform duration-300 hover:translate-y-[-5px]">
           <CardPersonnage
             nom="Yang"
             prenom="François"
@@ -106,7 +108,7 @@ import Transition from "../components/Transition.astro";
           <img
             src={IutMmi.src}
             alt="IUT MMI"
-            class="w-full rounded-lg shadow-lg"
+            class="w-full rounded-lg shadow-lg transition-transform duration-300 hover:scale-[1.02]"
           />
           <div class="position-center mt-10">
             <a class="btn-landing-page bg-terre-cuite text-white" href=""
@@ -126,7 +128,9 @@ import Transition from "../components/Transition.astro";
       <ul
         class="flex flex-col justify-center items-center mt-10 gap-14 md:flex-row lg:gap-20 md:gap-16 xl:gap-50"
       >
-        <li class="flex flex-col items-center justify-center">
+        <li
+          class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
+        >
           <div class="h-20 flex items-center justify-center mb-4">
             <img class="w-20" src={IconDiversite.src} alt="" />
           </div>
@@ -134,7 +138,9 @@ import Transition from "../components/Transition.astro";
             Diversité
           </h3>
         </li>
-        <li class="flex flex-col items-center justify-center">
+        <li
+          class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
+        >
           <div class="h-20 flex items-center justify-center mb-4">
             <img class="w-20" src={IconAuthenticite.src} alt="" />
           </div>
@@ -142,7 +148,9 @@ import Transition from "../components/Transition.astro";
             Authenticité
           </h3>
         </li>
-        <li class="flex flex-col items-center justify-center">
+        <li
+          class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
+        >
           <div class="h-20 flex items-center justify-center mb-4">
             <img class="w-20" src={IconSoutien.src} alt="" />
           </div>
@@ -152,7 +160,9 @@ import Transition from "../components/Transition.astro";
             Soutenir les petits commerces
           </h3>
         </li>
-        <li class="flex flex-col items-center justify-center">
+        <li
+          class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
+        >
           <div class="h-20 flex items-center justify-center mb-4">
             <img class="w-20" src={IconPartage.src} alt="" />
           </div>
