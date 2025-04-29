@@ -12,14 +12,15 @@ import IconeCroix from "../assets/icones/icone-croix-menu.svg";
 
 <header
   class="flex items-center justify-between px-4 gap-8 border-b-1 bg-white h-20 shadow-sm lg:fixed lg:inset-x-0 lg:top-0 lg:h-20 lg:gap-8 lg:items-center lg:justify-between lg:z-10 lg:px-12"
+  role="banner"
 >
-  <a href="/">
-    <img class="w-20" src={Logo.src} alt="" />
+  <a href="/" aria-label="Accueil ASAFRAM">
+    <img class="w-20" src={Logo.src} alt="Logo ASAFRAM" />
   </a>
   <button
     id="menu-btn"
     class="group relative z-10 flex h-3 w-6 flex-col justify-between *:block *:ease *:h-0.5 *:w-full *:transform *:rounded-full *:bg-black *:transition *:duration-300 lg:hidden"
-    aria-label="Menu"
+    aria-label="Menu de navigation"
     aria-controls="menu"
     aria-expanded="false"
   >
@@ -35,9 +36,15 @@ import IconeCroix from "../assets/icones/icone-croix-menu.svg";
     id="menu"
     class="flex-1 px-6 py-12 flex mt-20 flex-col fixed z-10 inset-0 visible transition-transform duration-300 transform translate-x-full aria-expanded:translate-x-0 lg:hidden bg-background"
     aria-hidden="true"
+    role="navigation"
+    aria-label="Menu principal mobile"
   >
     <div class="absolute inset-0 w-full h-full z-0">
-      <img src={FondMenu.src} alt="" class="w-full h-full object-cover" />
+      <img
+        src={FondMenu.src}
+        alt="Fond de menu décoratif"
+        class="w-full h-full object-cover"
+      />
     </div>
     <div
       class="flex flex-col items-center justify-center h-full relative w-full"
@@ -45,6 +52,7 @@ import IconeCroix from "../assets/icones/icone-croix-menu.svg";
       <img
         src={LigneMenu1.src}
         alt=""
+        aria-hidden="true"
         class="absolute top-[-36px] left-0 w-30 md:left-30 md:w-36 lg:w-48 z-0"
       />
       <ul
@@ -71,18 +79,25 @@ import IconeCroix from "../assets/icones/icone-croix-menu.svg";
       </div>
       <ul class="mt-26 flex gap-20 items-center justify-center z-10">
         <li>
-          <a href=""><img src={IconFacebook.src} alt="Icon Facebook" /></a>
+          <a href="" aria-label="Page Facebook ASAFRAM"
+            ><img src={IconFacebook.src} alt="Facebook" /></a
+          >
         </li>
         <li>
-          <a href=""><img src={IconInstagram.src} alt="Icon Instagram" /></a>
+          <a href="" aria-label="Page Instagram ASAFRAM"
+            ><img src={IconInstagram.src} alt="Instagram" /></a
+          >
         </li>
         <li>
-          <a href=""><img src={IconTikTok.src} alt="Icon Tiktok" /></a>
+          <a href="" aria-label="Page TikTok ASAFRAM"
+            ><img src={IconTikTok.src} alt="TikTok" /></a
+          >
         </li>
       </ul>
       <img
         src={LigneMenu2.src}
         alt=""
+        aria-hidden="true"
         class="absolute bottom-[-160px] right-4 w-20 md:w-24 md:right-50 md:bottom-[-220px] z-0"
       />
     </div>
@@ -90,9 +105,11 @@ import IconeCroix from "../assets/icones/icone-croix-menu.svg";
 
   <nav
     class="hidden lg:flex lg:fixed lg:inset-x-0 lg:h-20 lg:px-12 lg:items-center lg:justify-between bg-white shadow-sm"
+    role="navigation"
+    aria-label="Menu principal desktop"
   >
     <div class="flex-none">
-      <a href="/">
+      <a href="/" aria-label="Accueil ASAFRAM">
         <img class="w-20" src={Logo.src} alt="Logo Asafram" />
       </a>
     </div>
@@ -119,8 +136,9 @@ import IconeCroix from "../assets/icones/icone-croix-menu.svg";
       <a
         class="btn-landing-page flex items-center justify-center gap-4"
         href=""
+        aria-label="S'inscrire à ASAFRAM"
       >
-        <img class="w-6" src={IconeEnvoyer.src} alt="Icone Envoyer" />
+        <img class="w-6" src={IconeEnvoyer.src} alt="" aria-hidden="true" />
         <p>S'inscrire</p>
       </a>
     </div>

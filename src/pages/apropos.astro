@@ -23,14 +23,15 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
   classContent="bg-white text-black"
 >
   <Fragment slot="content">
-    <div class="h-40 w-full bg-background"></div>
+    <div class="h-40 w-full bg-background" aria-hidden="true"></div>
     <Transition className="bottom-10 md:bottom-14 lg:bottom-20 xl:bottom-32" />
-    <section class="section-content" id="equipe">
+    <section class="section-content" id="equipe" aria-label="Notre équipe">
       <header class="lg:mb-20 mb-10">
         <h2>Notre équipe</h2>
       </header>
       <ul
         class="flex flex-col justify-center items-center gap-8 md:flex-row md:gap-30 lg:gap-60 xl:gap-80"
+        aria-label="Membres de l'équipe ASAFRAM"
       >
         <li class="transition-transform duration-300 hover:translate-y-[-5px]">
           <CardPersonnage
@@ -38,7 +39,7 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
             prenom="Andréa"
             role="Designer"
             image={AndreaPerso}
-            alt="Image de Andréa Mestre"
+            alt="Portrait d'Andréa Mestre, designer d'ASAFRAM"
           />
         </li>
         <li class="transition-transform duration-300 hover:translate-y-[-5px]">
@@ -47,7 +48,7 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
             prenom="Nicolas"
             role="Développeur"
             image={NicoPerso}
-            alt="Image de Nicolas Thai"
+            alt="Portrait de Nicolas Thai, développeur d'ASAFRAM"
           />
         </li>
         <li class="transition-transform duration-300 hover:translate-y-[-5px]">
@@ -56,7 +57,7 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
             prenom="François"
             role="Communication"
             image={FrancoisPerso}
-            alt="Image de François Yang"
+            alt="Portrait de François Yang, responsable communication d'ASAFRAM"
           />
         </li>
       </ul>
@@ -69,6 +70,8 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
 
     <section
       class="section-content bg-background lg:pt-40 pt-20 lg:pb-40 pb-30"
+      id="notre-histoire"
+      aria-label="Histoire d'ASAFRAM"
     >
       <header>
         <h2 class="uppercase text-center md:!text-left lg:ml-10">
@@ -107,13 +110,18 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
         <div class="mt-10 lg:mt-0 lg:w-1/2 flex flex-col">
           <img
             src={IutMmi.src}
-            alt="IUT MMI"
+            alt="Campus de l'IUT MMI où le projet ASAFRAM a été créé"
             class="w-full rounded-lg shadow-lg transition-transform duration-300 hover:scale-[1.02]"
           />
           <div class="position-center mt-10">
-            <a class="btn-landing-page bg-terre-cuite text-white" href=""
-              >Essayer ASAFRAM</a
+            <a
+              class="btn-landing-page bg-terre-cuite text-white"
+              href=""
+              aria-label="Essayer la plateforme ASAFRAM"
+              role="button"
             >
+              Essayer ASAFRAM
+            </a>
           </div>
         </div>
       </div>
@@ -121,17 +129,25 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
 
     <Transition className="bottom-10 md:bottom-14 lg:bottom-20 xl:bottom-32" />
 
-    <section class="section-content lg:pb-40 pb-10">
+    <section
+      class="section-content lg:pb-40 pb-10"
+      id="valeurs"
+      aria-label="Nos valeurs et engagements"
+    >
       <header class="lg:mb-40 mb-10">
         <h2>Nos valeurs & engagements</h2>
       </header>
       <ul
         class="flex flex-col justify-center items-center mt-10 gap-14 md:flex-row lg:gap-20 md:gap-16 xl:gap-50"
+        aria-label="Liste des valeurs d'ASAFRAM"
       >
         <li
           class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
         >
-          <div class="h-20 flex items-center justify-center mb-4">
+          <div
+            class="h-20 flex items-center justify-center mb-4"
+            aria-hidden="true"
+          >
             <img class="w-20" src={IconDiversite.src} alt="" />
           </div>
           <h3 class="text-center h-10 flex items-center justify-center">
@@ -141,7 +157,10 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
         <li
           class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
         >
-          <div class="h-20 flex items-center justify-center mb-4">
+          <div
+            class="h-20 flex items-center justify-center mb-4"
+            aria-hidden="true"
+          >
             <img class="w-20" src={IconAuthenticite.src} alt="" />
           </div>
           <h3 class="text-center h-10 flex items-center justify-center">
@@ -151,7 +170,10 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
         <li
           class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
         >
-          <div class="h-20 flex items-center justify-center mb-4">
+          <div
+            class="h-20 flex items-center justify-center mb-4"
+            aria-hidden="true"
+          >
             <img class="w-20" src={IconSoutien.src} alt="" />
           </div>
           <h3
@@ -163,7 +185,10 @@ import FondAproposMobile from "../assets/fond/apropos-mobile.svg";
         <li
           class="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-110"
         >
-          <div class="h-20 flex items-center justify-center mb-4">
+          <div
+            class="h-20 flex items-center justify-center mb-4"
+            aria-hidden="true"
+          >
             <img class="w-20" src={IconPartage.src} alt="" />
           </div>
           <h3 class="text-center h-10 flex items-center justify-center">

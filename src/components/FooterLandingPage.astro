@@ -7,39 +7,86 @@ import IconeLinkedin from "../assets/icones/linkedin.svg";
 import IconeDiscord from "../assets/icones/discord.svg";
 ---
 
-<footer class="w-full bg-white border-t border-gray-300">
+<footer class="w-full bg-white border-t border-gray-300" role="contentinfo">
   <div class="max-w-7xl mx-auto px-4 py-12 hidden md:block">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <div class="flex flex-col justify-center items-center gap-8 mr-10">
         <img src={Logo.src} alt="Logo ASAFRAM" class="w-32" />
         <div class="flex gap-4 md:gap-6 lg:gap-8 flex-wrap justify-center">
-          <a href="#" class="hover:opacity-70 transition-opacity">
-            <img src={IconeFacebook.src} alt="Facebook" class="w-6 h-6" />
+          <a
+            href="#"
+            class="hover:opacity-70 transition-opacity"
+            aria-label="Facebook"
+          >
+            <img
+              src={IconeFacebook.src}
+              alt=""
+              aria-hidden="true"
+              class="w-6 h-6"
+            />
           </a>
-          <a href="#" class="hover:opacity-70 transition-opacity">
-            <img src={IconeInstagram.src} alt="Instagram" class="w-6 h-6" />
+          <a
+            href="#"
+            class="hover:opacity-70 transition-opacity"
+            aria-label="Instagram"
+          >
+            <img
+              src={IconeInstagram.src}
+              alt=""
+              aria-hidden="true"
+              class="w-6 h-6"
+            />
           </a>
-          <a href="#" class="hover:opacity-70 transition-opacity">
-            <img src={IconeTikTok.src} alt="TikTok" class="w-6 h-6" />
+          <a
+            href="#"
+            class="hover:opacity-70 transition-opacity"
+            aria-label="TikTok"
+          >
+            <img
+              src={IconeTikTok.src}
+              alt=""
+              aria-hidden="true"
+              class="w-6 h-6"
+            />
           </a>
-          <a href="#" class="hover:opacity-70 transition-opacity">
-            <img src={IconeLinkedin.src} alt="LinkedIn" class="w-6 h-6" />
+          <a
+            href="#"
+            class="hover:opacity-70 transition-opacity"
+            aria-label="LinkedIn"
+          >
+            <img
+              src={IconeLinkedin.src}
+              alt=""
+              aria-hidden="true"
+              class="w-6 h-6"
+            />
           </a>
-          <a href="#" class="hover:opacity-70 transition-opacity">
-            <img src={IconeDiscord.src} alt="Discord" class="w-6 h-6" />
+          <a
+            href="#"
+            class="hover:opacity-70 transition-opacity"
+            aria-label="Discord"
+          >
+            <img
+              src={IconeDiscord.src}
+              alt=""
+              aria-hidden="true"
+              class="w-6 h-6"
+            />
           </a>
         </div>
-        <div
+        <button
           class="border border-black rounded-md px-3 py-1 flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 transition-colors"
+          aria-haspopup="listbox"
+          aria-label="Sélectionner la langue"
         >
           <span>Français</span>
-          <span class="text-xs">▼</span>
-        </div>
+          <span class="text-xs" aria-hidden="true">▼</span>
+        </button>
       </div>
 
       <div class="pl-16">
-        <h3 class="!text-xl mb-6 uppercase">Navigation</h3>
-        <ul class="space-y-4">
+        <h3 class="!text-xl mb-6 uppercase" id="nav-footer">Navigation</h3>
+        <ul class="space-y-4" aria-labelledby="nav-footer">
           <li>
             <a href="/mission" class="hover:text-sable">Notre mission</a>
           </li>
@@ -61,8 +108,10 @@ import IconeDiscord from "../assets/icones/discord.svg";
       </div>
 
       <div class="pl-8">
-        <h3 class="!text-xl font-bold mb-6 uppercase">Infos légales</h3>
-        <ul class="space-y-4">
+        <h3 class="!text-xl font-bold mb-6 uppercase" id="legal-footer">
+          Infos légales
+        </h3>
+        <ul class="space-y-4" aria-labelledby="legal-footer">
           <li>
             <a href="/confidentialite" class="hover:text-sable"
               >Confidentialité</a
@@ -80,8 +129,10 @@ import IconeDiscord from "../assets/icones/discord.svg";
       </div>
 
       <div>
-        <h3 class="!text-xl font-bold mb-6 uppercase">Contact</h3>
-        <ul class="space-y-4 mb-8">
+        <h3 class="!text-xl font-bold mb-6 uppercase" id="contact-footer">
+          Contact
+        </h3>
+        <ul class="space-y-4 mb-8" aria-labelledby="contact-footer">
           <li>
             <a href="/contact" class="hover:text-sable">Nous contacter</a>
           </li>
@@ -97,20 +148,31 @@ import IconeDiscord from "../assets/icones/discord.svg";
         </ul>
 
         <div class="mt-6">
-          <h4 class="text-lg font-semibold mb-2">Newsletter</h4>
-          <p class="text-xs text-gray-600 mb-2">(1 email tous les mercredis)</p>
-          <div class="flex gap-2">
+          <h4 class="text-lg font-semibold mb-2" id="newsletter-desktop">
+            Newsletter
+          </h4>
+          <p class="text-xs text-gray-600 mb-2" id="newsletter-desc-desktop">
+            (1 email tous les mercredis)
+          </p>
+          <form
+            class="flex gap-2"
+            aria-labelledby="newsletter-desktop"
+            aria-describedby="newsletter-desc-desktop"
+          >
             <input
               type="email"
               placeholder="Entrez votre email..."
+              aria-label="Votre adresse email"
+              required
               class="px-4 py-2 border border-black rounded-full text-sm w-full"
             />
             <button
+              type="submit"
               class="bg-black text-white px-6 py-2 rounded-full text-sm hover:opacity-90 transition-opacity"
             >
               OK
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -127,12 +189,14 @@ import IconeDiscord from "../assets/icones/discord.svg";
   <div class="md:hidden px-5 py-8">
     <div class="relative mb-8">
       <div class="absolute top-2 right-0">
-        <div
+        <button
           class="border border-black rounded-md px-3 py-1 flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 transition-colors"
+          aria-haspopup="listbox"
+          aria-label="Sélectionner la langue"
         >
           <span>Français</span>
-          <span class="text-xs">▼</span>
-        </div>
+          <span class="text-xs" aria-hidden="true">▼</span>
+        </button>
       </div>
 
       <div class="flex flex-col items-center">
@@ -150,50 +214,60 @@ import IconeDiscord from "../assets/icones/discord.svg";
       <a
         href="#"
         class="hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+        aria-label="Facebook"
       >
         <img
           src={IconeFacebook.src}
-          alt="Facebook"
+          alt=""
+          aria-hidden="true"
           class="w-auto h-auto max-w-full max-h-full"
         />
       </a>
       <a
         href="#"
         class="hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+        aria-label="TikTok"
       >
         <img
           src={IconeTikTok.src}
-          alt="TikTok"
+          alt=""
+          aria-hidden="true"
           class="w-auto h-auto max-w-full max-h-full"
         />
       </a>
       <a
         href="#"
         class="hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+        aria-label="LinkedIn"
       >
         <img
           src={IconeLinkedin.src}
-          alt="LinkedIn"
+          alt=""
+          aria-hidden="true"
           class="w-auto h-auto max-w-full max-h-full"
         />
       </a>
       <a
         href="#"
         class="hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+        aria-label="Discord"
       >
         <img
           src={IconeDiscord.src}
-          alt="Discord"
+          alt=""
+          aria-hidden="true"
           class="w-auto h-auto max-w-full max-h-full"
         />
       </a>
       <a
         href="#"
         class="hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+        aria-label="Instagram"
       >
         <img
           src={IconeInstagram.src}
-          alt="Instagram"
+          alt=""
+          aria-hidden="true"
           class="w-auto h-auto max-w-full max-h-full"
         />
       </a>
@@ -203,10 +277,14 @@ import IconeDiscord from "../assets/icones/discord.svg";
       <div class="flex flex-col items-center">
         <h3
           class="font-bold mb-5 text-base border-b border-gray-200 pb-2 text-center uppercase"
+          id="nav-mobile-footer"
         >
           Navigation
         </h3>
-        <ul class="space-y-4 text-sm text-center w-full">
+        <ul
+          class="space-y-4 text-sm text-center w-full"
+          aria-labelledby="nav-mobile-footer"
+        >
           <li>
             <a
               href="/mission"
@@ -248,10 +326,14 @@ import IconeDiscord from "../assets/icones/discord.svg";
       <div class="flex flex-col items-center">
         <h3
           class="font-bold mb-5 text-base border-b border-gray-200 pb-2 text-center uppercase"
+          id="legal-mobile-footer"
         >
           Infos légales
         </h3>
-        <ul class="space-y-4 text-sm text-center w-full">
+        <ul
+          class="space-y-4 text-sm text-center w-full"
+          aria-labelledby="legal-mobile-footer"
+        >
           <li>
             <a
               href="/confidentialite"
@@ -296,10 +378,14 @@ import IconeDiscord from "../assets/icones/discord.svg";
     >
       <h3
         class="font-bold mb-5 text-base border-b border-gray-200 pb-2 text-center uppercase"
+        id="contact-mobile-footer"
       >
         Contact
       </h3>
-      <div class="space-y-3 text-sm text-center">
+      <div
+        class="space-y-3 text-sm text-center"
+        aria-labelledby="contact-mobile-footer"
+      >
         <p class="flex items-center justify-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -307,6 +393,7 @@ import IconeDiscord from "../assets/icones/discord.svg";
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -327,6 +414,7 @@ import IconeDiscord from "../assets/icones/discord.svg";
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -345,21 +433,32 @@ import IconeDiscord from "../assets/icones/discord.svg";
     </div>
 
     <div class="text-center mb-10 bg-gray-50 py-6 px-4 rounded-lg">
-      <h4 class="font-semibold mb-2 text-base">Newsletter</h4>
-      <p class="text-xs mb-4 text-gray-600">(1 email tous les mercredis)</p>
+      <h4 class="font-semibold mb-2 text-base" id="newsletter-mobile">
+        Newsletter
+      </h4>
+      <p class="text-xs mb-4 text-gray-600" id="newsletter-desc-mobile">
+        (1 email tous les mercredis)
+      </p>
       <div class="flex justify-center mx-auto">
-        <div class="flex w-full max-w-xs">
+        <form
+          class="flex w-full max-w-xs"
+          aria-labelledby="newsletter-mobile"
+          aria-describedby="newsletter-desc-mobile"
+        >
           <input
             type="email"
             placeholder="Entrez votre email..."
+            aria-label="Votre adresse email"
+            required
             class="px-4 py-2 border border-black rounded-l-full text-xs w-full focus:outline-none focus:ring-1 focus:ring-terre-cuite"
           />
           <button
+            type="submit"
             class="bg-black text-white px-5 py-2 rounded-r-full text-xs -ml-1 hover:bg-gray-800 transition-colors duration-200 shadow-md"
           >
             OK
           </button>
-        </div>
+        </form>
       </div>
     </div>
 
