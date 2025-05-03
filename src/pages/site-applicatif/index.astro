@@ -1,8 +1,56 @@
 ---
 import LayoutApplicatif from "../../layouts/LayoutApplicatif.astro";
+import CardProduits from "../../components/site-applicatif/CardProduits.astro";
+import { getProductById } from "../../../backend/backend.js";
+
+// ID du produit à charger
+const productId = "ah29am0x101bdq5"; // Vous pouvez changer cet ID selon vos besoins
+
+// Récupération du produit depuis la base de données
+let dbProduct = await getProductById(productId);
+
+// Création d'un nouvel objet de produit avec les valeurs statiques
+const product = dbProduct
+  ? {
+      // Propriétés du produit venant de la base de données
+      id: dbProduct.id,
+      nom: dbProduct.nom,
+      prix: dbProduct.prix,
+      img: dbProduct.img,
+      expand: dbProduct.expand,
+      note: dbProduct.note,
+      nbNotes: dbProduct.nombres_notes,
+
+      // Valeurs statiques qui causaient des problèmes
+
+      distance: 5,
+    }
+  : {
+      // Produit de secours si aucun produit n'est trouvé
+      id: "produit-demo",
+      nom: "Huile d'olive vierge extra",
+      prix: 12.99,
+      note: 4.5,
+      reviewCount: 120,
+      distance: 5,
+      img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      expand: {
+        pays: {
+          nom: "Espagne",
+          drapeauUrl:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/200px-Flag_of_Spain.svg.png",
+        },
+      },
+    };
 ---
 
-<LayoutApplicatif title="ASAFRAM" description="ASAFRAM">
-  <h1 class="text-3xl font-bold mb-6">ASAFRAM</h1>
-  <p>Bienvenue sur la plateforme ASAFRAM.</p>
+<LayoutApplicatif title="ASAFRAM" description="Carte produit démo">
+  <section>
+    <header>
+      <h2>Produits Asiatiques</h2>
+    </header>
+    <div class="flex justify-center">
+      <CardProduits product={product} />
+    </div>
+  </section>
 </LayoutApplicatif>

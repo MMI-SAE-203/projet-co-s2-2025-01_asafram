@@ -1,24 +1,31 @@
-# build output
+# Fichiers de build
 dist/
+.output/
 
-# generated types
-.astro/
-
-# dependencies
+# Dépendances
 node_modules/
 
-# logs
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# Fichiers d'environnement
 .env
 .env.production
 
-# macOS-specific files
+# Fichiers générés par l'éditeur
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Fichiers système macOS
 .DS_Store
 
-# jetbrains setting folder
-.idea/
+# Ignorer tous les fichiers de la base de données PocketBase
+/backend/pocketbase/pb_data/
