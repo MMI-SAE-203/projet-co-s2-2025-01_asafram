@@ -1,9 +1,9 @@
 ---
-import LayoutApplicatif from "../../../layouts/LayoutApplicatif.astro";
-import IconeFavoris from "../../../assets/icones/icone-etoile.svg";
-import IconeEtoileNote from "../../../assets/icones/etoile-note.svg";
-import IconeDistance from "../../../assets/icones/icone-coordonnes.svg";
-import { getProductById } from "../../../../backend/backend.js";
+import LayoutApplicatif from "../../../../layouts/LayoutApplicatif.astro";
+import IconeFavoris from "../../../../assets/icones/icone-etoile.svg";
+import IconeEtoileNote from "../../../../assets/icones/etoile-note.svg";
+import IconeDistance from "../../../../assets/icones/icone-coordonnes.svg";
+import { getProductById } from "../../../../../backend/backend.js";
 
 // Récupération de l'ID du produit depuis l'URL
 const { id } = Astro.params;

@@ -1371,12 +1371,19 @@ export async function getPaysByContinent(continent) {
   }
 }
 
-export async function getProductsByContinent(
-  continent,
-  page = 1,
-  perPage = 20
-) {
+export async function getProductsByContinent(continent, options = {}) {
   try {
+    // Options par défaut
+    const {
+      page = 1,
+      perPage = 20,
+      limit = null,
+      sort = "created",
+      addFixedDistance = false,
+      distanceValue = 15,
+      randomize = false,
+    } = options;
+
     // On récupère d'abord tous les pays de ce continent
     const paysIds = await pb
       .collection("pays")
@@ -1399,33 +1406,81 @@ export async function getProductsByContinent(
     // On construit le filtre pour récupérer les produits de ces pays
     const paysFilter = paysIds.map((id) => `pays="${id}"`).join(" || ");
 
-    const resultList = await pb.collection("produits").getList(page, perPage, {
+    // Configuration de la requête
+    const queryConfig = {
       filter: `(${paysFilter})`,
       expand: "pays",
-      sort: "created",
-    });
+      sort: randomize ? "random()" : sort,
+    };
 
-    // Traitement des images...
-    resultList.items = resultList.items.map((product) => {
-      if (product.img) {
-        product.img = pb.files.getURL(product, product.img);
-      }
+    // Si on souhaite limiter les résultats sans pagination
+    if (limit !== null && limit > 0) {
+      // On récupère directement le nombre de produits demandé
+      let produits = await pb
+        .collection("produits")
+        .getList(1, limit, queryConfig);
 
-      if (
-        product.expand &&
-        product.expand.pays &&
-        product.expand.pays.drapeau
-      ) {
-        product.expand.pays.drapeauUrl = pb.files.getURL(
-          product.expand.pays,
+      // Traitement des images et des drapeaux
+      produits.items = produits.items.map((product) => {
+        // Traitement de l'image du produit
+        if (product.img) {
+          product.img = pb.files.getURL(product, product.img);
+        }
+
+        // Traitement de l'image du drapeau du pays
+        if (
+          product.expand &&
+          product.expand.pays &&
           product.expand.pays.drapeau
-        );
-      }
+        ) {
+          product.expand.pays.drapeauUrl = pb.files.getURL(
+            product.expand.pays,
+            product.expand.pays.drapeau
+          );
+        }
 
-      return product;
-    });
+        // Ajout d'une distance fixe si demandé
+        if (addFixedDistance) {
+          product.distance = distanceValue;
+        }
 
-    return resultList;
+        return product;
+      });
+
+      return produits;
+    } else {
+      // Sinon on utilise la pagination standard
+      const resultList = await pb
+        .collection("produits")
+        .getList(page, perPage, queryConfig);
+
+      // Traitement des images et des drapeaux
+      resultList.items = resultList.items.map((product) => {
+        if (product.img) {
+          product.img = pb.files.getURL(product, product.img);
+        }
+
+        if (
+          product.expand &&
+          product.expand.pays &&
+          product.expand.pays.drapeau
+        ) {
+          product.expand.pays.drapeauUrl = pb.files.getURL(
+            product.expand.pays,
+            product.expand.pays.drapeau
+          );
+        }
+
+        // Ajout d'une distance fixe si demandé
+        if (addFixedDistance) {
+          product.distance = distanceValue;
+        }
+
+        return product;
+      });
+
+      return resultList;
+    }
   } catch (error) {
     console.error(
       `Erreur lors de la récupération des produits du continent ${continent}:`,

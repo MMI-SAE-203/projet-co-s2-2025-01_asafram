@@ -1,56 +1,88 @@
 ---
 import LayoutApplicatif from "../../layouts/LayoutApplicatif.astro";
 import CardProduits from "../../components/site-applicatif/CardProduits.astro";
-import { getProductById } from "../../../backend/backend.js";
+import BulleCategorie from "../../components/site-applicatif/BulleCategorie.astro";
+import { getProductsByContinent } from "../../../backend/backend.js";
+import IconeBoissons from "../../assets/icones/icone-boissons.webp";
+import IconeFruitsEtLegumes from "../../assets/icones/icone-fruits.webp";
+import IconeViandes from "../../assets/icones/icone-viandes.webp";
+import IconeEpices from "../../assets/icones/icone-epices.webp";
+import IconeSnacks from "../../assets/icones/icone-snacks.webp";
+import SvgAsie from "../../assets/icones/continent-asie.svg";
+import SvgAfrique from "../../assets/icones/continent-afrique.svg";
+import SvgAmeriqueLatine from "../../assets/icones/continent-ameriquelatine.svg";
+import SvgMaghreb from "../../assets/icones/continent-maghreb.svg";
 
-// ID du produit à charger
-const productId = "ah29am0x101bdq5"; // Vous pouvez changer cet ID selon vos besoins
+// Définition des catégories
+const categories = [
+  { nom: "Boissons", icone: IconeBoissons },
+  { nom: "Fruits et Légumes", icone: IconeFruitsEtLegumes },
+  { nom: "Viandes", icone: IconeViandes },
+  { nom: "Épices", icone: IconeEpices },
+  { nom: "Snacks", icone: IconeSnacks },
+];
 
-// Récupération du produit depuis la base de données
-let dbProduct = await getProductById(productId);
+// Récupération des produits asiatiques
+const asianProductsResult = await getProductsByContinent("Asie", {
+  perPage: 8, // On récupère 8 produits maximum
+});
 
-// Création d'un nouvel objet de produit avec les valeurs statiques
-const product = dbProduct
-  ? {
-      // Propriétés du produit venant de la base de données
-      id: dbProduct.id,
-      nom: dbProduct.nom,
-      prix: dbProduct.prix,
-      img: dbProduct.img,
-      expand: dbProduct.expand,
-      note: dbProduct.note,
-      nbNotes: dbProduct.nombres_notes,
+// Ajout d'une distance fictive aux produits et extraction des items de la réponse
+const asianProducts = asianProductsResult.items.map((produit) => {
+  // Ajout d'une distance (valeur fictive)
+  produit.distance = 15;
 
-      // Valeurs statiques qui causaient des problèmes
+  // Correction pour le nombre de notes (si nombres_notes existe mais pas nbNotes)
+  if (produit.nombres_notes && !produit.nbNotes) {
+    produit.nbNotes = produit.nombres_notes;
+  }
 
-      distance: 5,
-    }
-  : {
-      // Produit de secours si aucun produit n'est trouvé
-      id: "produit-demo",
-      nom: "Huile d'olive vierge extra",
-      prix: 12.99,
-      note: 4.5,
-      reviewCount: 120,
-      distance: 5,
-      img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      expand: {
-        pays: {
-          nom: "Espagne",
-          drapeauUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/200px-Flag_of_Spain.svg.png",
-        },
-      },
-    };
+  // Si aucune note n'est définie, on ajoute une valeur par défaut
+  if (!produit.nbNotes) {
+    produit.nbNotes = Math.floor(Math.random() * 50) + 10; // Entre 10 et 59 notes aléatoirement
+  }
+
+  return produit;
+});
 ---
 
 <LayoutApplicatif title="ASAFRAM" description="Carte produit démo">
-  <section>
-    <header>
-      <h2>Produits Asiatiques</h2>
+  <!-- Section des catégories -->
+  <section class="container mx-auto px-4 py-8">
+    <ul class="flex flex-wrap justify-center gap-32 my-8">
+      {
+        categories.map((categorie) => (
+          <li>
+            <BulleCategorie nom={categorie.nom} icone={categorie.icone.src} />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Section des produits asiatiques -->
+  <section class="container mx-auto px-4 py-8">
+    <header class="mb-8">
+      <h2
+        class="text-2xl !text-left font-raleway font-extrabold uppercase tracking-wider relative inline-block"
+      >
+        Produits Asiatiques
+      </h2>
+      <div class="w-full h-0.5 bg-saumon mt-2"></div>
     </header>
-    <div class="flex justify-center">
-      <CardProduits product={product} />
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center"
+    >
+      {asianProducts.map((produit) => <CardProduits product={produit} />)}
+    </div>
+
+    <div class="flex justify-center mt-10">
+      <a
+        class="bg-saumon text-black font-bold uppercase py-3 px-8 rounded-full hover:bg-[#e69c50] transition-colors duration-300"
+      >
+        Tout afficher
+      </a>
     </div>
   </section>
 </LayoutApplicatif>

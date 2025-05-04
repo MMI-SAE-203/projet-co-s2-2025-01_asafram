@@ -1,0 +1,41 @@
+---
+// Props du composant
+const { icone, nom } = Astro.props;
+
+// Formater le nom pour l'URL (minuscules, sans accents, tirets au lieu d'espaces)
+const formatUrlName = (name: string): string => {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+};
+
+const urlCategorie = `/site-applicatif/produits/${formatUrlName(nom)}`;
+---
+
+<a
+  href={urlCategorie}
+  class="flex flex-col items-center gap-2 cursor-pointer hover:scale-103 transition-transform duration-300"
+>
+  <div class="relative">
+    <!-- Cercle de fond -->
+    <div
+      class="w-[120px] h-[120px] rounded-full bg-sable flex items-center justify-center"
+    >
+      <!-- Icône de la catégorie -->
+      <img
+        src={icone}
+        alt={`Icône ${nom}`}
+        class="relative bottom-2 w-[90px] h-[90px] object-contain"
+      />
+    </div>
+  </div>
+
+  <!-- Nom de la catégorie -->
+  <span
+    class="relative bottom-7 text-center uppercase font-raleway font-bold text-black text-lg mt-1"
+  >
+    {nom}
+  </span>
+</a>

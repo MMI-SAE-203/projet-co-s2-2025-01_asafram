@@ -5,6 +5,19 @@ import IconeRecherche from "../assets/icones/icone-recherche.svg";
 import IconeProfil from "../assets/icones/icone-compte.webp";
 import IconeBurger from "../assets/icones/icone-burger.svg";
 import IconeEtoile from "../assets/icones/icone-etoile.svg";
+import { isUserLoggedIn, getCurrentUser } from "../../backend/backend.js";
+
+// Vérifier si l'utilisateur est connecté
+const userLoggedIn = isUserLoggedIn();
+let userAvatar = null;
+
+// Si connecté, récupérer les informations de l'utilisateur
+if (userLoggedIn) {
+  const user = await getCurrentUser();
+  if (user && user.avatarUrl) {
+    userAvatar = user.avatarUrl;
+  }
+}
 ---
 
 <header
@@ -65,19 +78,35 @@ import IconeEtoile from "../assets/icones/icone-etoile.svg";
           </div>
 
           <div class="flex items-center gap-8">
-            <button
+            <a
+              href="/site-applicatif/favoris"
               aria-label="Accéder aux favoris"
               class="p-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
             >
               <img src={IconeEtoile.src} alt="" class="w-7 h-7" />
-            </button>
+            </a>
 
-            <button
-              aria-label="Accéder au profil"
+            <a
+              href="/site-applicatif/compte"
+              aria-label={userLoggedIn
+                ? "Accéder à votre compte"
+                : "Se connecter"}
               class="p-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
             >
-              <img src={IconeProfil.src} alt="" class="w-7 h-7" />
-            </button>
+              {
+                userLoggedIn && userAvatar ? (
+                  <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-black-light shadow-sm">
+                    <img
+                      src={userAvatar}
+                      alt="Votre profil"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <img src={IconeProfil.src} alt="" class="w-7 h-7" />
+                )
+              }
+            </a>
 
             <div
               class="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200 cursor-pointer"
@@ -188,7 +217,7 @@ import IconeEtoile from "../assets/icones/icone-etoile.svg";
     <ul class="space-y-6">
       <li>
         <a
-          href="/categorie/boissons"
+          href="/site-applicatif/produits/boissons"
           class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
         >
           Boissons
@@ -196,7 +225,7 @@ import IconeEtoile from "../assets/icones/icone-etoile.svg";
       </li>
       <li>
         <a
-          href="/categorie/fruits-legumes"
+          href="/site-applicatif/produits/fruits-legumes"
           class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
         >
           Fruits & légumes
@@ -204,7 +233,7 @@ import IconeEtoile from "../assets/icones/icone-etoile.svg";
       </li>
       <li>
         <a
-          href="/categorie/viandes"
+          href="/site-applicatif/produits/viandes"
           class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
         >
           Viandes
@@ -212,7 +241,7 @@ import IconeEtoile from "../assets/icones/icone-etoile.svg";
       </li>
       <li>
         <a
-          href="/categorie/epices"
+          href="/site-applicatif/produits/epices"
           class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
         >
           Épices
@@ -220,64 +249,96 @@ import IconeEtoile from "../assets/icones/icone-etoile.svg";
       </li>
       <li>
         <a
-          href="/categorie/snacks"
+          href="/site-applicatif/produits/snacks"
           class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
         >
           Snacks
         </a>
       </li>
+      <li>
+        <a
+          href="/site-applicatif/produits/sauces"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Sauces
+        </a>
+      </li>
+      <li>
+        <a
+          href="/site-applicatif/produits/conserves"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Conserves
+        </a>
+      </li>
+      <li>
+        <a
+          href="/site-applicatif/produits/condiments"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Condiments
+        </a>
+      </li>
+      <li>
+        <a
+          href="/site-applicatif/produits/autres"
+          class="block py-2 text-lg hover:translate-x-1 transition-transform duration-200"
+        >
+          Autres
+        </a>
+      </li>
     </ul>
-  </nav>
-</div>
 
-<style>
-  .border-black-light {
-    border-color: rgba(0, 0, 0, 0.7);
-  }
-
-  .bg-background {
-    background-color: #f8f5f0;
-  }
-
-  .text-terre-cuite {
-    color: #b7562a;
-  }
-</style>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const menuBtn = document.getElementById("produits-btn");
-    const menuProduits = document.getElementById("menu-produits");
-    const closeMenuBtn = document.getElementById("close-menu-btn");
-
-    function openMenu() {
-      if (menuBtn) menuBtn.setAttribute("aria-expanded", "true");
-      if (menuProduits) {
-        menuProduits.classList.remove("translate-x-full");
-        menuProduits.setAttribute("aria-hidden", "false");
+    <style>
+      .border-black-light {
+        border-color: rgba(0, 0, 0, 0.7);
       }
-    }
 
-    function closeMenu() {
-      if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
-      if (menuProduits) {
-        menuProduits.classList.add("translate-x-full");
-        menuProduits.setAttribute("aria-hidden", "true");
+      .bg-background {
+        background-color: #f8f5f0;
       }
-    }
 
-    if (menuBtn && menuProduits && closeMenuBtn) {
-      menuBtn.addEventListener("click", openMenu);
-      closeMenuBtn.addEventListener("click", closeMenu);
+      .text-terre-cuite {
+        color: #b7562a;
+      }
+    </style>
 
-      document.addEventListener("keydown", (event) => {
-        if (
-          event.key === "Escape" &&
-          menuBtn.getAttribute("aria-expanded") === "true"
-        ) {
-          closeMenu();
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const menuBtn = document.getElementById("produits-btn");
+        const menuProduits = document.getElementById("menu-produits");
+        const closeMenuBtn = document.getElementById("close-menu-btn");
+
+        function openMenu() {
+          if (menuBtn) menuBtn.setAttribute("aria-expanded", "true");
+          if (menuProduits) {
+            menuProduits.classList.remove("translate-x-full");
+            menuProduits.setAttribute("aria-hidden", "false");
+          }
+        }
+
+        function closeMenu() {
+          if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+          if (menuProduits) {
+            menuProduits.classList.add("translate-x-full");
+            menuProduits.setAttribute("aria-hidden", "true");
+          }
+        }
+
+        if (menuBtn && menuProduits && closeMenuBtn) {
+          menuBtn.addEventListener("click", openMenu);
+          closeMenuBtn.addEventListener("click", closeMenu);
+
+          document.addEventListener("keydown", (event) => {
+            if (
+              event.key === "Escape" &&
+              menuBtn.getAttribute("aria-expanded") === "true"
+            ) {
+              closeMenu();
+            }
+          });
         }
       });
-    }
-  });
-</script>
+    </script>
+  </nav>
+</div>
