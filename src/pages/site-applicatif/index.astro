@@ -2,7 +2,11 @@
 import LayoutApplicatif from "../../layouts/LayoutApplicatif.astro";
 import CardProduits from "../../components/site-applicatif/CardProduits.astro";
 import BulleCategorie from "../../components/site-applicatif/BulleCategorie.astro";
-import { getProductsByContinent } from "../../../backend/backend.js";
+import {
+  getProductsByContinent,
+  getRecipeById,
+  getPopularRecipes,
+} from "../../../backend/backend.js";
 import IconeBoissons from "../../assets/icones/icone-boissons.webp";
 import IconeFruitsEtLegumes from "../../assets/icones/icone-fruits.webp";
 import IconeViandes from "../../assets/icones/icone-viandes.webp";
@@ -12,7 +16,7 @@ import SvgAsie from "../../assets/icones/continent-asie.svg";
 import SvgAfrique from "../../assets/icones/continent-afrique.svg";
 import SvgAmeriqueLatine from "../../assets/icones/continent-ameriquelatine.svg";
 import SvgMaghreb from "../../assets/icones/continent-maghreb.svg";
-
+import CardRecettes from "../../components/site-applicatif/CardRecettes.astro";
 // Définition des catégories
 const categories = [
   { nom: "Boissons", icone: IconeBoissons },
@@ -44,45 +48,79 @@ const asianProducts = asianProductsResult.items.map((produit) => {
 
   return produit;
 });
+
+// Récupération des recettes populaires (8 max)
+const popularRecipes = await getPopularRecipes(8);
 ---
 
 <LayoutApplicatif title="ASAFRAM" description="Carte produit démo">
-  <!-- Section des catégories -->
-  <section class="container mx-auto px-4 py-8">
-    <ul class="flex flex-wrap justify-center gap-32 my-8">
-      {
-        categories.map((categorie) => (
-          <li>
-            <BulleCategorie nom={categorie.nom} icone={categorie.icone.src} />
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  <div class="bg-white">
+    <!-- Section des catégories -->
+    <section class="container mx-auto px-4 py-8">
+      <ul class="flex flex-wrap justify-center gap-32 my-8">
+        {
+          categories.map((categorie) => (
+            <li>
+              <BulleCategorie nom={categorie.nom} icone={categorie.icone.src} />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
-  <!-- Section des produits asiatiques -->
-  <section class="container mx-auto px-4 py-8">
-    <header class="mb-8">
-      <h2
-        class="text-2xl !text-left font-raleway font-extrabold uppercase tracking-wider relative inline-block"
+    <!-- Section des produits asiatiques -->
+    <section class="container mx-auto px-4 py-8">
+      <header class="mb-16">
+        <h2
+          class="text-2xl !text-left font-raleway font-extrabold uppercase tracking-wider relative inline-block pb-4"
+        >
+          Produits Asiatiques
+        </h2>
+        <div class="w-full h-0.5 bg-black mt-2"></div>
+      </header>
+      <div
+        class="grid
+        grid-cols-1
+        sm:grid-cols-2
+        lg:grid-cols-4
+        gap-14
+        justify-items-center"
       >
-        Produits Asiatiques
-      </h2>
-      <div class="w-full h-0.5 bg-saumon mt-2"></div>
-    </header>
+        {asianProducts.map((produit) => <CardProduits product={produit} />)}
+      </div>
 
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center"
-    >
-      {asianProducts.map((produit) => <CardProduits product={produit} />)}
-    </div>
+      <div class="flex justify-center mt-20">
+        <a
+          href="/site-applicatif/produits"
+          class="bg-saumon hover:bg-saumon-hover text-black font-bold uppercase py-3 px-10 rounded-lg transition-colors duration-300 cursor-pointer"
+        >
+          Tout afficher
+        </a>
+      </div>
+    </section>
 
-    <div class="flex justify-center mt-10">
-      <a
-        class="bg-saumon text-black font-bold uppercase py-3 px-8 rounded-full hover:bg-[#e69c50] transition-colors duration-300"
+    <section class="container mx-auto px-4 py-8">
+      <header class="mb-16">
+        <h2
+          class="text-2xl !text-left font-raleway font-bold uppercase tracking-wider relative inline-block pb-4"
+        >
+          Recettes populaires
+        </h2>
+        <div class="w-full h-0.5 bg-black mt-2"></div>
+      </header>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-14 justify-items-center"
       >
-        Tout afficher
-      </a>
-    </div>
-  </section>
+        {popularRecipes.map((recette) => <CardRecettes recette={recette} />)}
+      </div>
+      <div class="flex justify-center mt-20">
+        <a
+          href="/site-applicatif/recettes"
+          class="bg-jaune hover:bg-jaune-hover text-black font-bold uppercase py-3 px-10 rounded-lg transition-colors duration-300 cursor-pointer"
+        >
+          Tout afficher
+        </a>
+      </div>
+    </section>
+  </div>
 </LayoutApplicatif>

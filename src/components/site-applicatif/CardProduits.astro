@@ -40,7 +40,7 @@ const isFavorite = false;
     }
 
     <button
-      class="favorite-btn w-[38px] h-[38px] bg-saumon rounded-full flex justify-center items-center transition-all duration-300 hover:bg-[#e69c50] z-20"
+      class="cursor-pointer favorite-btn w-[38px] h-[38px] bg-saumon rounded-full flex justify-center items-center transition-all duration-300 hover:bg-[#e69c50] z-20"
       aria-label={isFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
       data-product-id={product.id || "produit-demo"}
     >
@@ -80,7 +80,7 @@ const isFavorite = false;
   </div>
 
   <h3
-    class="!text-lg uppercase !font-raleway !font-bold text-black mt-0 pt-0 pb-0"
+    class="!text-lg uppercase !font-raleway font-bold text-black mt-0 pt-0 pb-0"
   >
     {product.nom}
   </h3>

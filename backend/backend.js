@@ -120,12 +120,22 @@ export async function getAllRecipes() {
   try {
     let recipes = await pb.collection("recettes").getFullList({
       sort: "created",
+      expand: "pays,auteur",
     });
 
     recipes = recipes.map((recipe) => {
       if (recipe.img) {
         recipe.img = pb.files.getURL(recipe, recipe.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+        recipe.expand.pays.drapeauUrl = pb.files.getURL(
+          recipe.expand.pays,
+          recipe.expand.pays.drapeau
+        );
+      }
+
       return recipe;
     });
     return recipes;
@@ -137,10 +147,46 @@ export async function getAllRecipes() {
 
 export async function getRecipeById(id) {
   try {
-    const recipe = await pb.collection("recettes").getOne(id);
+    // Récupérer la recette avec les relations expandées
+    const recipe = await pb.collection("recettes").getOne(id, {
+      expand: "pays,auteur",
+    });
+
+    // Traitement de l'image de la recette
     if (recipe.img) {
       recipe.img = pb.files.getURL(recipe, recipe.img);
     }
+
+    // Traiter l'URL du drapeau du pays si disponible
+    if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+      recipe.expand.pays.drapeauUrl = pb.files.getURL(
+        recipe.expand.pays,
+        recipe.expand.pays.drapeau
+      );
+    }
+
+    // Si l'auteur n'est pas correctement expandé mais qu'on a son ID
+    if (!recipe.expand?.auteur?.username && recipe.auteur) {
+      try {
+        // Récupérer les infos de l'auteur directement
+        const auteurId =
+          typeof recipe.auteur === "string"
+            ? recipe.auteur
+            : recipe.expand?.auteur?.id || recipe.auteur.id;
+
+        if (auteurId) {
+          const auteur = await pb.collection("users").getOne(auteurId);
+
+          // S'assurer que l'expand existe
+          if (!recipe.expand) recipe.expand = {};
+          recipe.expand.auteur = auteur;
+        }
+      } catch (userError) {
+        console.error("Erreur lors de la récupération de l'auteur:", userError);
+        // On continue même si on ne peut pas récupérer l'auteur
+      }
+    }
+
     return recipe;
   } catch (error) {
     console.error(
@@ -159,12 +205,22 @@ export async function getRecipesWithPagination(
   try {
     const resultList = await pb.collection("recettes").getList(page, perPage, {
       sort: sort,
+      expand: "pays,auteur",
     });
 
     resultList.items = resultList.items.map((recipe) => {
       if (recipe.img) {
         recipe.img = pb.files.getURL(recipe, recipe.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+        recipe.expand.pays.drapeauUrl = pb.files.getURL(
+          recipe.expand.pays,
+          recipe.expand.pays.drapeau
+        );
+      }
+
       return recipe;
     });
 
@@ -220,12 +276,22 @@ export async function getLatestRecipes(limit = 5) {
   try {
     let recipes = await pb.collection("recettes").getList(1, limit, {
       sort: "-created",
+      expand: "pays,auteur",
     });
 
     recipes.items = recipes.items.map((recipe) => {
       if (recipe.img) {
         recipe.img = pb.files.getURL(recipe, recipe.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+        recipe.expand.pays.drapeauUrl = pb.files.getURL(
+          recipe.expand.pays,
+          recipe.expand.pays.drapeau
+        );
+      }
+
       return recipe;
     });
 
@@ -239,17 +305,26 @@ export async function getLatestRecipes(limit = 5) {
   }
 }
 
-export async function getPopularRecipes(limit = 5) {
+export async function getPopularRecipes(limit = 8) {
   try {
-    // À adapter selon votre système de popularité (vues, likes, etc.)
+    // On trie par la meilleure note (champ note ou nbNotes si tu veux le nombre de notes)
     let recipes = await pb.collection("recettes").getList(1, limit, {
-      sort: "-views", // Supposant que vous avez un champ 'views'
+      sort: "-note",
+      expand: "pays,auteur",
     });
 
     recipes.items = recipes.items.map((recipe) => {
       if (recipe.img) {
         recipe.img = pb.files.getURL(recipe, recipe.img);
       }
+
+      if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+        recipe.expand.pays.drapeauUrl = pb.files.getURL(
+          recipe.expand.pays,
+          recipe.expand.pays.drapeau
+        );
+      }
+
       return recipe;
     });
 
@@ -269,12 +344,22 @@ export async function getAllShops() {
   try {
     let shops = await pb.collection("boutiques").getFullList({
       sort: "created",
+      expand: "pays",
     });
 
     shops = shops.map((shop) => {
       if (shop.img) {
         shop.img = pb.files.getURL(shop, shop.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (shop.expand && shop.expand.pays && shop.expand.pays.drapeau) {
+        shop.expand.pays.drapeauUrl = pb.files.getURL(
+          shop.expand.pays,
+          shop.expand.pays.drapeau
+        );
+      }
+
       return shop;
     });
     return shops;
@@ -286,10 +371,22 @@ export async function getAllShops() {
 
 export async function getShopById(id) {
   try {
-    const shop = await pb.collection("boutiques").getOne(id);
+    const shop = await pb.collection("boutiques").getOne(id, {
+      expand: "pays",
+    });
+
     if (shop.img) {
       shop.img = pb.files.getURL(shop, shop.img);
     }
+
+    // Traiter l'URL du drapeau du pays si disponible
+    if (shop.expand && shop.expand.pays && shop.expand.pays.drapeau) {
+      shop.expand.pays.drapeauUrl = pb.files.getURL(
+        shop.expand.pays,
+        shop.expand.pays.drapeau
+      );
+    }
+
     return shop;
   } catch (error) {
     console.error(
@@ -308,12 +405,22 @@ export async function getShopsWithPagination(
   try {
     const resultList = await pb.collection("boutiques").getList(page, perPage, {
       sort: sort,
+      expand: "pays",
     });
 
     resultList.items = resultList.items.map((shop) => {
       if (shop.img) {
         shop.img = pb.files.getURL(shop, shop.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (shop.expand && shop.expand.pays && shop.expand.pays.drapeau) {
+        shop.expand.pays.drapeauUrl = pb.files.getURL(
+          shop.expand.pays,
+          shop.expand.pays.drapeau
+        );
+      }
+
       return shop;
     });
 
@@ -986,6 +1093,7 @@ export async function filterRecipes(
     const resultList = await pb.collection("recettes").getList(page, perPage, {
       filter: filterExpression,
       sort: sort,
+      expand: "pays,auteur",
     });
 
     // Traitement des images
@@ -993,6 +1101,15 @@ export async function filterRecipes(
       if (recipe.img) {
         recipe.img = pb.files.getURL(recipe, recipe.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+        recipe.expand.pays.drapeauUrl = pb.files.getURL(
+          recipe.expand.pays,
+          recipe.expand.pays.drapeau
+        );
+      }
+
       return recipe;
     });
 
@@ -1040,6 +1157,7 @@ export async function filterShops(
     const resultList = await pb.collection("boutiques").getList(page, perPage, {
       filter: filterExpression,
       sort: sort,
+      expand: "pays",
     });
 
     // Traitement des images
@@ -1047,6 +1165,15 @@ export async function filterShops(
       if (shop.img) {
         shop.img = pb.files.getURL(shop, shop.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (shop.expand && shop.expand.pays && shop.expand.pays.drapeau) {
+        shop.expand.pays.drapeauUrl = pb.files.getURL(
+          shop.expand.pays,
+          shop.expand.pays.drapeau
+        );
+      }
+
       return shop;
     });
 
@@ -1068,12 +1195,22 @@ export async function searchRecipes(
     const filter = fields.map((field) => `${field}~"${query}"`).join(" || ");
     const resultList = await pb.collection("recettes").getList(page, perPage, {
       filter: filter,
+      expand: "pays,auteur",
     });
 
     resultList.items = resultList.items.map((recipe) => {
       if (recipe.img) {
         recipe.img = pb.files.getURL(recipe, recipe.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+        recipe.expand.pays.drapeauUrl = pb.files.getURL(
+          recipe.expand.pays,
+          recipe.expand.pays.drapeau
+        );
+      }
+
       return recipe;
     });
 
@@ -1098,12 +1235,22 @@ export async function searchShops(
     const filter = fields.map((field) => `${field}~"${query}"`).join(" || ");
     const resultList = await pb.collection("boutiques").getList(page, perPage, {
       filter: filter,
+      expand: "pays",
     });
 
     resultList.items = resultList.items.map((shop) => {
       if (shop.img) {
         shop.img = pb.files.getURL(shop, shop.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (shop.expand && shop.expand.pays && shop.expand.pays.drapeau) {
+        shop.expand.pays.drapeauUrl = pb.files.getURL(
+          shop.expand.pays,
+          shop.expand.pays.drapeau
+        );
+      }
+
       return shop;
     });
 
@@ -1160,6 +1307,7 @@ export async function searchAndFilterProducts(
     const resultList = await pb.collection("produits").getList(page, perPage, {
       filter: filterExpression,
       sort: sort,
+      expand: "pays",
     });
 
     // Traitement des images
@@ -1167,6 +1315,19 @@ export async function searchAndFilterProducts(
       if (product.img) {
         product.img = pb.files.getURL(product, product.img);
       }
+
+      // Traiter l'URL du drapeau du pays si disponible
+      if (
+        product.expand &&
+        product.expand.pays &&
+        product.expand.pays.drapeau
+      ) {
+        product.expand.pays.drapeauUrl = pb.files.getURL(
+          product.expand.pays,
+          product.expand.pays.drapeau
+        );
+      }
+
       return product;
     });
 
