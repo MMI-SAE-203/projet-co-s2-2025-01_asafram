@@ -1,0 +1,63 @@
+---
+import LayoutApplicatif from "../../../layouts/LayoutApplicatif.astro";
+import CardProduits from "../../../components/site-applicatif/CardProduits.astro";
+import { getProductsWithPagination } from "../../../../backend/backend.js";
+
+// Récupération des produits avec pagination (page 1, 12 produits par page)
+const page = 1;
+const perPage = 12;
+const productsResult = await getProductsWithPagination(page, perPage);
+
+// Extraction des données
+const products = productsResult.items || [];
+const totalItems = productsResult.totalItems || 0;
+const totalPages = productsResult.totalPages || 1;
+---
+
+<LayoutApplicatif
+  title="Tous les produits"
+  description="Catalogue complet des produits"
+>
+  <section class="container mx-auto px-4 py-8">
+    <header class="mb-8">
+      <h1
+        class="text-4xl font-raleway font-extrabold uppercase tracking-wider text-left pb-2"
+      >
+        Tous les produits
+      </h1>
+      <div class="text-lg text-gray-600 mb-6">
+        {totalItems} produits disponibles • Page {page} sur {totalPages}
+      </div>
+    </header>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 justify-items-center"
+    >
+      {products.map((produit) => <CardProduits product={produit} />)}
+    </div>
+
+    {
+      totalPages > 1 && (
+        <div class="flex justify-center mt-10">
+          <div class="inline-flex rounded-md shadow-sm">
+            {/* Navigation de pagination simple - à améliorer plus tard */}
+            <button
+              class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2"
+              disabled={page === 1}
+            >
+              Précédent
+            </button>
+            <span class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200">
+              {page} / {totalPages}
+            </span>
+            <button
+              class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2"
+              disabled={page === totalPages}
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
+      )
+    }
+  </section>
+</LayoutApplicatif>
