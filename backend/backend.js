@@ -1650,3 +1650,52 @@ export async function getProductsByContinent(continent, options = {}) {
     throw error;
   }
 }
+
+export async function getPopularProducts(limit = 8) {
+  try {
+    let products = await pb.collection("produits").getList(1, limit, {
+      sort: "-created",
+      expand: "pays",
+    });
+
+    products.items = products.items.map((product) => {
+      if (product.img) {
+        product.img = pb.files.getURL(product, product.img);
+      }
+
+      if (
+        product.expand &&
+        product.expand.pays &&
+        product.expand.pays.drapeau
+      ) {
+        product.expand.pays.drapeauUrl = pb.files.getURL(
+          product.expand.pays,
+          product.expand.pays.drapeau
+        );
+      }
+
+      if (product.nombres_notes && !product.nbNotes) {
+        product.nbNotes = product.nombres_notes;
+      }
+      if (!product.nbNotes) {
+        product.nbNotes = Math.floor(Math.random() * 50) + 10;
+      }
+
+      if (!product.note) {
+        product.note = Math.random() * 2 + 3;
+      }
+
+      product.distance = 15;
+
+      return product;
+    });
+
+    return products.items;
+  } catch (error) {
+    console.error(
+      `Erreur lors de la récupération des ${limit} produits populaires:`,
+      error
+    );
+    throw error;
+  }
+}
