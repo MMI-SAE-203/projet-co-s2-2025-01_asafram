@@ -12,15 +12,12 @@ import SvgAmeriqueLatine from "../../assets/icones/continent-ameriquelatine.svg"
 import SvgMaghreb from "../../assets/icones/continent-maghreb.svg";
 import IconeUser from "../../assets/icones/icone-user.svg";
 
-// Récupération des informations de l'utilisateur actuel
 const user = await getCurrentUser();
 
-// Redirection si l'utilisateur n'est pas connecté
 if (!user) {
   return Astro.redirect("/site-applicatif/auth/connexion");
 }
 
-// Traitement du formulaire de déconnexion
 if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
   const action = formData.get("action");
@@ -47,13 +44,11 @@ if (Astro.request.method === "POST") {
 
       await updateUserProfile(userData);
 
-      // Avatar traitement
       const avatarFile = formData.get("avatar");
       if (avatarFile instanceof File && avatarFile.size > 0) {
         await uploadUserAvatar(avatarFile);
       }
 
-      // Redirection pour rafraîchir les données
       return Astro.redirect("/site-applicatif/compte?updated=true");
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil:", error);
@@ -61,7 +56,6 @@ if (Astro.request.method === "POST") {
   }
 }
 
-// Liste des pays pour le champ de sélection
 const pays = [
   { code: "FR", nom: "France" },
   { code: "MA", nom: "Maroc" },
@@ -86,7 +80,6 @@ const pays = [
   description="Gérez votre profil ASAFRAM, modifiez vos informations personnelles et vos préférences."
 >
   <div class="min-h-screen bg-gray-50">
-    <!-- En-tête de la page -->
     <div
       class="relative bg-gradient-to-r from-background to-background/70 py-8 mb-8 overflow-hidden"
     >
@@ -129,12 +122,9 @@ const pays = [
     </div>
 
     <div class="container mx-auto px-4 pb-16">
-      <!-- Contenu principal -->
       <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Aside - Menu latéral -->
         <aside class="lg:w-1/4">
           <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <!-- Profil résumé -->
             <div
               class="p-6 bg-gradient-to-r from-background/20 to-background/30 border-b border-gray-200"
             >
@@ -176,7 +166,6 @@ const pays = [
               </div>
             </div>
 
-            <!-- Menu de navigation -->
             <nav>
               <ul class="py-2">
                 <li>
@@ -281,9 +270,7 @@ const pays = [
           </div>
         </aside>
 
-        <!-- Contenu principal -->
         <main class="lg:w-3/4">
-          <!-- Message de succès pour la mise à jour -->
           {
             Astro.url.searchParams.get("updated") && (
               <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-md animate-fadeIn">
@@ -312,9 +299,7 @@ const pays = [
             )
           }
 
-          <!-- Contenu des onglets -->
           <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <!-- Onglet Profil -->
             <div id="profile-tab" class="tab-content">
               <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
