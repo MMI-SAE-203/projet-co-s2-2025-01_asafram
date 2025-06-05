@@ -3,7 +3,14 @@ import LayoutApplicatif from "../../../../layouts/LayoutApplicatif.astro";
 import IconeFavoris from "../../../../assets/icones/icone-etoile.svg";
 import IconeEtoileNote from "../../../../assets/icones/etoile-note.svg";
 import IconeDistance from "../../../../assets/icones/icone-coordonnes.svg";
-import { getProductById } from "../../../../../backend/backend.js";
+import {
+  getProductById,
+  getProductsByContinent,
+  getRecipesByContinent,
+} from "../../../../../backend/backend.js";
+import SplashDesign from "../../../../assets/icones/splash-design.svg";
+import CardProduits from "../../../../components/site-applicatif/CardProduits.astro";
+import CardRecettes from "../../../../components/site-applicatif/CardRecettes.astro";
 
 // Récupération de l'ID du produit depuis l'URL
 const { id } = Astro.params;
@@ -45,10 +52,42 @@ const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
 // État du favori (à implémenter ultérieurement avec une vraie logique)
 const isFavorite = false;
+
+// Récupération du continent du produit pour les suggestions
+const continent = product.expand?.pays?.continent;
+
+// Récupération des produits et recettes du même continent (4 de chaque)
+let relatedProducts: any[] = [];
+let relatedRecipes: any[] = [];
+
+if (continent) {
+  try {
+    const relatedProductsResult = await getProductsByContinent(continent, {
+      limit: 5,
+    });
+    relatedProducts = relatedProductsResult.items
+      .filter((p) => p.id !== product.id)
+      .slice(0, 4);
+
+    const relatedRecipesResult = await getRecipesByContinent(continent, {
+      limit: 4,
+    });
+    relatedRecipes = relatedRecipesResult.items;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des suggestions:", error);
+  }
+}
 ---
 
 <LayoutApplicatif title={product.nom} description={product.description}>
-  <div class="container mx-auto px-4 py-8 max-w-6xl">
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <div class="container mx-auto px-4 py-20 max-w-6xl">
     <!-- Fil d'Ariane -->
     <div class="text-sm text-gray-500 mb-6">
       <a href="/site-applicatif" class="hover:text-saumon">Accueil</a> &gt;
@@ -57,16 +96,19 @@ const isFavorite = false;
       <span class="text-black">{product.nom}</span>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-40">
+    <div class="flex flex-col md:flex-row gap-60">
       <!-- Partie gauche: image du produit -->
       <div class="md:w-1/2">
         <div class="relative">
-          <!-- Cercle de fond saumon -->
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div
-              class="w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-saumon opacity-75 rounded-full"
-            >
-            </div>
+          <!-- Design SVG de fond -->
+          <div
+            class="absolute inset-0 flex items-center justify-center translate-y-8"
+          >
+            <img
+              src={SplashDesign.src}
+              alt="Design décoratif"
+              class="w-[350px] h-[350px] md:w-[450px] md:h-[450px] object-contain"
+            />
           </div>
 
           <!-- Image du produit -->
@@ -235,7 +277,7 @@ const isFavorite = false;
 
         <!-- Bouton d'achat -->
         <button
-          class="w-full bg-saumon text-black font-bold py-4 rounded-lg hover:bg-[#e69c50] transition-colors flex items-center justify-center gap-3"
+          class="w-full cursor-pointer bg-jaune text-black font-bold py-4 rounded-lg hover:bg-jaune-hover transition-colors flex items-center justify-center gap-3"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -255,33 +297,468 @@ const isFavorite = false;
         </button>
       </div>
     </div>
+  </div>
 
-    <!-- Description du produit -->
-    <div class="mt-12 border-t border-gray-200 pt-8">
-      <h2 class="text-2xl font-bold mb-4">DÉCOUVREZ {product.nom}</h2>
-      <div class="prose max-w-none">
-        <p class="text-lg">{product.description}</p>
+  <!-- Menu slider et contenu -->
+  <div class="bg-white w-full pt-20 pb-20">
+    <div
+      class="container flex flex-col gap-20 justify-center items-center px-4 py-12 mx-auto"
+    >
+      <!-- Menu slider -->
+      <div class="w-full max-w-7xl">
+        <div class="flex border-b border-gray-200 mb-8">
+          <button
+            class="tab-button px-6 py-3 text-lg font-bold border-b-2 border-saumon text-saumon"
+            data-tab="description"
+          >
+            Informations
+          </button>
+          <button
+            class="tab-button px-6 py-3 text-lg font-bold border-b-2 border-transparent text-gray-500 hover:text-saumon"
+            data-tab="points-vente"
+          >
+            Points de ventes
+          </button>
+          <button
+            class="tab-button px-6 py-3 text-lg font-bold border-b-2 border-transparent text-gray-500 hover:text-saumon"
+            data-tab="avis"
+          >
+            Avis
+          </button>
+        </div>
 
-        <p class="mt-6">
-          Parfait pour se rafraîchir, ce produit unique associe le goût délicat
-          des ingrédients authentiques à une texture surprenante.
-        </p>
+        <!-- Contenu des onglets -->
+        <div class="tab-content">
+          <!-- Onglet Description (actif par défaut) -->
+          <div id="description-tab" class="tab-panel">
+            <div class="flex gap-20 justify-center items-center">
+              <!-- Description -->
+              <div class="w-1/2 pr-8">
+                <h2 class="!text-2xl !text-left font-bold mb-4">
+                  DÉCOUVREZ {product.nom}
+                </h2>
+                <div class="prose max-w-none">
+                  <div
+                    class="text-lg leading-relaxed space-y-8"
+                    set:html={product.description}
+                  />
+                </div>
+              </div>
 
-        <p class="mt-4">
-          Sans ingrédients d'origine animale, rafraîchissant et original, c'est
-          la pause parfaite pour s'évader le temps d'un instant gourmand !
-        </p>
+              <!-- Tableau nutritionnel -->
+              <div class="nutrition-card w-[450px]">
+                <!-- Formes décoratives -->
+                <div
+                  class="absolute -top-6 -left-6 w-20 h-20 bg-saumon rounded-full opacity-60 shadow-lg"
+                >
+                </div>
+                <div
+                  class="absolute -bottom-8 -right-8 w-16 h-16 bg-sable rounded-full opacity-50 shadow-lg"
+                >
+                </div>
+                <div
+                  class="absolute top-12 right-8 w-8 h-8 bg-saumon rounded-full opacity-40"
+                >
+                </div>
+                <div
+                  class="absolute top-20 right-12 w-4 h-4 bg-saumon rounded-full opacity-40"
+                >
+                </div>
+                <div
+                  class="absolute top-24 right-16 w-4 h-4 bg-sable rounded-full opacity-40"
+                >
+                </div>
+                <div
+                  class="absolute top-32 right-12 w-4 h-4 bg-saumon rounded-full opacity-40"
+                >
+                </div>
+
+                <!-- Contenu principal du tableau -->
+                <div class="relative bg-white p-4 rounded-lg shadow-lg">
+                  <!-- Titre -->
+                  <h2
+                    class="!text-2xl font-radio-canada-big font-black text-black mb-3 text-center uppercase"
+                  >
+                    Tableau Nutritionnel
+                  </h2>
+
+                  <!-- Ligne de séparation -->
+                  <div class="w-full border-t border-gray-400 mb-3"></div>
+
+                  <!-- Portions -->
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-raleway font-bold text-black text-sm"
+                      >Portions</span
+                    >
+                    <span class="font-raleway font-bold text-black text-sm"
+                      >330ml</span
+                    >
+                  </div>
+
+                  <p class="text-xs text-gray-600 font-raleway mb-3">
+                    pour 330ml
+                  </p>
+
+                  <!-- Calories -->
+                  <div class="flex justify-between items-center mb-4">
+                    <span class="font-raleway font-bold text-black text-sm"
+                      >Calories</span
+                    >
+                    <span
+                      class="text-2xl font-radio-canada-big font-black text-black"
+                      >180kcal</span
+                    >
+                  </div>
+
+                  <!-- Ligne de séparation -->
+                  <div class="w-full border-t border-gray-400 mb-3"></div>
+
+                  <!-- Informations nutritionnelles -->
+                  <div class="space-y-2">
+                    <!-- Matières grasses -->
+                    <div class="nutrition-item">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway font-bold text-black text-sm"
+                          >Matières grasses</span
+                        >
+                        <span class="font-raleway text-black text-sm">0.1g</span
+                        >
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Dont acides gras saturés -->
+                    <div class="nutrition-item pl-3">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway text-gray-700 text-xs"
+                          >Dont acides gras saturés</span
+                        >
+                        <span class="font-raleway text-black text-xs">0g</span>
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Glucides -->
+                    <div class="nutrition-item">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway font-bold text-black text-sm"
+                          >Glucides</span
+                        >
+                        <span class="font-raleway text-black text-sm">45g</span>
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Dont sucres -->
+                    <div class="nutrition-item pl-3">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway text-gray-700 text-xs"
+                          >Dont sucres</span
+                        >
+                        <span class="font-raleway text-black text-xs">40g</span>
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Protéines -->
+                    <div class="nutrition-item">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway font-bold text-black text-sm"
+                          >Protéines</span
+                        >
+                        <span class="font-raleway text-black text-sm">0g</span>
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Sel -->
+                    <div class="nutrition-item">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway font-bold text-black text-sm"
+                          >Sel</span
+                        >
+                        <span class="font-raleway text-black text-sm">0.1g</span
+                        >
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Fibres alimentaires -->
+                    <div class="nutrition-item">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway font-bold text-black text-sm"
+                          >Fibres alimentaires</span
+                        >
+                        <span class="font-raleway text-black text-sm">2g</span>
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+
+                    <!-- Calcium -->
+                    <div class="nutrition-item">
+                      <div class="flex justify-between items-center">
+                        <span class="font-raleway font-bold text-black text-sm"
+                          >Calcium</span
+                        >
+                        <span class="font-raleway text-black text-sm">20mg</span
+                        >
+                      </div>
+                      <div class="w-full border-t border-gray-300 mt-1"></div>
+                    </div>
+                  </div>
+
+                  <!-- Note en bas -->
+                  <p
+                    class="text-xs text-gray-600 font-raleway mt-4 leading-relaxed"
+                  >
+                    *Il est important de viser environ 2000 kcal par jour pour
+                    un homme et 1800 kcal pour une femme afin de maintenir une
+                    alimentation équilibrée.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Onglet Points de vente -->
+          <div id="points-vente-tab" class="tab-panel hidden">
+            <div class="max-w-6xl mx-auto">
+              <h2 class="text-2xl font-bold mb-6 !text-left">
+                OÙ TROUVER {product.nom} ?
+              </h2>
+
+              <!-- Carte des magasins -->
+              <div class="mb-8">
+                <div
+                  id="map"
+                  class="w-full h-96 rounded-lg shadow-lg border border-gray-200"
+                >
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                  <h3 class="text-lg font-bold mb-3 text-saumon">CARREFOUR</h3>
+                  <p class="text-sm mb-2">
+                    <strong>Adresse :</strong> 15 Avenue des Champs, 75008 Paris
+                  </p>
+                  <p class="text-sm mb-2">
+                    <strong>Distance :</strong> 2.3 km
+                  </p>
+                  <p class="text-sm mb-4">
+                    <strong>Stock :</strong>
+                    <span class="text-green-600">Disponible</span>
+                  </p>
+                  <button
+                    class="bg-saumon text-white px-4 py-2 rounded hover:bg-saumon-hover transition-colors"
+                  >
+                    Réserver
+                  </button>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                  <h3 class="text-lg font-bold mb-3 text-saumon">FRANPRIX</h3>
+                  <p class="text-sm mb-2">
+                    <strong>Adresse :</strong> 42 Rue de la République, 75011 Paris
+                  </p>
+                  <p class="text-sm mb-2">
+                    <strong>Distance :</strong> 3.7 km
+                  </p>
+                  <p class="text-sm mb-4">
+                    <strong>Stock :</strong>
+                    <span class="text-green-600">Disponible</span>
+                  </p>
+                  <button
+                    class="bg-saumon text-white px-4 py-2 rounded hover:bg-saumon-hover transition-colors"
+                  >
+                    Réserver
+                  </button>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                  <h3 class="text-lg font-bold mb-3 text-saumon">MONOPRIX</h3>
+                  <p class="text-sm mb-2">
+                    <strong>Adresse :</strong> 8 Boulevard Saint-Germain, 75005 Paris
+                  </p>
+                  <p class="text-sm mb-2">
+                    <strong>Distance :</strong> 5.1 km
+                  </p>
+                  <p class="text-sm mb-4">
+                    <strong>Stock :</strong>
+                    <span class="text-orange-600">Stock limité</span>
+                  </p>
+                  <button
+                    class="bg-saumon text-white px-4 py-2 rounded hover:bg-saumon-hover transition-colors"
+                  >
+                    Réserver
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Onglet Avis -->
+          <div id="avis-tab" class="tab-panel hidden">
+            <div class="max-w-4xl mx-auto">
+              <h2 class="text-2xl font-bold mb-6 !text-left">
+                AVIS SUR {product.nom}
+              </h2>
+              <!-- Résumé des notes -->
+              <div class="bg-gray-50 p-6 rounded-lg mb-8">
+                <div class="flex items-center gap-6">
+                  <div class="text-center">
+                    <div class="text-4xl font-bold text-saumon">
+                      {product.note}
+                    </div>
+                    <div class="text-sm text-gray-600">sur 5 étoiles</div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="text-sm text-gray-600 mb-2">
+                      Basé sur {product.nbNotes} avis
+                    </div>
+                    <div class="space-y-1">
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs w-8">5★</span>
+                        <div class="flex-1 bg-gray-200 h-2 rounded-full">
+                          <div
+                            class="bg-saumon h-2 rounded-full"
+                            style="width: 65%"
+                          >
+                          </div>
+                        </div>
+                        <span class="text-xs text-gray-600">65%</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs w-8">4★</span>
+                        <div class="flex-1 bg-gray-200 h-2 rounded-full">
+                          <div
+                            class="bg-saumon h-2 rounded-full"
+                            style="width: 25%"
+                          >
+                          </div>
+                        </div>
+                        <span class="text-xs text-gray-600">25%</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs w-8">3★</span>
+                        <div class="flex-1 bg-gray-200 h-2 rounded-full">
+                          <div
+                            class="bg-saumon h-2 rounded-full"
+                            style="width: 8%"
+                          >
+                          </div>
+                        </div>
+                        <span class="text-xs text-gray-600">8%</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs w-8">2★</span>
+                        <div class="flex-1 bg-gray-200 h-2 rounded-full">
+                          <div
+                            class="bg-saumon h-2 rounded-full"
+                            style="width: 2%"
+                          >
+                          </div>
+                        </div>
+                        <span class="text-xs text-gray-600">2%</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs w-8">1★</span>
+                        <div class="flex-1 bg-gray-200 h-2 rounded-full">
+                          <div
+                            class="bg-saumon h-2 rounded-full"
+                            style="width: 0%"
+                          >
+                          </div>
+                        </div>
+                        <span class="text-xs text-gray-600">0%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Liste des avis -->
+              <div class="space-y-6">
+                <div class="border-b border-gray-200 pb-6">
+                  <div class="flex items-start gap-4">
+                    <div
+                      class="w-10 h-10 bg-saumon rounded-full flex items-center justify-center text-white font-bold"
+                    >
+                      M
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex items-center gap-2 mb-2">
+                        <span class="font-bold">Marie L.</span>
+                        <div class="flex text-saumon">★★★★★</div>
+                        <span class="text-sm text-gray-500">il y a 2 jours</span
+                        >
+                      </div>
+                      <p class="text-gray-700">
+                        Excellent produit ! Le goût est authentique et la
+                        texture parfaite. Je recommande vivement pour découvrir
+                        de nouvelles saveurs.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-b border-gray-200 pb-6">
+                  <div class="flex items-start gap-4">
+                    <div
+                      class="w-10 h-10 bg-saumon rounded-full flex items-center justify-center text-white font-bold"
+                    >
+                      J
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex items-center gap-2 mb-2">
+                        <span class="font-bold">Jean P.</span>
+                        <div class="flex text-saumon">★★★★☆</div>
+                        <span class="text-sm text-gray-500"
+                          >il y a 1 semaine</span
+                        >
+                      </div>
+                      <p class="text-gray-700">
+                        Très bon produit, conforme à mes attentes. La livraison
+                        était rapide et l'emballage soigné.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Suggestions de produits similaires -->
-    <div class="mt-16">
-      <h2 class="text-2xl font-bold mb-6">VOUS AIMEREZ AUSSI</h2>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-      >
-        <!-- Produits similaires à implémenter ultérieurement -->
-      </div>
+      <!-- Produits du même continent -->
+      {
+        relatedProducts.length > 0 && (
+          <div class="my-30">
+            <h2 class="!text-3xl font-bold mb-6 !text-left">
+              Produits recommandés
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {relatedProducts.slice(0, 4).map((relatedProduct) => (
+                <CardProduits product={relatedProduct} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      <!-- Recettes du même continent -->
+      {
+        relatedRecipes.length > 0 && (
+          <div class="my-30">
+            <h2 class="!text-3xl font-bold mb-6 !text-left">
+              Recettes recommandées
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {relatedRecipes.slice(0, 4).map((relatedRecipe) => (
+                <CardRecettes recette={relatedRecipe} />
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </LayoutApplicatif>
@@ -289,6 +766,136 @@ const isFavorite = false;
 <script>
   // Script pour gérer les interactions avec la quantité et les favoris
   document.addEventListener("DOMContentLoaded", () => {
+    // Attendre que Leaflet soit chargé
+    function waitForLeaflet() {
+      return new Promise((resolve) => {
+        if (typeof (window as any).L !== "undefined") {
+          resolve((window as any).L);
+        } else {
+          setTimeout(() => waitForLeaflet().then(resolve), 100);
+        }
+      });
+    }
+
+    // Référence pour Leaflet
+    let L: any;
+    // Gestion des onglets
+    const tabButtons = document.querySelectorAll(".tab-button");
+    const tabPanels = document.querySelectorAll(".tab-panel");
+    let map: any = null;
+
+    // Données des magasins
+    const stores = [
+      {
+        name: "CARREFOUR",
+        address: "15 Avenue des Champs, 75008 Paris",
+        lat: 48.8737,
+        lng: 2.295,
+        distance: "2.3 km",
+        stock: "Disponible",
+      },
+      {
+        name: "FRANPRIX",
+        address: "42 Rue de la République, 75011 Paris",
+        lat: 48.8566,
+        lng: 2.3522,
+        distance: "3.7 km",
+        stock: "Disponible",
+      },
+      {
+        name: "MONOPRIX",
+        address: "8 Boulevard Saint-Germain, 75005 Paris",
+        lat: 48.8499,
+        lng: 2.3447,
+        distance: "5.1 km",
+        stock: "Stock limité",
+      },
+    ];
+
+    async function initMap() {
+      if (map) return; // Éviter la réinitialisation
+
+      // Attendre que Leaflet soit disponible
+      try {
+        L = await waitForLeaflet();
+        console.log("Leaflet chargé avec succès");
+      } catch (error) {
+        console.error("Erreur lors du chargement de Leaflet:", error);
+        return;
+      }
+
+      // Vérifier que l'élément map existe
+      const mapElement = document.getElementById("map");
+      if (!mapElement) {
+        console.error("Élément map non trouvé");
+        return;
+      }
+
+      console.log("Initialisation de la carte...");
+      // Centre de Paris
+      map = L.map("map").setView([48.8566, 2.3522], 12);
+
+      // Ajouter les tuiles OpenStreetMap
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Ajouter les marqueurs pour chaque magasin
+      stores.forEach((store) => {
+        const marker = L.marker([store.lat, store.lng]).addTo(map);
+        marker.bindPopup(`
+                <div class="p-2">
+                  <h3 class="font-bold text-lg text-saumon">${store.name}</h3>
+                  <p class="text-sm mb-1"><strong>Adresse:</strong> ${store.address}</p>
+                  <p class="text-sm mb-1"><strong>Distance:</strong> ${store.distance}</p>
+                  <p class="text-sm"><strong>Stock:</strong> <span class="${store.stock === "Disponible" ? "text-green-600" : "text-orange-600"}">${store.stock}</span></p>
+                </div>
+              `);
+      });
+    }
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetTab = button.getAttribute("data-tab");
+
+        // Réinitialiser tous les boutons
+        tabButtons.forEach((btn) => {
+          btn.classList.remove("border-saumon", "text-saumon");
+          btn.classList.add("border-transparent", "text-gray-500");
+        });
+
+        // Activer le bouton cliqué
+        button.classList.remove("border-transparent", "text-gray-500");
+        button.classList.add("border-saumon", "text-saumon");
+
+        // Masquer tous les panneaux
+        tabPanels.forEach((panel) => {
+          panel.classList.add("hidden");
+        });
+
+        // Afficher le panneau correspondant
+        const targetPanel = document.getElementById(`${targetTab}-tab`);
+        if (targetPanel) {
+          targetPanel.classList.remove("hidden");
+
+          // Initialiser la carte si l'onglet points de vente est sélectionné
+          if (targetTab === "points-vente") {
+            console.log("Onglet points-vente sélectionné");
+            setTimeout(async () => {
+              await initMap();
+              // Forcer le redimensionnement de la carte après l'affichage
+              if (map) {
+                setTimeout(() => {
+                  map.invalidateSize();
+                  console.log("Carte redimensionnée");
+                }, 300);
+              }
+            }, 300); // Augmenter le délai pour s'assurer que l'élément est visible
+          }
+        }
+      });
+    });
     // Récupération du prix unitaire depuis l'élément HTML
     const priceElement = document.querySelector(".text-3xl.font-bold");
     const unitPrice =
@@ -402,4 +1009,33 @@ const isFavorite = false;
     outline: 2px solid #e69c50;
     outline-offset: 2px;
   }
+
+  /* Styles pour le tableau nutritionnel */
+  .nutrition-card {
+    position: relative;
+    overflow: visible;
+    width: 450px !important;
+    min-width: 450px !important;
+  }
+
+  /* Styles pour la carte Leaflet */
+  #map {
+    height: 384px !important;
+    width: 100% !important;
+    min-height: 384px !important;
+  }
+
+  .nutrition-item {
+    font-size: 14px;
+  }
+
+  .nutrition-item:last-child .border-t {
+    display: none;
+  }
 </style>
+
+<!-- Leaflet JS chargé à la fin -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
