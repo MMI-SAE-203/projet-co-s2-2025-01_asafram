@@ -19,6 +19,8 @@ import FondAccueil from "../assets/fond/accueil-desktop.svg";
 import IconeFirst from "../assets/icones/icone-first.svg";
 import Transition from "../components/Transition.astro";
 import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
+import ImageProduits from "../assets/images/image-produits.webp";
+import ImageBoutiques from "../assets/images/image-boutiques.webp";
 ---
 
 <Layout>
@@ -107,13 +109,11 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
         </p>
       </div>
       <div class="md:w-1/2 order-2">
-        <div
-          class="w-full h-[200px] md:h-[250px] lg:h-[300px] bg-gray-200 flex items-center justify-center rounded-lg shadow-sm"
-          aria-label="Illustration de catalogues de produits internationaux"
-          role="img"
-        >
-          <p class="text-gray-500 italic">Image à venir</p>
-        </div>
+        <img
+          src={ImageProduits.src}
+          alt="Illustration de catalogues de produits internationaux"
+          class="w-full h-[200px] md:h-[250px] lg:h-[300px] object-cover rounded-lg shadow-sm"
+        />
       </div>
     </div>
 
@@ -132,13 +132,11 @@ import IconeEnvoyer from "../assets/icones/icone-envoyer.webp";
         </p>
       </div>
       <div class="md:w-1/2">
-        <div
-          class="w-full h-[200px] md:h-[250px] lg:h-[300px] bg-gray-200 flex items-center justify-center rounded-lg shadow-sm"
-          aria-label="Illustration de la carte interactive des boutiques"
-          role="img"
-        >
-          <p class="text-gray-500 italic">Image à venir</p>
-        </div>
+        <img
+          src={ImageBoutiques.src}
+          alt="Illustration de la carte interactive des boutiques"
+          class="w-full h-[200px] md:h-[250px] lg:h-[300px] object-cover rounded-lg shadow-sm"
+        />
       </div>
     </div>
   </div>
