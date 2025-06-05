@@ -1,0 +1,970 @@
+---
+import LayoutApplicatif from "../../../layouts/LayoutApplicatif.astro";
+import CardProduits from "../../../components/site-applicatif/CardProduits.astro";
+import { getAllProducts, getAllPays } from "../../../../backend/backend.js";
+
+const products = await getAllProducts();
+const pays = await getAllPays();
+---
+
+<LayoutApplicatif
+  title="Produits"
+  description="Découvrez tous nos produits du monde"
+>
+  <style>
+    body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+  <div class="min-h-screen bg-gray-50" id="products-page">
+    <!-- Layout flex avec sidebar et contenu principal côte à côte -->
+    <div class="flex">
+      <!-- Sidebar des filtres - Position normale (pas fixe) -->
+      <div
+        class="w-[420px] bg-white shadow-lg border-r border-gray-200 min-h-screen"
+      >
+        <div class="p-6">
+          <!-- En-tête des filtres -->
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="!text-3xl font-raleway font-black uppercase text-black">
+              FILTRES
+            </h2>
+            <button
+              id="reset-filters-btn"
+              class="text-xs font-raleway border border-gray-600 px-4 py-1.5 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+            >
+              RÉINITIALISER
+            </button>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-black mb-6"></div>
+
+          <!-- Section Barre de recherche -->
+          <div class="mb-6">
+            <h3
+              class="!text-2xl font-raleway font-bold uppercase text-black mb-4"
+            >
+              RECHERCHE
+            </h3>
+            <div class="relative">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Nom du produit..."
+                class="w-full px-4 py-2.5 border border-gray-400 rounded-lg text-sm font-raleway focus:outline-none focus:border-saumon bg-white"
+              />
+              <!-- Loupe quand pas de texte -->
+              <svg
+                id="search-icon"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <!-- Croix quand il y a du texte -->
+              <button
+                id="clear-search-btn"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors hidden"
+                title="Effacer la recherche"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Continents -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                CONTINENTS
+              </h3>
+              <button
+                id="all-continents-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="space-y-2" id="continent-filters">
+              <button
+                data-continent="Afrique"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                AFRIQUE
+              </button>
+
+              <button
+                data-continent="Amérique Latine"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                AMÉRIQUE LATINE
+              </button>
+
+              <button
+                data-continent="Asie"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                ASIE
+              </button>
+
+              <button
+                data-continent="Maghreb"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                MAGHREB
+              </button>
+            </div>
+          </div>
+
+          <!-- Section Pays -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                PAYS
+              </h3>
+              <button
+                id="all-countries-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+                disabled
+                style="opacity: 0.5; cursor: not-allowed;"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="relative">
+              <select
+                id="countries-select"
+                class="w-full p-2.5 border border-gray-400 rounded-lg text-xs font-raleway bg-white appearance-none pr-8 uppercase cursor-pointer"
+                disabled
+                style="opacity: 0.5; cursor: not-allowed;"
+              >
+                <option value="tous">Tous les pays</option>
+              </select>
+              <svg
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-black pointer-events-none"
+                style="opacity: 0.5;"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Catégories -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                CATÉGORIES
+              </h3>
+              <button
+                id="all-categories-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-y-2 gap-x-1" id="category-filters">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Boissons"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >BOISSONS</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Fruits & légumes"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >FRUITS & LÉGUMES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Viandes"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >VIANDES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Épices"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >ÉPICES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Snacks"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >SNACKS</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Sauces"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >SAUCES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Conserves"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >CONSERVES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Condiments"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >CONDIMENTS</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer col-span-1">
+                <input
+                  type="checkbox"
+                  class="category-checkbox mr-1 w-3 h-3 border-2 border-black rounded-none cursor-pointer"
+                  value="Autres"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >AUTRES</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Prix -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                PRIX
+              </h3>
+              <button
+                id="price-toggle-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+              >
+                DÉSACTIVÉ
+              </button>
+            </div>
+
+            <!-- Section prix -->
+            <div class="space-y-3" id="price-section" style="display: none;">
+              <p class="text-xs font-raleway text-gray-600 mb-3">
+                Fourchette de prix :
+              </p>
+
+              <div class="flex items-center space-x-2">
+                <input
+                  type="number"
+                  id="min-price"
+                  placeholder="Min"
+                  min="0"
+                  step="0.01"
+                  class="w-20 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:border-saumon"
+                />
+                <span class="text-xs text-gray-500">-</span>
+                <input
+                  type="number"
+                  id="max-price"
+                  placeholder="Max"
+                  min="0"
+                  step="0.01"
+                  class="w-20 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:border-saumon"
+                />
+                <span class="text-xs text-gray-500">€</span>
+              </div>
+
+              <button
+                id="all-prices-btn"
+                class="w-full text-xs font-raleway border border-gray-400 px-3 py-1.5 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+              >
+                TOUS LES PRIX
+              </button>
+            </div>
+
+            <!-- Message quand désactivé -->
+            <div id="price-disabled-message" class="text-center py-3">
+              <span class="text-xs font-raleway text-gray-500">
+                Filtrage par prix désactivé
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenu principal des produits - Position normale (pas fixe) -->
+      <div class="flex-1">
+        <!-- Contenu des produits -->
+        <div class="px-8 pb-8">
+          <!-- En-tête -->
+          <div class="mb-8 mt-10">
+            <div class="ml-22">
+              <h1
+                class="!text-6xl font-radio-canada-big font-black text-gray-800 mb-4 uppercase !text-left !pb-0"
+              >
+                Tous les produits
+              </h1>
+              <p class="text-gray-600 font-raleway">
+                Découvrez tous nos produits du monde entier, triés par
+                catégories.
+              </p>
+              <div id="results-info" class="text-lg text-gray-600 mt-4">
+                <span id="visible-count">{products.length}</span> produits • Page
+                <span id="current-page">1</span> sur <span id="total-pages"
+                  >1</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Zone des produits -->
+          <div
+            class="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 mb-40"
+            id="products-container"
+          >
+            {
+              products.map((produit) => (
+                <div class="w-full flex justify-center">
+                  <CardProduits product={produit} />
+                </div>
+              ))
+            }
+          </div>
+
+          <!-- Message si aucun produit -->
+          <div id="no-products-message" class="hidden text-center py-16">
+            <p class="text-gray-500 text-lg font-raleway">
+              Aucun produit ne correspond à vos critères de recherche.
+            </p>
+          </div>
+
+          <!-- Pagination -->
+          <div id="pagination-container" class="flex justify-center mt-10">
+            <div
+              class="inline-flex items-center gap-1"
+              id="pagination-controls"
+            >
+              <!-- Généré dynamiquement par JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script pour le filtrage et pagination -->
+    <script define:vars={{ products, pays }}>
+      // Rendre les pays disponibles globalement
+      window.allPays = pays;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Initialisation de la page produits...");
+
+        // Variables globales
+        let selectedContinents = [];
+        let selectedCategories = [];
+        let selectedCountry = "tous";
+        let searchQuery = "";
+        let priceFilterEnabled = false;
+        let minPrice = null;
+        let maxPrice = null;
+        let availableCountries = [];
+        let filteredProducts = [...products];
+        let currentPage = 1;
+        const productsPerPage = 12;
+
+        // Gestion de la recherche
+        const searchInput = document.getElementById("search-input");
+        const searchIcon = document.getElementById("search-icon");
+        const clearSearchBtn = document.getElementById("clear-search-btn");
+
+        searchInput.addEventListener("input", function () {
+          searchQuery = this.value.toLowerCase();
+
+          if (searchQuery) {
+            searchIcon.classList.add("hidden");
+            clearSearchBtn.classList.remove("hidden");
+          } else {
+            searchIcon.classList.remove("hidden");
+            clearSearchBtn.classList.add("hidden");
+          }
+
+          filterProducts();
+        });
+
+        clearSearchBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          searchQuery = "";
+          searchIcon.classList.remove("hidden");
+          clearSearchBtn.classList.add("hidden");
+          filterProducts();
+        });
+
+        // Gestion des continents
+        const allContinentsBtn = document.getElementById("all-continents-btn");
+        const continentBtns = document.querySelectorAll(".continent-btn");
+
+        allContinentsBtn.addEventListener("click", function () {
+          selectedContinents = [
+            "Afrique",
+            "Amérique Latine",
+            "Asie",
+            "Maghreb",
+          ];
+          updateContinentButtons();
+          updateCountriesDropdown();
+          filterProducts();
+        });
+
+        continentBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const continent = this.dataset.continent;
+
+            if (selectedContinents.includes(continent)) {
+              selectedContinents = selectedContinents.filter(
+                (c) => c !== continent
+              );
+            } else {
+              selectedContinents.push(continent);
+            }
+
+            updateContinentButtons();
+            updateCountriesDropdown();
+            filterProducts();
+          });
+        });
+
+        function updateContinentButtons() {
+          const allSelected =
+            selectedContinents.length === 4 &&
+            selectedContinents.includes("Afrique") &&
+            selectedContinents.includes("Amérique Latine") &&
+            selectedContinents.includes("Asie") &&
+            selectedContinents.includes("Maghreb");
+
+          if (allSelected) {
+            allContinentsBtn.classList.add("bg-gray-200");
+          } else {
+            allContinentsBtn.classList.remove("bg-gray-200");
+          }
+
+          continentBtns.forEach((btn) => {
+            const continent = btn.dataset.continent;
+            if (selectedContinents.includes(continent)) {
+              btn.classList.remove("bg-white", "text-black", "border-black");
+              btn.classList.add("bg-jaune", "text-black");
+            } else {
+              btn.classList.remove("bg-jaune");
+              btn.classList.add("bg-white", "text-black", "border-black");
+            }
+          });
+        }
+
+        // Gestion des pays
+        function updateCountriesDropdown() {
+          const countriesSelect = document.getElementById("countries-select");
+          const allCountriesBtn = document.getElementById("all-countries-btn");
+
+          if (selectedContinents.length === 0) {
+            availableCountries = [];
+            selectedCountry = "tous";
+            countriesSelect.disabled = true;
+            allCountriesBtn.disabled = true;
+            countriesSelect.style.opacity = "0.5";
+            countriesSelect.style.cursor = "not-allowed";
+            allCountriesBtn.style.opacity = "0.5";
+            allCountriesBtn.style.cursor = "not-allowed";
+          } else {
+            availableCountries = window.allPays.filter((p) =>
+              selectedContinents.includes(p.continent)
+            );
+            countriesSelect.disabled = false;
+            allCountriesBtn.disabled = false;
+            countriesSelect.style.opacity = "1";
+            countriesSelect.style.cursor = "pointer";
+            allCountriesBtn.style.opacity = "1";
+            allCountriesBtn.style.cursor = "pointer";
+
+            countriesSelect.innerHTML =
+              '<option value="tous">Tous les pays</option>';
+            availableCountries.forEach((country) => {
+              const option = document.createElement("option");
+              option.value = country.id;
+              option.textContent = country.nom;
+              countriesSelect.appendChild(option);
+            });
+          }
+        }
+
+        document
+          .getElementById("all-countries-btn")
+          .addEventListener("click", function () {
+            if (!this.disabled) {
+              selectedCountry = "tous";
+              document.getElementById("countries-select").value = "tous";
+              filterProducts();
+            }
+          });
+
+        document
+          .getElementById("countries-select")
+          .addEventListener("change", function () {
+            selectedCountry = this.value;
+            filterProducts();
+          });
+
+        // Gestion des catégories
+        const allCategoriesBtn = document.getElementById("all-categories-btn");
+        const categoryCheckboxes =
+          document.querySelectorAll(".category-checkbox");
+
+        allCategoriesBtn.addEventListener("click", function () {
+          selectedCategories = [
+            "Boissons",
+            "Fruits & légumes",
+            "Viandes",
+            "Épices",
+            "Snacks",
+            "Sauces",
+            "Conserves",
+            "Condiments",
+            "Autres",
+          ];
+          categoryCheckboxes.forEach((cb) => (cb.checked = true));
+          updateCategoriesButton();
+          filterProducts();
+        });
+
+        categoryCheckboxes.forEach((cb) => {
+          cb.addEventListener("change", function () {
+            if (this.checked) {
+              selectedCategories.push(this.value);
+            } else {
+              selectedCategories = selectedCategories.filter(
+                (c) => c !== this.value
+              );
+            }
+            updateCategoriesButton();
+            filterProducts();
+          });
+        });
+
+        function updateCategoriesButton() {
+          const allSelected =
+            selectedCategories.length === 9 &&
+            selectedCategories.includes("Boissons") &&
+            selectedCategories.includes("Fruits & légumes") &&
+            selectedCategories.includes("Viandes") &&
+            selectedCategories.includes("Épices") &&
+            selectedCategories.includes("Snacks") &&
+            selectedCategories.includes("Sauces") &&
+            selectedCategories.includes("Conserves") &&
+            selectedCategories.includes("Condiments") &&
+            selectedCategories.includes("Autres");
+
+          if (allSelected) {
+            allCategoriesBtn.classList.add("bg-gray-200");
+          } else {
+            allCategoriesBtn.classList.remove("bg-gray-200");
+          }
+        }
+
+        // Gestion du filtre de prix
+        const priceToggleBtn = document.getElementById("price-toggle-btn");
+        const priceSection = document.getElementById("price-section");
+        const priceDisabledMessage = document.getElementById(
+          "price-disabled-message"
+        );
+        const minPriceInput = document.getElementById("min-price");
+        const maxPriceInput = document.getElementById("max-price");
+        const allPricesBtn = document.getElementById("all-prices-btn");
+
+        priceToggleBtn.addEventListener("click", function () {
+          priceFilterEnabled = !priceFilterEnabled;
+
+          if (priceFilterEnabled) {
+            this.textContent = "ACTIVÉ";
+            this.classList.add(
+              "border-saumon",
+              "bg-saumon-hover",
+              "text-black"
+            );
+            this.classList.remove("border-gray-600");
+            priceSection.style.display = "block";
+            priceDisabledMessage.style.display = "none";
+          } else {
+            this.textContent = "DÉSACTIVÉ";
+            this.classList.remove(
+              "border-saumon",
+              "bg-saumon-hover",
+              "text-black"
+            );
+            this.classList.add("border-gray-600");
+            priceSection.style.display = "none";
+            priceDisabledMessage.style.display = "block";
+            minPrice = null;
+            maxPrice = null;
+            minPriceInput.value = "";
+            maxPriceInput.value = "";
+          }
+
+          filterProducts();
+        });
+
+        minPriceInput.addEventListener("input", function () {
+          minPrice = this.value ? parseFloat(this.value) : null;
+          updatePricesButton();
+          filterProducts();
+        });
+
+        maxPriceInput.addEventListener("input", function () {
+          maxPrice = this.value ? parseFloat(this.value) : null;
+          updatePricesButton();
+          filterProducts();
+        });
+
+        allPricesBtn.addEventListener("click", function () {
+          minPrice = null;
+          maxPrice = null;
+          minPriceInput.value = "";
+          maxPriceInput.value = "";
+          updatePricesButton();
+          filterProducts();
+        });
+
+        function updatePricesButton() {
+          if (minPrice === null && maxPrice === null) {
+            allPricesBtn.classList.add("bg-gray-200");
+          } else {
+            allPricesBtn.classList.remove("bg-gray-200");
+          }
+        }
+
+        // Bouton de réinitialisation
+        document
+          .getElementById("reset-filters-btn")
+          .addEventListener("click", function () {
+            selectedContinents = [];
+            selectedCategories = [];
+            selectedCountry = "tous";
+            searchQuery = "";
+            priceFilterEnabled = false;
+            minPrice = null;
+            maxPrice = null;
+
+            // Réinitialiser l'interface
+            searchInput.value = "";
+            searchIcon.classList.remove("hidden");
+            clearSearchBtn.classList.add("hidden");
+
+            categoryCheckboxes.forEach((cb) => (cb.checked = false));
+
+            minPriceInput.value = "";
+            maxPriceInput.value = "";
+
+            priceToggleBtn.textContent = "DÉSACTIVÉ";
+            priceToggleBtn.classList.remove(
+              "border-saumon",
+              "bg-saumon-hover",
+              "text-black"
+            );
+            priceToggleBtn.classList.add("border-gray-600");
+            priceSection.style.display = "none";
+            priceDisabledMessage.style.display = "block";
+
+            updateContinentButtons();
+            updateCountriesDropdown();
+            updateCategoriesButton();
+            updatePricesButton();
+            filterProducts();
+          });
+
+        // Fonction de filtrage des produits
+        function filterProducts() {
+          currentPage = 1; // Reset à la page 1 lors du filtrage
+
+          filteredProducts = products.filter((product) => {
+            let shouldShow = true;
+
+            // Filtre par recherche textuelle
+            if (
+              searchQuery &&
+              !product.nom.toLowerCase().includes(searchQuery)
+            ) {
+              shouldShow = false;
+            }
+
+            // Filtre par continent
+            if (selectedContinents.length > 0) {
+              const productContinent =
+                product.expand?.pays?.continent || product.continent;
+              if (!selectedContinents.includes(productContinent)) {
+                shouldShow = false;
+              }
+            }
+
+            // Filtre par pays
+            if (selectedCountry !== "tous") {
+              const productPaysId = product.expand?.pays?.id || product.pays;
+              if (productPaysId !== selectedCountry) {
+                shouldShow = false;
+              }
+            }
+
+            // Filtre par catégories
+            if (selectedCategories.length > 0) {
+              const productCategory = product.categorie;
+              if (!selectedCategories.includes(productCategory)) {
+                shouldShow = false;
+              }
+            }
+
+            // Filtre par prix
+            if (priceFilterEnabled) {
+              const productPrice = parseFloat(product.prix) || 0;
+              if (minPrice !== null && productPrice < minPrice) {
+                shouldShow = false;
+              }
+              if (maxPrice !== null && productPrice > maxPrice) {
+                shouldShow = false;
+              }
+            }
+
+            return shouldShow;
+          });
+
+          updateDisplay();
+        }
+
+        // Fonction de mise à jour de l'affichage avec pagination
+        function updateDisplay() {
+          const totalProducts = filteredProducts.length;
+          const totalPages = Math.ceil(totalProducts / productsPerPage);
+          const startIndex = (currentPage - 1) * productsPerPage;
+          const endIndex = startIndex + productsPerPage;
+          const productsToShow = filteredProducts.slice(startIndex, endIndex);
+
+          // Mettre à jour les infos
+          document.getElementById("visible-count").textContent = totalProducts;
+          document.getElementById("current-page").textContent = currentPage;
+          document.getElementById("total-pages").textContent = Math.max(
+            1,
+            totalPages
+          );
+
+          // Afficher/masquer tous les produits
+          const allProductCards = document.querySelectorAll(
+            "#products-container > div"
+          );
+          allProductCards.forEach((card, index) => {
+            card.style.display = "none";
+          });
+
+          // Afficher uniquement les produits de la page courante
+          productsToShow.forEach((product) => {
+            const productIndex = products.findIndex((p) => p.id === product.id);
+            if (productIndex !== -1 && allProductCards[productIndex]) {
+              allProductCards[productIndex].style.display = "flex";
+            }
+          });
+
+          // Afficher/masquer le message "aucun produit"
+          const noProductsMessage = document.getElementById(
+            "no-products-message"
+          );
+          if (totalProducts === 0) {
+            noProductsMessage.classList.remove("hidden");
+          } else {
+            noProductsMessage.classList.add("hidden");
+          }
+
+          // Mettre à jour la pagination
+          updatePagination(totalPages);
+        }
+
+        // Fonction de mise à jour de la pagination
+        function updatePagination(totalPages) {
+          const paginationControls = document.getElementById(
+            "pagination-controls"
+          );
+          paginationControls.innerHTML = "";
+
+          if (totalPages <= 1) {
+            document.getElementById("pagination-container").style.display =
+              "none";
+            return;
+          }
+
+          document.getElementById("pagination-container").style.display =
+            "flex";
+
+          // Bouton précédent
+          const prevBtn = document.createElement("button");
+          prevBtn.innerHTML = "&lt;";
+          prevBtn.className =
+            "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors";
+          prevBtn.disabled = currentPage === 1;
+          if (currentPage === 1) {
+            prevBtn.classList.add("opacity-50", "cursor-not-allowed");
+          } else {
+            prevBtn.classList.add("cursor-pointer");
+          }
+          prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+              currentPage--;
+              updateDisplay();
+            }
+          });
+          paginationControls.appendChild(prevBtn);
+
+          // Calculer les pages à afficher
+          const maxVisiblePages = 7; // Afficher max 7 numéros de pages
+          let startPage = Math.max(
+            1,
+            currentPage - Math.floor(maxVisiblePages / 2)
+          );
+          let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+          // Ajuster si on n'a pas assez de pages à la fin
+          if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+          }
+
+          // Numéros de pages
+          for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement("button");
+            pageBtn.textContent = i;
+            pageBtn.className =
+              "w-8 h-8 flex items-center justify-center text-sm font-medium transition-colors cursor-pointer";
+
+            if (i === currentPage) {
+              pageBtn.classList.add("bg-black", "text-white");
+            } else {
+              pageBtn.classList.add(
+                "text-gray-900",
+                "bg-white",
+                "hover:bg-gray-100"
+              );
+            }
+
+            pageBtn.addEventListener("click", () => {
+              currentPage = i;
+              updateDisplay();
+            });
+            paginationControls.appendChild(pageBtn);
+          }
+
+          // Points de suspension et dernière page si nécessaire
+          if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+              const dotsSpan = document.createElement("span");
+              dotsSpan.textContent = "...";
+              dotsSpan.className =
+                "w-8 h-8 flex items-center justify-center text-sm text-gray-500";
+              paginationControls.appendChild(dotsSpan);
+            }
+
+            const lastPageBtn = document.createElement("button");
+            lastPageBtn.textContent = totalPages;
+            lastPageBtn.className =
+              "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors cursor-pointer";
+            lastPageBtn.addEventListener("click", () => {
+              currentPage = totalPages;
+              updateDisplay();
+            });
+            paginationControls.appendChild(lastPageBtn);
+          }
+
+          // Bouton suivant
+          const nextBtn = document.createElement("button");
+          nextBtn.innerHTML = "&gt;";
+          nextBtn.className =
+            "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors";
+          nextBtn.disabled = currentPage === totalPages;
+          if (currentPage === totalPages) {
+            nextBtn.classList.add("opacity-50", "cursor-not-allowed");
+          } else {
+            nextBtn.classList.add("cursor-pointer");
+          }
+          nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+              currentPage++;
+              updateDisplay();
+            }
+          });
+          paginationControls.appendChild(nextBtn);
+        }
+
+        // Initialisation
+        filterProducts();
+        console.log("Page produits initialisée avec succès");
+      });
+    </script>
+  </div>
+</LayoutApplicatif>

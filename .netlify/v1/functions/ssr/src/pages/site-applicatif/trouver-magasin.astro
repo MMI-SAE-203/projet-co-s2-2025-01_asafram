@@ -1,0 +1,1455 @@
+---
+import LayoutApplicatif from "../../layouts/LayoutApplicatif.astro";
+import { getAllShops } from "../../../backend/backend.js";
+
+const shops = await getAllShops();
+---
+
+<LayoutApplicatif
+  title="Trouver un magasin"
+  description="Trouvez les magasins ASAFRAM près de chez vous"
+>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <style>
+    #map {
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .leaflet-container {
+      background: #f0f0f0;
+      font-family: "Raleway", sans-serif;
+    }
+
+    /* Améliorer l'affichage des popups */
+    .leaflet-popup-content {
+      font-family: "Raleway", sans-serif;
+    }
+
+    /* Scroll normal de la page, seuls les filtres restent fixes */
+    body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Éviter les conflits avec le scroll sur la carte */
+    .leaflet-container {
+      cursor: grab;
+    }
+
+    .leaflet-container:active {
+      cursor: grabbing;
+    }
+
+    .main-container {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Ajuster la position des contrôles de zoom Leaflet */
+    .leaflet-control-zoom {
+      margin-left: 10px !important;
+      margin-top: 10px !important;
+    }
+
+    /* Styles pour le bouton de filtre - Position normale */
+    .filter-toggle-btn {
+      position: absolute !important;
+      top: 240px !important;
+      left: 0 !important;
+      z-index: 9999 !important;
+      transform: translateX(0) !important;
+      transition: transform 0.3s ease !important;
+    }
+
+    .filter-toggle-btn.shifted {
+      transform: translateX(384px) !important;
+    }
+
+    /* Styles pour la sidebar vraiment fixe avec scroll interne */
+    .filter-sidebar {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      bottom: auto !important;
+      width: 384px !important;
+      z-index: 9998 !important;
+      transform: translateX(-384px) !important;
+      transition: transform 0.3s ease !important;
+      overflow-y: auto !important;
+      min-height: calc(100vh - 160px) !important;
+    }
+
+    .filter-sidebar.open {
+      transform: translateX(0) !important;
+    }
+
+    /* Zone de carte remise en position normale */
+    .map-zone {
+      transition: margin-left 0.3s ease !important;
+      margin-left: 0 !important;
+      position: absolute !important;
+      top: 160px !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      min-height: calc(100vh - 160px) !important;
+    }
+
+    .map-zone.shifted {
+      left: 384px !important;
+    }
+
+    /* Barre de recherche - Position normale en haut à droite */
+    .search-bar-fixed {
+      position: absolute !important;
+      top: 200px !important;
+      right: 16px !important;
+      z-index: 10000 !important;
+      transform: none !important;
+    }
+
+    /* Zone de détails de boutique à droite */
+    .shop-details-panel {
+      position: absolute !important;
+      top: 240px !important;
+      right: 16px !important;
+      bottom: 16px !important;
+      width: 320px !important;
+      z-index: 9999 !important;
+      background: white !important;
+      border-radius: 12px !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+      border: 1px solid #e5e7eb !important;
+      overflow-y: auto !important;
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease !important;
+      opacity: 0 !important;
+      transform: translateX(20px) !important;
+      pointer-events: none !important;
+    }
+
+    .shop-details-panel.visible {
+      opacity: 1 !important;
+      transform: translateX(0) !important;
+      pointer-events: auto !important;
+    }
+
+    .shop-details-content {
+      padding: 20px !important;
+    }
+
+    .shop-details-image {
+      width: 100% !important;
+      height: 160px !important;
+      object-fit: cover !important;
+      border-radius: 8px !important;
+      margin-bottom: 12px !important;
+    }
+
+    .shop-details-title {
+      font-size: 20px !important;
+      font-weight: bold !important;
+      color: #1f2937 !important;
+      margin-bottom: 12px !important;
+      font-family: "Raleway", sans-serif !important;
+    }
+
+    .shop-details-info {
+      display: flex !important;
+      align-items: flex-start !important;
+      margin-bottom: 10px !important;
+      font-family: "Raleway", sans-serif !important;
+    }
+
+    .shop-details-icon {
+      margin-right: 10px !important;
+      margin-top: 1px !important;
+      font-size: 14px !important;
+    }
+
+    .shop-details-text {
+      flex: 1 !important;
+      color: #374151 !important;
+      line-height: 1.4 !important;
+      font-size: 14px !important;
+    }
+
+    .shop-details-link {
+      color: #ef4444 !important;
+      text-decoration: none !important;
+      font-weight: 500 !important;
+    }
+
+    .shop-details-link:hover {
+      text-decoration: underline !important;
+    }
+
+    .shop-details-close {
+      position: absolute !important;
+      top: 16px !important;
+      right: 16px !important;
+      background: #f3f4f6 !important;
+      border: none !important;
+      border-radius: 50% !important;
+      width: 32px !important;
+      height: 32px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      font-size: 18px !important;
+      color: #6b7280 !important;
+      transition: background-color 0.2s !important;
+    }
+
+    .shop-details-close:hover {
+      background: #e5e7eb !important;
+    }
+
+    /* Styles pour les marqueurs personnalisés */
+    .selected-marker {
+      z-index: 1000 !important;
+      animation: pulse-selected 2s infinite !important;
+    }
+
+    .found-marker {
+      z-index: 999 !important;
+    }
+
+    @keyframes pulse-selected {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Améliorer le contraste des marqueurs sélectionnés */
+    .leaflet-marker-icon.selected-marker {
+      box-shadow: 0 0 20px rgba(227, 184, 92, 0.6) !important;
+    }
+
+    .leaflet-marker-icon.found-marker {
+      box-shadow: 0 0 15px rgba(227, 184, 92, 0.4) !important;
+    }
+  </style>
+
+  <div
+    class="main-container bg-gray-50"
+    x-data="{ filtersOpen: true, selectedContinents: [], selectedCategories: [], searchQuery: '', selectedShopType: 'tous' }"
+  >
+    <!-- Bouton pour toggle les filtres - Position normale -->
+    <div
+      @click="filtersOpen = !filtersOpen"
+      class="filter-toggle-btn bg-sable hover:bg-sable-hover text-black font-bold p-3 rounded-r-lg shadow-lg cursor-pointer"
+      :class="filtersOpen ? 'shifted' : ''"
+    >
+      <svg
+        class="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.586a1 1 0 01-.293.707L9 19.414V14.414a1 1 0 00-.293-.707L2.293 7.293A1 1 0 012 6.586V4z"
+        ></path>
+      </svg>
+    </div>
+
+    <!-- Sidebar des filtres - Vraiment fixe -->
+    <div
+      class="filter-sidebar bg-white shadow-lg border-r border-gray-200"
+      :class="filtersOpen ? 'open' : ''"
+    >
+      <div class="h-full flex flex-col">
+        <div class="p-8 flex-1">
+          <!-- En-tête des filtres -->
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="!text-3xl font-raleway font-black uppercase text-black">
+              FILTRES
+            </h2>
+            <button
+              @click="selectedContinents = []; selectedCategories = []; searchQuery = ''; selectedShopType = 'tous'"
+              class="text-xs font-raleway border border-gray-600 px-4 py-1.5 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+            >
+              RÉINITIALISER
+            </button>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-black mb-6"></div>
+
+          <!-- Section Continents -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                CONTINENTS
+              </h3>
+              <button
+                @click="selectedContinents = ['Afrique', 'Amérique Latine', 'Asie', 'Maghreb']"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+                :class="selectedContinents.length === 4 && selectedContinents.includes('Afrique') && selectedContinents.includes('Amérique Latine') && selectedContinents.includes('Asie') && selectedContinents.includes('Maghreb') ? 'bg-gray-200' : ''"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="space-y-2">
+              <button
+                @click="selectedContinents.includes('Afrique') ? (selectedContinents = selectedContinents.filter(c => c !== 'Afrique')) : selectedContinents.push('Afrique')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
+                :class="selectedContinents.includes('Afrique') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
+              >
+                AFRIQUE
+              </button>
+
+              <button
+                @click="selectedContinents.includes('Amérique Latine') ? (selectedContinents = selectedContinents.filter(c => c !== 'Amérique Latine')) : selectedContinents.push('Amérique Latine')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
+                :class="selectedContinents.includes('Amérique Latine') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
+              >
+                AMÉRIQUE LATINE
+              </button>
+
+              <button
+                @click="selectedContinents.includes('Asie') ? (selectedContinents = selectedContinents.filter(c => c !== 'Asie')) : selectedContinents.push('Asie')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
+                :class="selectedContinents.includes('Asie') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
+              >
+                ASIE
+              </button>
+
+              <button
+                @click="selectedContinents.includes('Maghreb') ? (selectedContinents = selectedContinents.filter(c => c !== 'Maghreb')) : selectedContinents.push('Maghreb')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
+                :class="selectedContinents.includes('Maghreb') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
+              >
+                MAGHREB
+              </button>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Catégories -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                CATÉGORIES
+              </h3>
+              <button
+                @click="selectedCategories = ['viande', 'snack', 'poisson', 'epices', 'fruit', 'sauces', 'feculent', 'boissons']"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+                :class="selectedCategories.length === 8 && selectedCategories.includes('viande') && selectedCategories.includes('snack') && selectedCategories.includes('poisson') && selectedCategories.includes('epices') && selectedCategories.includes('fruit') && selectedCategories.includes('sauces') && selectedCategories.includes('feculent') && selectedCategories.includes('boissons') ? 'bg-gray-200' : ''"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-y-2 gap-x-4">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="viande"
+                  @change="$event.target.checked ? selectedCategories.push('viande') : selectedCategories = selectedCategories.filter(c => c !== 'viande')"
+                  :checked="selectedCategories.includes('viande')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >VIANDE</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="snack"
+                  @change="$event.target.checked ? selectedCategories.push('snack') : selectedCategories = selectedCategories.filter(c => c !== 'snack')"
+                  :checked="selectedCategories.includes('snack')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >SNACK</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="poisson"
+                  @change="$event.target.checked ? selectedCategories.push('poisson') : selectedCategories = selectedCategories.filter(c => c !== 'poisson')"
+                  :checked="selectedCategories.includes('poisson')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >POISSON</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="epices"
+                  @change="$event.target.checked ? selectedCategories.push('epices') : selectedCategories = selectedCategories.filter(c => c !== 'epices')"
+                  :checked="selectedCategories.includes('epices')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >ÉPICES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="fruit"
+                  @change="$event.target.checked ? selectedCategories.push('fruit') : selectedCategories = selectedCategories.filter(c => c !== 'fruit')"
+                  :checked="selectedCategories.includes('fruit')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >FRUIT / LÉGUME</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="sauces"
+                  @change="$event.target.checked ? selectedCategories.push('sauces') : selectedCategories = selectedCategories.filter(c => c !== 'sauces')"
+                  :checked="selectedCategories.includes('sauces')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >SAUCES</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="feculent"
+                  @change="$event.target.checked ? selectedCategories.push('feculent') : selectedCategories = selectedCategories.filter(c => c !== 'feculent')"
+                  :checked="selectedCategories.includes('feculent')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >FÉCULENT</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="boissons"
+                  @change="$event.target.checked ? selectedCategories.push('boissons') : selectedCategories = selectedCategories.filter(c => c !== 'boissons')"
+                  :checked="selectedCategories.includes('boissons')"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >BOISSONS</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Magasins -->
+          <div>
+            <h3
+              class="!text-2xl font-raleway font-bold uppercase mb-4 text-black"
+            >
+              MAGASINS
+            </h3>
+            <div class="relative">
+              <select
+                class="w-full p-2.5 border border-gray-400 rounded-lg text-xs font-raleway bg-white appearance-none pr-8 cursor-pointer"
+                x-model="selectedShopType"
+              >
+                <option value="tous">Tous les magasins</option>
+                <option value="Petite épicerie">Petite épicerie</option>
+                <option value="Magasin de taille moyenne"
+                  >Magasin de taille moyenne</option
+                >
+                <option value="Grande Surface">Grande Surface</option>
+              </select>
+              <svg
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-black pointer-events-none"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone de la carte - Dans le flow normal de la page -->
+    <div
+      class="map-zone w-full relative"
+      :class="filtersOpen ? 'shifted' : ''"
+      style="height: calc(100vh - 160px); min-height: 600px;"
+    >
+      <!-- Carte -->
+      <div id="map" class="w-full h-full"></div>
+    </div>
+  </div>
+
+  <!-- Barre de recherche - Position normale en haut à droite -->
+  <div class="search-bar-fixed" x-data="{ searchQuery: '' }">
+    <div class="relative">
+      <input
+        type="text"
+        placeholder="CHERCHER UNE BOUTIQUE"
+        class="w-80 px-4 py-3 border-2 border-gray-300 rounded-lg text-sm font-raleway focus:outline-none focus:border-saumon bg-white shadow-lg"
+        x-model="searchQuery"
+      />
+      <!-- Loupe quand pas de texte -->
+      <svg
+        x-show="searchQuery === ''"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <!-- Croix quand il y a du texte -->
+      <button
+        x-show="searchQuery !== ''"
+        @click="searchQuery = ''; $nextTick(() => { const event = new Event('input'); $el.previousElementSibling.dispatchEvent(event); })"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"
+        title="Effacer la recherche"
+      >
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panneau de détails de boutique à droite -->
+  <div
+    id="shop-details-panel"
+    class="absolute top-60 right-4 bottom-4 w-80 z-[9999] bg-white rounded-xl shadow-2xl border border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out opacity-0 translate-x-5 pointer-events-none"
+  >
+    <div class="p-5 relative">
+      <div id="shop-details-content-inner">
+        <!-- Le contenu sera injecté ici dynamiquement -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+  <!-- Script pour initialiser la carte -->
+  <script define:vars={{ shops }}>
+    // Attendre que la page soit complètement chargée
+    window.addEventListener("load", function () {
+      console.log("Initialisation de la carte...");
+
+      try {
+        // Créer des icônes personnalisées avec la couleur sable
+        const defaultIcon = L.icon({
+          iconUrl:
+            "data:image/svg+xml;base64," +
+            btoa(`
+            <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.5 0C5.6 0 0 5.6 0 12.5c0 9.4 12.5 28.5 12.5 28.5s12.5-19.1 12.5-28.5C25 5.6 19.4 0 12.5 0z" fill="#E3B85C"/>
+              <circle cx="12.5" cy="12.5" r="6" fill="white"/>
+            </svg>
+          `),
+          shadowUrl:
+            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+
+        const selectedIcon = L.icon({
+          iconUrl:
+            "data:image/svg+xml;base64," +
+            btoa(`
+            <svg width="35" height="57" viewBox="0 0 35 57" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.5 0C7.8 0 0 7.8 0 17.5c0 13.1 17.5 39.5 17.5 39.5s17.5-26.4 17.5-39.5C35 7.8 27.2 0 17.5 0z" fill="#D4A853"/>
+              <circle cx="17.5" cy="17.5" r="8.5" fill="white"/>
+              <circle cx="17.5" cy="17.5" r="6" fill="#E3B85C"/>
+            </svg>
+          `),
+          shadowUrl:
+            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+          iconSize: [35, 57],
+          iconAnchor: [17, 57],
+          popupAnchor: [1, -47],
+          shadowSize: [57, 57],
+          className: "selected-marker",
+        });
+
+        const foundIcon = L.icon({
+          iconUrl:
+            "data:image/svg+xml;base64," +
+            btoa(`
+            <svg width="30" height="49" viewBox="0 0 30 49" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 0C6.7 0 0 6.7 0 15c0 11.2 15 34 15 34s15-22.8 15-34C30 6.7 23.3 0 15 0z" fill="#E3B85C"/>
+              <circle cx="15" cy="15" r="7" fill="white"/>
+              <circle cx="15" cy="15" r="5" fill="#E3B85C"/>
+            </svg>
+          `),
+          shadowUrl:
+            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+          iconSize: [30, 49],
+          iconAnchor: [15, 49],
+          popupAnchor: [1, -41],
+          shadowSize: [49, 49],
+          className: "found-marker",
+        });
+
+        // Création de la carte centrée sur la France avec limites strictes
+        const map = L.map("map", {
+          scrollWheelZoom: false, // Désactiver le zoom molette normal
+          doubleClickZoom: true, // Garder le double-clic pour zoomer
+          boxZoom: true, // Garder la sélection pour zoomer
+          keyboard: true, // Garder les contrôles clavier
+          minZoom: 2, // Zoom minimum mondial
+          maxZoom: 12, // Réduire le zoom maximum à 12 pour éviter les zones grises
+          zoomControl: true, // Garder les contrôles de zoom
+        });
+
+        // Désactiver explicitement le handler de scroll wheel de Leaflet
+        map.scrollWheelZoom.disable();
+
+        // Ajout de la couche de tuiles OpenStreetMap
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 12, // Réduire à 12 pour éviter les zones grises
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }).addTo(map);
+
+        // Gestion du zoom avec CTRL + molette uniquement
+        map.getContainer().addEventListener(
+          "wheel",
+          function (e) {
+            if (e.ctrlKey) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+
+              // Débogage pour comprendre le comportement
+              console.log("CTRL + Wheel Event:", {
+                deltaY: e.deltaY,
+                deltaX: e.deltaX,
+                deltaMode: e.deltaMode,
+                wheelDelta: e.wheelDelta,
+                wheelDeltaY: e.wheelDeltaY,
+                type: e.type,
+                ctrlKey: e.ctrlKey,
+                direction:
+                  e.deltaY > 0
+                    ? "down (should zoom out)"
+                    : "up (should zoom in)",
+              });
+
+              const currentZoom = map.getZoom();
+              // deltaY > 0 = scroll vers le bas = ZOOM OUT (-0.5)
+              // deltaY < 0 = scroll vers le haut = ZOOM IN (+0.5)
+              const zoomChange = e.deltaY > 0 ? -0.5 : 0.5;
+              const newZoom = Math.max(
+                map.getMinZoom(),
+                Math.min(map.getMaxZoom(), currentZoom + zoomChange)
+              );
+
+              console.log("Zoom:", {
+                currentZoom: currentZoom,
+                zoomChange: zoomChange,
+                newZoom: newZoom,
+                applied: newZoom !== currentZoom,
+              });
+
+              const rect = map.getContainer().getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              const containerPoint = L.point(x, y);
+              const latLng = map.containerPointToLatLng(containerPoint);
+
+              map.setZoomAround(latLng, newZoom);
+
+              return false;
+            }
+          },
+          { passive: false, capture: true }
+        );
+
+        // Essayer aussi de capturer l'événement directement sur le document
+        document.addEventListener(
+          "wheel",
+          function (e) {
+            if (e.ctrlKey && e.target && e.target.closest("#map")) {
+              console.log("Document wheel event (backup):", {
+                deltaY: e.deltaY,
+                target: e.target,
+                isMapTarget: !!e.target.closest("#map"),
+              });
+            }
+          },
+          { passive: false, capture: true }
+        );
+
+        // Centrer directement sur Paris avec un zoom précis
+        map.setView([47.8567, 5.3522], 6.5);
+
+        // Forcer le redimensionnement initial de la carte
+        setTimeout(() => {
+          map.invalidateSize();
+          // Recentrer après le redimensionnement initial
+          map.setView([47.8567, 5.3522], 6.5);
+        }, 200);
+
+        console.log("Carte limitée à la France initialisée avec succès");
+
+        // Fonction de géocodage avec Nominatim (OpenStreetMap)
+        async function geocodeAddress(address) {
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ", France")}&limit=1&countrycodes=fr`
+            );
+            const data = await response.json();
+            if (data && data.length > 0) {
+              return {
+                lat: parseFloat(data[0].lat),
+                lng: parseFloat(data[0].lon),
+                success: true,
+              };
+            }
+            return { success: false };
+          } catch (error) {
+            console.error("Erreur géocodage pour", address, ":", error);
+            return { success: false };
+          }
+        }
+
+        // Fonction pour créer le contenu HTML du popup
+        function createPopupContent(shop) {
+          let imageHtml = "";
+          if (shop.img && shop.img.length > 0) {
+            imageHtml = `<img src="${shop.img}" alt="${shop.nom}" class="w-full h-40 object-cover">`;
+          }
+
+          let continentHtml = "";
+          if (
+            shop.expand &&
+            shop.expand.continent &&
+            shop.expand.continent.length > 0
+          ) {
+            const continents = shop.expand.continent
+              .map((c) => c.nom || c)
+              .join(", ");
+            continentHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">🌍</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">${continents}</div>
+              </div>
+            `;
+          } else if (shop.continent) {
+            continentHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">🌍</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">${shop.continent}</div>
+              </div>
+            `;
+          }
+
+          let siteWebHtml = "";
+          if (shop.site_web) {
+            siteWebHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">🌐</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">
+                  <a href="${shop.site_web}" target="_blank" rel="noopener" class="text-red-500 hover:underline font-medium">${shop.site_web}</a>
+                </div>
+              </div>
+            `;
+          }
+
+          let horaireHtml = "";
+          if (shop.horaire) {
+            horaireHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">🕒</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">${shop.horaire}</div>
+              </div>
+            `;
+          }
+
+          let telephoneHtml = "";
+          if (shop.telephone) {
+            telephoneHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">📞</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">
+                  <a href="tel:${shop.telephone}" class="text-red-500 hover:underline font-medium">${shop.telephone}</a>
+                </div>
+              </div>
+            `;
+          }
+
+          let adresseHtml = "";
+          if (shop.adresse) {
+            adresseHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">📍</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">${shop.adresse}</div>
+              </div>
+            `;
+          }
+
+          let descriptionHtml = "";
+          if (shop.description) {
+            descriptionHtml = `
+              <div class="flex items-start mb-2.5 font-raleway">
+                <div class="mr-2.5 mt-0.5 text-sm">ℹ️</div>
+                <div class="flex-1 text-gray-600 leading-tight text-sm">${shop.description}</div>
+              </div>
+            `;
+          }
+
+          return `
+            ${imageHtml}
+            <h2 class="!text-lg font-bold text-gray-800 mb-3 font-raleway">${shop.nom}</h2>
+            ${adresseHtml}
+            ${telephoneHtml}
+            ${horaireHtml}
+            ${siteWebHtml}
+            ${continentHtml}
+            ${descriptionHtml}
+          `;
+        }
+
+        // Fonction pour afficher les détails d'une boutique dans le panneau
+        function showShopDetails(shop) {
+          const panel = document.getElementById("shop-details-panel");
+          const content = document.getElementById("shop-details-content-inner");
+
+          if (panel && content) {
+            content.innerHTML = createPopupContent(shop);
+            panel.classList.remove(
+              "opacity-0",
+              "translate-x-5",
+              "pointer-events-none"
+            );
+            panel.classList.add(
+              "opacity-100",
+              "translate-x-0",
+              "pointer-events-auto"
+            );
+
+            // Forcer le redimensionnement de la carte après l'ouverture du panneau
+            setTimeout(() => {
+              map.invalidateSize();
+            }, 350); // Après la transition du panneau
+          }
+        }
+
+        // Fonction pour masquer le panneau de détails
+        function hideShopDetails() {
+          const panel = document.getElementById("shop-details-panel");
+          if (panel) {
+            panel.classList.remove(
+              "opacity-100",
+              "translate-x-0",
+              "pointer-events-auto"
+            );
+            panel.classList.add(
+              "opacity-0",
+              "translate-x-5",
+              "pointer-events-none"
+            );
+
+            // Forcer le redimensionnement de la carte après la fermeture du panneau
+            setTimeout(() => {
+              map.invalidateSize();
+            }, 350); // Après la transition du panneau
+          }
+        }
+
+        // Variable pour stocker tous les marqueurs avec leurs données
+        let shopsMarkers = [];
+        let allShopsData = [];
+        let selectedMarker = null;
+
+        // Fonction pour réinitialiser tous les marqueurs au style par défaut
+        function resetAllMarkers() {
+          shopsMarkers.forEach((markerData) => {
+            markerData.marker.setIcon(defaultIcon);
+          });
+          selectedMarker = null;
+        }
+
+        // Fonction pour sélectionner un marqueur spécifique
+        function selectMarker(markerData, shouldZoom = false) {
+          // Réinitialiser tous les marqueurs d'abord
+          resetAllMarkers();
+
+          // Appliquer le style sélectionné
+          markerData.marker.setIcon(selectedIcon);
+          selectedMarker = markerData;
+
+          // Ouvrir le panneau de détails
+          showShopDetails(markerData.shop);
+
+          // Forcer le redimensionnement de la carte pour éviter les problèmes d'affichage
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 100);
+
+          // Centrer la vue sur le marqueur avec ou sans zoom selon le contexte
+          setTimeout(() => {
+            const markerLatLng = markerData.marker.getLatLng();
+
+            if (shouldZoom) {
+              // Recherche : zoom + centrage + décalage
+              const currentZoom = map.getZoom();
+              const targetZoom = Math.min(Math.max(currentZoom, 9), 11);
+
+              console.log(
+                `🔍 Recherche - Zoom de ${currentZoom} vers ${targetZoom}`
+              );
+
+              // 1. Centrer avec zoom
+              map.setView(markerLatLng, targetZoom, {
+                animate: true,
+                duration: 0.6,
+              });
+
+              // 2. Décaler après zoom
+              setTimeout(() => {
+                map.panBy([168, 0], {
+                  animate: true,
+                  duration: 0.4,
+                });
+              }, 650);
+            } else {
+              // Clic direct : juste centrage + décalage (pas de zoom)
+              console.log(`🖱️ Clic direct - Centrage sans zoom`);
+
+              // Calculer le centre visuel en tenant compte du panneau latéral
+              // Le panneau fait 320px, donc la zone visible est réduite
+              const mapContainer = map.getContainer();
+              const mapWidth = mapContainer.offsetWidth;
+              const panelWidth = 320; // Largeur du panneau
+
+              // Le centre visuel devrait être décalé vers la gauche
+              const visualCenterOffsetX = -panelWidth / 2; // -160px vers la gauche
+
+              // Convertir le marqueur en point pixel
+              const markerPoint = map.latLngToContainerPoint(markerLatLng);
+
+              // Calculer le point central visuel
+              const visualCenterX = mapWidth / 2 + visualCenterOffsetX;
+              const visualCenterY = mapContainer.offsetHeight / 2;
+
+              // Calculer le décalage nécessaire
+              const deltaX = markerPoint.x - visualCenterX;
+              const deltaY = markerPoint.y - visualCenterY;
+
+              console.log(`Décalage corrigé: ${deltaX}px, ${deltaY}px`);
+
+              // Utiliser seulement panBy pour déplacer la vue (pas de zoom du tout)
+              map.panBy([deltaX, deltaY], {
+                animate: true,
+                duration: 0.5,
+              });
+            }
+
+            // Invalidation finale
+            setTimeout(() => {
+              map.invalidateSize();
+            }, 1100);
+          }, 150);
+
+          console.log(
+            `✅ Marqueur sélectionné: ${markerData.shop.nom} (zoom: ${shouldZoom})`
+          );
+        }
+
+        // Fonction de recherche et filtrage des marqueurs améliorée
+        function filterShopsBySearch(searchTerm) {
+          const searchLower = searchTerm.toLowerCase().trim();
+
+          if (searchLower === "") {
+            // Afficher tous les marqueurs et réinitialiser les styles
+            resetAllMarkers();
+            shopsMarkers.forEach((markerData) => {
+              if (!map.hasLayer(markerData.marker)) {
+                map.addLayer(markerData.marker);
+              }
+            });
+
+            // Masquer le panneau de détails
+            hideShopDetails();
+
+            // Ajuster la vue pour montrer tous les marqueurs
+            if (shopsMarkers.length > 0) {
+              const group = new L.featureGroup(
+                shopsMarkers.map((m) => m.marker)
+              );
+              map.fitBounds(group.getBounds().pad(0.1));
+            }
+            return;
+          }
+
+          // Réinitialiser les styles avant de filtrer
+          resetAllMarkers();
+
+          // Filtrer les marqueurs selon le nom de la boutique
+          const matchingMarkers = [];
+
+          shopsMarkers.forEach((markerData) => {
+            const shopName = markerData.shop.nom.toLowerCase();
+
+            if (shopName.includes(searchLower)) {
+              // Afficher le marqueur avec le style "trouvé"
+              if (!map.hasLayer(markerData.marker)) {
+                map.addLayer(markerData.marker);
+              }
+              markerData.marker.setIcon(foundIcon);
+              matchingMarkers.push(markerData);
+            } else {
+              // Masquer le marqueur s'il ne correspond pas
+              if (map.hasLayer(markerData.marker)) {
+                map.removeLayer(markerData.marker);
+              }
+            }
+          });
+
+          // Logique de sélection intelligente
+          if (matchingMarkers.length === 1) {
+            // 1 seul résultat → Sélection automatique avec zoom
+            console.log(
+              `🎯 1 résultat trouvé, sélection automatique avec zoom`
+            );
+            selectMarker(matchingMarkers[0], true); // Recherche = avec zoom
+          } else if (
+            matchingMarkers.length > 1 &&
+            matchingMarkers.length <= 3
+          ) {
+            // 2-3 résultats → Zoomer et proposer la sélection du premier si recherche très précise
+            const exactMatches = matchingMarkers.filter(
+              (markerData) => markerData.shop.nom.toLowerCase() === searchLower
+            );
+
+            if (exactMatches.length === 1) {
+              // Correspondance exacte trouvée avec zoom
+              console.log(`🎯 Correspondance exacte trouvée avec zoom`);
+              selectMarker(exactMatches[0], true); // Recherche = avec zoom
+            } else {
+              // Plusieurs résultats, juste zoomer
+              const group = new L.featureGroup(
+                matchingMarkers.map((m) => m.marker)
+              );
+              map.fitBounds(group.getBounds().pad(0.2));
+              hideShopDetails();
+              console.log(`📍 ${matchingMarkers.length} résultats trouvés`);
+            }
+          } else if (matchingMarkers.length > 3) {
+            // Beaucoup de résultats → Juste zoomer
+            const group = new L.featureGroup(
+              matchingMarkers.map((m) => m.marker)
+            );
+            map.fitBounds(group.getBounds().pad(0.2));
+            hideShopDetails();
+            console.log(`📍 ${matchingMarkers.length} résultats trouvés`);
+          } else {
+            // Aucun résultat trouvé
+            hideShopDetails();
+            console.log(`❌ Aucune boutique trouvée pour "${searchTerm}"`);
+          }
+        }
+
+        // Initialiser la recherche après chargement de la page
+        function initializeSearch() {
+          // Essayer plusieurs sélecteurs pour trouver le bon champ de recherche
+          let searchInput = document.querySelector(
+            'input[placeholder="CHERCHER UNE BOUTIQUE"]'
+          );
+
+          if (!searchInput) {
+            // Fallback avec un sélecteur plus large
+            searchInput = document.querySelector('input[type="text"]');
+          }
+
+          if (!searchInput) {
+            // Dernier fallback avec x-model
+            searchInput = document.querySelector('[x-model="searchQuery"]');
+          }
+
+          if (searchInput) {
+            // Nettoyer les anciens gestionnaires d'événements
+            searchInput.removeEventListener("input", handleSearch);
+            searchInput.removeEventListener("keyup", handleSearch);
+
+            // Fonction de gestion de la recherche
+            function handleSearch(e) {
+              const searchTerm = e.target.value;
+              console.log("Recherche:", searchTerm);
+              filterShopsBySearch(searchTerm);
+            }
+
+            // Ajouter les nouveaux gestionnaires
+            searchInput.addEventListener("input", handleSearch);
+            searchInput.addEventListener("keyup", handleSearch);
+
+            console.log("✅ Recherche initialisée avec succès");
+            console.log("Champ trouvé:", searchInput);
+          } else {
+            console.error("❌ Champ de recherche non trouvé");
+            // Réessayer après un délai
+            setTimeout(initializeSearch, 500);
+          }
+        }
+
+        // Fonctions de filtrage par les filtres de la sidebar
+        function filterShopsByFilters() {
+          // Récupérer les valeurs des filtres depuis les éléments DOM
+          const selectedContinents = getSelectedContinents();
+          const selectedCategories = getSelectedCategories();
+          const selectedShopType = getSelectedShopType();
+
+          console.log("🔧 Filtres appliqués:", {
+            continents: selectedContinents,
+            categories: selectedCategories,
+            taille: selectedShopType,
+          });
+
+          // Réinitialiser tous les marqueurs
+          resetAllMarkers();
+
+          // Parcourir tous les marqueurs et appliquer les filtres
+          shopsMarkers.forEach((markerData) => {
+            let showMarker = true;
+            const shop = markerData.shop;
+
+            // Filtre par continent
+            if (selectedContinents.length > 0) {
+              const shopContinents = Array.isArray(shop.continent)
+                ? shop.continent
+                : [shop.continent];
+              const hasMatchingContinent = shopContinents.some((continent) =>
+                selectedContinents.includes(continent)
+              );
+              if (!hasMatchingContinent) {
+                showMarker = false;
+              }
+            }
+
+            // Filtre par catégories
+            if (selectedCategories.length > 0) {
+              const shopCategories = Array.isArray(shop.categorie)
+                ? shop.categorie
+                : [shop.categorie];
+              const hasMatchingCategory = shopCategories.some((category) =>
+                selectedCategories.includes(category)
+              );
+              if (!hasMatchingCategory) {
+                showMarker = false;
+              }
+            }
+
+            // Filtre par taille de magasin
+            if (selectedShopType !== "tous") {
+              if (shop.taille !== selectedShopType) {
+                showMarker = false;
+              }
+            }
+
+            // Afficher ou masquer le marqueur
+            if (showMarker) {
+              if (!map.hasLayer(markerData.marker)) {
+                map.addLayer(markerData.marker);
+              }
+            } else {
+              if (map.hasLayer(markerData.marker)) {
+                map.removeLayer(markerData.marker);
+              }
+            }
+          });
+
+          // Masquer le panneau de détails si aucun marqueur n'est sélectionné
+          const visibleMarkers = shopsMarkers.filter((markerData) =>
+            map.hasLayer(markerData.marker)
+          );
+
+          if (visibleMarkers.length === 0) {
+            hideShopDetails();
+            console.log(
+              "❌ Aucune boutique ne correspond aux filtres sélectionnés"
+            );
+          } else {
+            console.log(
+              `✅ ${visibleMarkers.length} boutiques correspondent aux filtres`
+            );
+
+            // Ajuster la vue pour montrer les marqueurs visibles
+            if (visibleMarkers.length > 0) {
+              const group = new L.featureGroup(
+                visibleMarkers.map((m) => m.marker)
+              );
+              map.fitBounds(group.getBounds().pad(0.1));
+            }
+          }
+        }
+
+        // Fonctions utilitaires pour récupérer les valeurs des filtres
+        function getSelectedContinents() {
+          // Récupérer les continents sélectionnés en regardant les boutons actifs
+          const continentButtons = document.querySelectorAll(
+            'button[class*="bg-jaune"]'
+          );
+          const selected = [];
+
+          continentButtons.forEach((button) => {
+            const text = button.textContent.trim();
+            if (text === "AFRIQUE") selected.push("Afrique");
+            else if (text === "AMÉRIQUE LATINE")
+              selected.push("Amérique Latine");
+            else if (text === "ASIE") selected.push("Asie");
+            else if (text === "MAGHREB") selected.push("Maghreb");
+          });
+
+          return selected;
+        }
+
+        function getSelectedCategories() {
+          // Récupérer les catégories cochées
+          const categoryCheckboxes = document.querySelectorAll(
+            'input[type="checkbox"]:checked'
+          );
+          const selected = [];
+
+          categoryCheckboxes.forEach((checkbox) => {
+            selected.push(checkbox.value);
+          });
+
+          return selected;
+        }
+
+        function getSelectedShopType() {
+          // Récupérer la taille de magasin sélectionnée
+          const shopTypeSelect = document.querySelector(
+            'select[x-model="selectedShopType"]'
+          );
+          return shopTypeSelect ? shopTypeSelect.value : "tous";
+        }
+
+        // Initialiser les écouteurs de filtres
+        function initializeFilters() {
+          console.log("📋 Initialisation des filtres...");
+
+          // Observer les clics sur les boutons de continent
+          document.addEventListener("click", (event) => {
+            if (
+              event.target.closest("button") &&
+              (event.target.textContent.includes("AFRIQUE") ||
+                event.target.textContent.includes("AMÉRIQUE LATINE") ||
+                event.target.textContent.includes("ASIE") ||
+                event.target.textContent.includes("MAGHREB") ||
+                event.target.textContent.includes("TOUS"))
+            ) {
+              setTimeout(filterShopsByFilters, 100);
+            }
+          });
+
+          // Observer les changements sur les checkboxes de catégories
+          document.addEventListener("change", (event) => {
+            if (event.target.type === "checkbox") {
+              setTimeout(filterShopsByFilters, 50);
+            }
+          });
+
+          // Observer les changements sur le select de taille
+          document.addEventListener("change", (event) => {
+            if (event.target.tagName === "SELECT") {
+              setTimeout(filterShopsByFilters, 50);
+            }
+          });
+
+          // Observer le bouton de réinitialisation
+          document.addEventListener("click", (event) => {
+            if (event.target.textContent.includes("RÉINITIALISER")) {
+              setTimeout(filterShopsByFilters, 150);
+            }
+          });
+
+          console.log("✅ Filtres initialisés avec succès");
+        }
+
+        // Fonction pour afficher les boutiques sur la carte
+        async function displayShopsOnMap() {
+          console.log("Début du géocodage des boutiques...");
+          console.log("Données boutiques reçues:", shops);
+
+          // Nettoyer les marqueurs existants
+          shopsMarkers.forEach((markerData) =>
+            map.removeLayer(markerData.marker)
+          );
+          shopsMarkers = [];
+          allShopsData = [];
+
+          let successCount = 0;
+          let errorCount = 0;
+
+          for (const shop of shops) {
+            if (!shop.adresse) {
+              console.warn("Pas d'adresse pour la boutique:", shop.nom);
+              errorCount++;
+              continue;
+            }
+
+            console.log(`Géocodage de: ${shop.nom} - ${shop.adresse}`);
+
+            const coords = await geocodeAddress(shop.adresse);
+
+            if (coords.success) {
+              // Créer le marqueur avec l'icône par défaut
+              const marker = L.marker([coords.lat, coords.lng], {
+                icon: defaultIcon,
+              }).addTo(map);
+
+              // Ajouter un gestionnaire de clic pour sélectionner le marqueur
+              marker.on("click", function () {
+                const markerData = shopsMarkers.find(
+                  (m) => m.marker === marker
+                );
+                if (markerData) {
+                  selectMarker(markerData, false); // Clic direct = pas de zoom
+                }
+              });
+
+              // Stocker les données du marqueur et de la boutique
+              const markerData = {
+                marker: marker,
+                shop: shop,
+                coords: coords,
+              };
+
+              shopsMarkers.push(markerData);
+              allShopsData.push(shop);
+              successCount++;
+
+              console.log(`✅ ${shop.nom} ajouté à la carte`);
+            } else {
+              console.error(
+                `❌ Impossible de géocoder: ${shop.nom} - ${shop.adresse}`
+              );
+              errorCount++;
+            }
+
+            // Petite pause pour éviter de surcharger l'API
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+
+          console.log(
+            `Géocodage terminé: ${successCount} succès, ${errorCount} erreurs`
+          );
+
+          // Ajuster la vue pour montrer tous les marqueurs si on en a
+          if (shopsMarkers.length > 0) {
+            const group = new L.featureGroup(shopsMarkers.map((m) => m.marker));
+            map.fitBounds(group.getBounds().pad(0.1));
+          }
+
+          // Initialiser la recherche après avoir chargé tous les marqueurs
+          initializeSearch();
+
+          // Initialiser les filtres
+          initializeFilters();
+
+          // Réessayer l'initialisation après un délai pour Alpine.js
+          setTimeout(() => {
+            initializeSearch();
+            initializeFilters();
+          }, 1000);
+        }
+
+        // Lancer l'affichage des boutiques
+        displayShopsOnMap();
+
+        // Ajouter un gestionnaire de redimensionnement pour maintenir la carte en bon état
+        window.addEventListener("resize", function () {
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 100);
+        });
+
+        // Invalidation supplémentaire après un délai pour s'assurer que tout est bien affiché
+        setTimeout(() => {
+          map.invalidateSize();
+          console.log("Carte redimensionnée - initialisation terminée");
+
+          // Dernière tentative d'initialisation de la recherche
+          initializeSearch();
+        }, 1000);
+
+        // Ajouter un message d'information au centre de la France
+        L.popup()
+          .setLatLng([46.603354, 1.888334])
+          .setContent(
+            '<div style="text-align: center; font-family: Raleway;"><b>Magasins ASAFRAM</b><br>Trouvez nos points de vente en France<br><small>Chargement des boutiques en cours...</small></div>'
+          )
+          .openOn(map);
+      } catch (error) {
+        console.error("Erreur lors de l'initialisation de la carte:", error);
+        // Afficher un message d'erreur à l'utilisateur
+        const mapElement = document.getElementById("map");
+        if (mapElement) {
+          mapElement.innerHTML =
+            '<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f0f0f0; color: #666; font-family: Raleway;"><p>Impossible de charger la carte. Veuillez rafraîchir la page.</p></div>';
+        }
+      }
+    });
+  </script>
+
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</LayoutApplicatif>

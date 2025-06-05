@@ -1,0 +1,124 @@
+---
+import LayoutApplicatif from "../../../layouts/LayoutApplicatif.astro";
+import CardProduits from "../../../components/site-applicatif/CardProduits.astro";
+import { getAllProducts, getProductById } from "../../../../backend/backend";
+
+// Récupération du paramètre de catégorie depuis l'URL
+const { categorie } = Astro.params;
+
+// Vérification que la catégorie existe
+if (!categorie) {
+  return Astro.redirect("/site-applicatif"); // Redirection vers la page d'accueil si pas de catégorie
+}
+
+// Liste des catégories valides (à synchroniser avec celles définies dans index.astro)
+const validCategories = [
+  "boissons",
+  "fruits-et-legumes",
+  "viandes",
+  "epices",
+  "snacks",
+];
+
+// Vérifier si le paramètre correspond à une catégorie valide
+const normalizedParam = categorie
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/\s+/g, "-");
+
+// Si ce n'est pas une catégorie valide, essayons de l'interpréter comme un ID de produit
+if (!validCategories.includes(normalizedParam)) {
+  try {
+    // Essayer de charger le produit avec cet ID
+    const product = await getProductById(categorie);
+    if (product) {
+      // Si un produit existe avec cet ID, rediriger vers la page de détail du produit
+      return Astro.redirect(`/site-applicatif/produits/fiche/${categorie}`);
+    }
+  } catch (error) {
+    // En cas d'erreur, on continue avec le traitement normal
+    console.error("Erreur lors de la vérification de l'ID du produit:", error);
+  }
+}
+
+// Fonction pour normaliser les noms de catégories (pour la comparaison)
+const normalizeCategory = (name: string): string => {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+};
+
+// Conversion du nom de catégorie affiché à partir de l'URL
+const displayCategorie = categorie
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+
+// Récupération de tous les produits
+const allProducts = await getAllProducts();
+
+// Filtrer les produits par catégorie
+// Nous comparons les noms de catégories normalisés pour être sûr que la comparaison fonctionne
+const filteredProducts = allProducts.filter((product) => {
+  const productCategory = product.categorie || "";
+  return normalizeCategory(productCategory) === normalizeCategory(categorie);
+});
+
+// Ajout d'une distance fictive aux produits
+const products = filteredProducts.map((product) => {
+  // Ajout d'une distance fictive (15km)
+  product.distance = 15;
+
+  // Gestion du nombre de notes si nécessaire
+  if (product.nombres_notes && !product.nbNotes) {
+    product.nbNotes = product.nombres_notes;
+  }
+
+  if (!product.nbNotes) {
+    product.nbNotes = Math.floor(Math.random() * 50) + 10; // Entre 10 et 59 notes aléatoirement
+  }
+
+  return product;
+});
+---
+
+<LayoutApplicatif
+  title={`Produits ${displayCategorie}`}
+  description={`Découvrez notre sélection de produits ${displayCategorie}`}
+>
+  <div class="container mx-auto px-4 py-8">
+    <header class="mb-8">
+      <a
+        href="/site-applicatif"
+        class="text-saumon hover:underline mb-2 inline-block"
+      >
+        &larr; Retour à l'accueil
+      </a>
+      <h1
+        class="text-2xl font-raleway font-extrabold uppercase tracking-wider relative inline-block mt-4"
+      >
+        {displayCategorie}
+      </h1>
+      <div class="w-full h-0.5 bg-saumon mt-2"></div>
+    </header>
+
+    {
+      products.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
+          {products.map((product) => (
+            <CardProduits product={product} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-xl font-raleway">
+            Aucun produit trouvé dans la catégorie "{displayCategorie}".
+          </p>
+        </div>
+      )
+    }
+  </div>
+</LayoutApplicatif>

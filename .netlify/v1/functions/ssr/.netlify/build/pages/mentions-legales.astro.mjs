@@ -1,0 +1,134 @@
+import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_UQsOWqpN.mjs';
+import 'kleur/colors';
+import { $ as $$Layout } from '../chunks/Layout_C3723gKP.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$MentionsLegales = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Mentions l\xE9gales | ASAFRAM", "description": "Consultez les mentions l\xE9gales d'ASAFRAM - Informations l\xE9gales et r\xE9glementaires de notre plateforme de produits du monde entier.", "alt": "Mentions l\xE9gales ASAFRAM", "classContent": "bg-white text-gray-900" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="bg-background text-black py-20" style="padding-top: 10rem;"> <div class="container mx-auto px-6"> <h1 class="text-5xl md:text-6xl font-bold mb-0">Mentions légales</h1> </div> </div> <div class="container mx-auto px-6 py-16 !mt-16"> <div class="mx-auto prose prose-lg max-w-none"> <section id="editeur" class="mb-20 scroll-mt-28"> <h2 class="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-background !text-left">
+Éditeur du site
+</h2> <div class="text-gray-700 leading-relaxed space-y-6 text-lg"> <p>
+Le site internet ASAFRAM est édité par la société ASAFRAM, dont le
+            siège social est situé à [adresse à compléter], [code postal]
+            [ville], France.
+</p> <p> <strong>Forme juridique :</strong> [À préciser - SARL, SAS, etc.]<br> <strong>Capital social :</strong> [Montant à compléter] euros<br> <strong>Numéro SIRET :</strong> [À compléter]<br> <strong>TVA Intracommunautaire :</strong> [À compléter]
+</p> <p> <strong>Directeur de publication :</strong> [Nom du directeur de publication]<br> <strong>Contact :</strong> Vous pouvez nous joindre par email à l'adresse
+<a href="mailto:contact@asafram.com" class="hover:text-orange-600 font-semibold transition-colors">contact@asafram.com</a> ou par téléphone au [numéro à compléter].
+</p> </div> </section> <section id="hebergement" class="mb-20 scroll-mt-28"> <h2 class="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-background !text-left">
+Hébergement
+</h2> <div class="text-gray-700 leading-relaxed space-y-6 text-lg"> <p>
+Le site ASAFRAM est hébergé par [Nom de l'hébergeur], société dont
+            le siège social est situé [adresse de l'hébergeur], [code postal]
+            [ville].
+</p> <p> <strong>Téléphone de l'hébergeur :</strong> [Numéro de téléphone]<br> <strong>Site web :</strong> [URL du site de l'hébergeur]
+</p> <p class="text-gray-600 italic">
+Conformément aux dispositions de l'article 6-III-2 de la loi n°
+            2004-575 du 21 juin 2004 pour la confiance dans l'économie
+            numérique.
+</p> </div> </section> <section id="propriete" class="mb-20 scroll-mt-28"> <h2 class="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-background !text-left">
+Propriété intellectuelle
+</h2> <div class="text-gray-700 leading-relaxed space-y-6 text-lg"> <p>
+L'ensemble du contenu de ce site web, incluant mais ne se limitant
+            pas aux textes, images, graphismes, logos, icônes, sons, logiciels,
+            est la propriété exclusive d'ASAFRAM ou de ses partenaires. Ce
+            contenu est protégé par les lois françaises et internationales
+            relatives à la propriété intellectuelle.
+</p> <p class="bg-amber-50 border-l-4 border-amber-400 pl-6 py-4 font-semibold text-amber-800">
+Toute reproduction, représentation, modification, publication,
+            adaptation de tout ou partie des éléments du site, quel que soit le
+            moyen ou le procédé utilisé, est interdite, sauf autorisation écrite
+            préalable d'ASAFRAM.
+</p> <p>
+Toute exploitation non autorisée du site ou de l'un quelconque des
+            éléments qu'il contient sera considérée comme constitutive d'une
+            contrefaçon et poursuivie conformément aux dispositions des articles
+            L.335-2 et suivants du Code de Propriété Intellectuelle.
+</p> <p>
+Les marques, logos et noms de domaine mentionnés sur ce site sont
+            des marques déposées par leurs propriétaires respectifs. Leur
+            utilisation dans le cadre de ce site ne saurait être interprétée
+            comme une autorisation d'usage.
+</p> </div> </section> <section id="donnees" class="mb-20 scroll-mt-28"> <h2 class="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-background !text-left">
+Protection des données personnelles
+</h2> <div class="text-gray-700 leading-relaxed space-y-6 text-lg"> <p>
+ASAFRAM attache une grande importance à la protection de vos données
+            personnelles. Dans le cadre de l'utilisation de notre site web, nous
+            sommes amenés à collecter et traiter certaines de vos données
+            personnelles.
+</p> <p> <strong>Responsable du traitement :</strong> ASAFRAM, en sa qualité d'éditeur
+            du site, est responsable du traitement de vos données personnelles.
+</p> <p> <strong>Types de données collectées :</strong> Nous collectons les données
+            que vous nous fournissez volontairement lors de votre inscription, de
+            vos commandes ou de votre navigation sur le site. Ces données peuvent
+            inclure votre nom, prénom, adresse email, adresse postale, numéro de
+            téléphone, ainsi que des données de navigation et de connexion.
+</p> <p> <strong>Finalités du traitement :</strong> Vos données sont traitées
+            pour la gestion de votre compte utilisateur, le traitement de vos commandes,
+            l'amélioration de nos services, et l'envoi d'informations commerciales
+            avec votre consentement.
+</p> <p> <strong>Vos droits :</strong> Conformément au Règlement Général sur la
+            Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification,
+            d'effacement, de limitation du traitement, de portabilité et d'opposition
+            concernant vos données personnelles. Vous pouvez également retirer votre
+            consentement à tout moment.
+</p> <p class="bg-blue-50 border-l-4 border-blue-400 pl-6 py-4 font-semibold text-blue-800">
+Pour exercer ces droits ou pour toute question relative au
+            traitement de vos données personnelles, vous pouvez nous contacter à
+            l'adresse : <a href="mailto:dpo@asafram.com" class="underline">dpo@asafram.com</a> </p> <p> <strong>Durée de conservation :</strong> Vos données sont conservées
+            pendant la durée nécessaire aux finalités pour lesquelles elles sont
+            collectées, dans le respect des obligations légales et réglementaires.
+</p> </div> </section> <section id="cookies" class="mb-20 scroll-mt-28"> <h2 class="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-background !text-left">
+Politique de cookies
+</h2> <div class="text-gray-700 leading-relaxed space-y-6 text-lg"> <p>
+Notre site utilise des cookies pour améliorer votre expérience de
+            navigation, analyser l'utilisation du site et vous proposer des
+            contenus personnalisés.
+</p> <p> <strong>Qu'est-ce qu'un cookie :</strong> Un cookie est un petit fichier
+            texte déposé sur votre terminal (ordinateur, tablette, smartphone) lors
+            de votre visite sur notre site. Il permet de reconnaître votre navigateur
+            et de collecter certaines informations.
+</p> <p> <strong>Types de cookies utilisés :</strong> </p> <p class="ml-6">
+• <strong>Cookies techniques :</strong> Indispensables au fonctionnement
+            du site, ils permettent l'utilisation des principales fonctionnalités
+            et la sécurisation de votre connexion.
+</p> <p class="ml-6">
+• <strong>Cookies analytiques :</strong> Ils nous aident à comprendre
+            comment vous utilisez notre site en collectant des informations anonymes
+            sur votre navigation.
+</p> <p class="ml-6">
+• <strong>Cookies de personnalisation :</strong> Ils permettent d'adapter
+            le contenu et les fonctionnalités du site à vos préférences et à votre
+            utilisation.
+</p> <p> <strong>Gestion des cookies :</strong> Vous pouvez à tout moment modifier
+            vos préférences concernant les cookies via les paramètres de votre navigateur.
+            Cependant, la désactivation de certains cookies peut affecter le fonctionnement
+            optimal du site.
+</p> <p>
+Pour plus d'informations sur la gestion des cookies, nous vous
+            invitons à consulter les pages d'aide de votre navigateur ou le site
+            de la CNIL : <a href="https://www.cnil.fr" class="hover:text-orange-600 font-semibold transition-colors">www.cnil.fr</a> </p> </div> </section> <section id="contact" class="mb-20 scroll-mt-28"> <h2 class="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-background !text-left"></h2> <div class="bg-background rounded-lg p-8 text-black"> <div class="space-y-6 text-lg"> <h3 class="text-xl !font-raleway mb-4">
+Des questions sur ces mentions légales ?
+</h3> <p class="">
+Notre équipe juridique est à votre disposition pour répondre à
+              toutes vos interrogations concernant ces mentions légales ou tout
+              autre aspect juridique de notre plateforme.
+</p> <div class="flex flex-col sm:flex-row gap-4 mt-8"> <a href="/contact" class="inline-flex uppercase text-lg items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors cursor-pointer">
+Contacter l'équipe juridique
+</a> </div> <p class="text-sm opacity-90 mt-6 pt-4 border-t border-white/20">
+Dernière mise à jour : 1er janvier 2025 • Nous nous réservons le
+              droit de modifier ces mentions légales à tout moment.
+</p> </div> </div> </section> </div> </div> <div class="fixed bottom-8 right-8 z-50"> <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-gray-900 hover:bg-saumon text-white w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center cursor-pointer" aria-label="Retour vers le haut"> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path> </svg> </button> </div> ` })}`;
+}, "C:/Users/thain/Documents/GitHub/projet-co-s2-2025-01_asafram/src/pages/mentions-legales.astro", void 0);
+
+const $$file = "C:/Users/thain/Documents/GitHub/projet-co-s2-2025-01_asafram/src/pages/mentions-legales.astro";
+const $$url = "/mentions-legales";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$MentionsLegales,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

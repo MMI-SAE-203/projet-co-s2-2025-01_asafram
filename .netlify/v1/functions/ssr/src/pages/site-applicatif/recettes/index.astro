@@ -1,0 +1,1344 @@
+---
+import LayoutApplicatif from "../../../layouts/LayoutApplicatif.astro";
+import CardRecettes from "../../../components/site-applicatif/CardRecettes.astro";
+import { getAllRecipes, getAllPays } from "../../../../backend/backend.js";
+
+const recipes = await getAllRecipes();
+const pays = await getAllPays();
+---
+
+<LayoutApplicatif
+  title="Recettes"
+  description="Découvrez toutes nos recettes du monde"
+>
+  <style>
+    body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+  <div class="min-h-screen bg-gray-50" id="recipes-page">
+    <!-- Layout flex avec sidebar et contenu principal côte à côte -->
+    <div class="flex">
+      <!-- Sidebar des filtres - Position normale (pas fixe) -->
+      <div
+        class="w-[420px] bg-white shadow-lg border-r border-gray-200 min-h-screen"
+      >
+        <div class="p-6">
+          <!-- En-tête des filtres -->
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="!text-3xl font-raleway font-black uppercase text-black">
+              FILTRES
+            </h2>
+            <button
+              id="reset-filters-btn"
+              class="text-xs font-raleway border border-gray-600 px-4 py-1.5 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+            >
+              RÉINITIALISER
+            </button>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-black mb-6"></div>
+
+          <!-- Section Barre de recherche -->
+          <div class="mb-6">
+            <h3
+              class="!text-2xl font-raleway font-bold uppercase text-black mb-4"
+            >
+              RECHERCHE
+            </h3>
+            <div class="relative">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Nom de la recette..."
+                class="w-full px-4 py-2.5 border border-gray-400 rounded-lg text-sm font-raleway focus:outline-none focus:border-saumon bg-white"
+              />
+              <!-- Loupe quand pas de texte -->
+              <svg
+                id="search-icon"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <!-- Croix quand il y a du texte -->
+              <button
+                id="clear-search-btn"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors hidden"
+                title="Effacer la recherche"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Continents -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                CONTINENTS
+              </h3>
+              <button
+                id="all-continents-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="space-y-2" id="continent-filters">
+              <button
+                data-continent="Afrique"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                AFRIQUE
+              </button>
+
+              <button
+                data-continent="Amérique Latine"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                AMÉRIQUE LATINE
+              </button>
+
+              <button
+                data-continent="Asie"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                ASIE
+              </button>
+
+              <button
+                data-continent="Maghreb"
+                class="continent-btn px-6 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors text-left cursor-pointer bg-white text-black border border-black"
+              >
+                MAGHREB
+              </button>
+            </div>
+          </div>
+
+          <!-- Section Pays -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                PAYS
+              </h3>
+              <button
+                id="all-countries-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+                disabled
+                style="opacity: 0.5; cursor: not-allowed;"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="relative">
+              <select
+                id="countries-select"
+                class="w-full p-2.5 border border-gray-400 rounded-lg text-xs font-raleway bg-white appearance-none pr-8 uppercase cursor-pointer"
+                disabled
+                style="opacity: 0.5; cursor: not-allowed;"
+              >
+                <option value="tous">Tous les pays</option>
+              </select>
+              <svg
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-black pointer-events-none"
+                style="opacity: 0.5;"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Types de repas -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                TYPE DE REPAS
+              </h3>
+              <button
+                id="all-meal-types-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+              >
+                TOUT
+              </button>
+            </div>
+
+            <div class="space-y-2" id="meal-type-filters">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="meal-type-checkbox mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="Entrée"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >ENTRÉE</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="meal-type-checkbox mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="Plats"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >PLATS</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="meal-type-checkbox mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="Desserts"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >DESSERTS</span
+                >
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="meal-type-checkbox mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
+                  value="Accompagnements"
+                />
+                <span class="text-xs font-raleway text-black uppercase"
+                  >ACCOMPAGNEMENTS</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Ligne de séparation -->
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
+
+          <!-- Section Notes -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
+                NOTES
+              </h3>
+              <button
+                id="rating-toggle-btn"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+              >
+                DÉSACTIVÉ
+              </button>
+            </div>
+
+            <!-- Sélecteur d'étoiles -->
+            <div class="space-y-3" id="rating-section" style="display: none;">
+              <p class="text-xs font-raleway text-gray-600 mb-3">
+                Note minimum requise :
+              </p>
+
+              <div
+                class="flex items-center justify-center space-x-1"
+                id="stars-container"
+              >
+                <button
+                  data-rating="1"
+                  class="star-btn w-6 h-6 transition-colors duration-200 cursor-pointer text-gray-300"
+                  title="1 étoile minimum"
+                >
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  data-rating="2"
+                  class="star-btn w-6 h-6 transition-colors duration-200 cursor-pointer text-gray-300"
+                  title="2 étoiles minimum"
+                >
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  data-rating="3"
+                  class="star-btn w-6 h-6 transition-colors duration-200 cursor-pointer text-gray-300"
+                  title="3 étoiles minimum"
+                >
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  data-rating="4"
+                  class="star-btn w-6 h-6 transition-colors duration-200 cursor-pointer text-gray-300"
+                  title="4 étoiles minimum"
+                >
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  data-rating="5"
+                  class="star-btn w-6 h-6 transition-colors duration-200 cursor-pointer text-gray-300"
+                  title="5 étoiles minimum"
+                >
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="text-center">
+                <span
+                  class="text-xs font-raleway text-gray-500"
+                  id="rating-text"
+                >
+                  0 étoile et plus
+                </span>
+              </div>
+
+              <button
+                id="all-ratings-btn"
+                class="w-full text-xs font-raleway border border-gray-400 px-3 py-1.5 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
+              >
+                TOUTES LES NOTES
+              </button>
+            </div>
+
+            <!-- Message quand désactivé -->
+            <div id="rating-disabled-message" class="text-center py-3">
+              <span class="text-xs font-raleway text-gray-500">
+                Filtrage par notes désactivé
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenu principal des recettes - Position normale (pas fixe) -->
+      <div class="flex-1">
+        <!-- Contenu des recettes -->
+        <div class="px-8 pb-8">
+          <!-- En-tête avec bouton -->
+          <div class="mb-8 mt-10 flex justify-between items-start">
+            <div class="ml-22">
+              <h1
+                class="!text-6xl font-radio-canada-big font-black text-gray-800 mb-4 uppercase !text-left !pb-0"
+              >
+                Toutes les recettes
+              </h1>
+              <p class="text-gray-600 font-raleway">
+                Découvrez toutes nos recettes du monde entier, de la plus
+                récente à la plus ancienne.
+              </p>
+              <div id="results-info" class="text-lg text-gray-600 mt-4">
+                <span id="visible-count">{recipes.length}</span> recettes • Page
+                <span id="current-page">1</span> sur <span id="total-pages"
+                  >1</span
+                >
+              </div>
+            </div>
+
+            <!-- Bouton Ajouter une recette en haut à droite -->
+            <button
+              id="add-recipe-btn"
+              class="bg-sable mt-20 mr-22 hover:bg-sable-hover text-black font-bold px-6 py-3 rounded-lg shadow-lg transition-colors duration-300 uppercase tracking-wide cursor-pointer"
+            >
+              + AJOUTER UNE RECETTE
+            </button>
+          </div>
+
+          <!-- Zone des recettes -->
+          <div
+            class="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 mb-40"
+            id="recipes-container"
+          >
+            {
+              recipes.map((recette) => (
+                <div class="w-full flex justify-center">
+                  <CardRecettes recette={recette} />
+                </div>
+              ))
+            }
+          </div>
+
+          <!-- Message si aucune recette -->
+          <div id="no-recipes-message" class="hidden text-center py-16">
+            <p class="text-gray-500 text-lg font-raleway">
+              Aucune recette ne correspond à vos critères de recherche.
+            </p>
+          </div>
+
+          <!-- Pagination -->
+          <div id="pagination-container" class="flex justify-center mt-10">
+            <div
+              class="inline-flex items-center gap-1"
+              id="pagination-controls"
+            >
+              <!-- Généré dynamiquement par JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Ajouter une recette -->
+    <div
+      id="add-recipe-modal"
+      class="fixed inset-0 bg-opacity-20 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+      style="backdrop-filter: blur(8px);"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+      >
+        <!-- Header du modal -->
+        <div
+          class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl"
+        >
+          <div class="flex justify-between items-center">
+            <h2
+              class="text-xl font-radio-canada-big font-black uppercase text-gray-800"
+            >
+              Ajouter une recette
+            </h2>
+            <button
+              id="close-modal-btn"
+              class="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenu du modal -->
+        <form id="recipe-form" class="p-6 space-y-6">
+          <!-- Nom de la recette -->
+          <div>
+            <label
+              class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+            >
+              Nom de la recette*
+            </label>
+            <input
+              type="text"
+              id="recipe-name"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors"
+              placeholder="Ex: Couscous royal"
+            />
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label
+              class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+            >
+              Description*
+            </label>
+            <textarea
+              id="recipe-description"
+              required
+              rows="3"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors resize-none"
+              placeholder="Décrivez votre recette..."></textarea>
+          </div>
+
+          <!-- Image -->
+          <div>
+            <label
+              class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+            >
+              Image de la recette
+            </label>
+            <input
+              type="file"
+              id="recipe-image"
+              accept="image/*"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors cursor-pointer"
+            />
+          </div>
+
+          <!-- Grille pour les champs en 2 colonnes -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Continent -->
+            <div>
+              <label
+                class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+              >
+                Continent*
+              </label>
+              <select
+                id="recipe-continent"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors cursor-pointer"
+              >
+                <option value="">Sélectionner un continent</option>
+                <option value="Afrique">Afrique</option>
+                <option value="Amérique Latine">Amérique Latine</option>
+                <option value="Asie">Asie</option>
+                <option value="Maghreb">Maghreb</option>
+              </select>
+            </div>
+
+            <!-- Pays -->
+            <div>
+              <label
+                class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+              >
+                Pays*
+              </label>
+              <select
+                id="recipe-country"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors cursor-pointer"
+                disabled
+              >
+                <option value="">Sélectionner d'abord un continent</option>
+              </select>
+            </div>
+
+            <!-- Type de repas -->
+            <div>
+              <label
+                class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+              >
+                Type de repas*
+              </label>
+              <select
+                id="recipe-type"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors cursor-pointer"
+              >
+                <option value="">Sélectionner un type</option>
+                <option value="Entrée">Entrée</option>
+                <option value="Plats">Plats</option>
+                <option value="Desserts">Desserts</option>
+                <option value="Accompagnements">Accompagnements</option>
+              </select>
+            </div>
+
+            <!-- Temps de préparation -->
+            <div>
+              <label
+                class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+              >
+                Temps de préparation (minutes)*
+              </label>
+              <input
+                type="number"
+                id="recipe-time"
+                required
+                min="1"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors"
+                placeholder="Ex: 45"
+              />
+            </div>
+
+            <!-- Difficulté -->
+            <div>
+              <label
+                class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+              >
+                Difficulté*
+              </label>
+              <select
+                id="recipe-difficulty"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors cursor-pointer"
+              >
+                <option value="">Sélectionner la difficulté</option>
+                <option value="facile">Facile</option>
+                <option value="moyen">Moyen</option>
+                <option value="difficile">Difficile</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Ingrédients -->
+          <div>
+            <label
+              class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+            >
+              Ingrédients*
+            </label>
+            <textarea
+              id="recipe-ingredients"
+              required
+              rows="4"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors resize-none"
+              placeholder="Listez les ingrédients (un par ligne ou séparés par des virgules)"
+            ></textarea>
+          </div>
+
+          <!-- Étapes -->
+          <div>
+            <label
+              class="block text-sm font-raleway font-bold text-gray-700 mb-2 uppercase"
+            >
+              Étapes de préparation*
+            </label>
+            <textarea
+              id="recipe-steps"
+              required
+              rows="5"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saumon transition-colors resize-none"
+              placeholder="Décrivez les étapes de préparation..."></textarea>
+          </div>
+
+          <!-- Boutons du formulaire -->
+          <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+            <button
+              type="button"
+              id="cancel-recipe-btn"
+              class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-raleway font-bold uppercase cursor-pointer"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              id="submit-recipe-btn"
+              class="px-6 py-3 bg-saumon hover:bg-saumon-hover text-black rounded-lg transition-colors font-raleway font-bold uppercase cursor-pointer"
+            >
+              Ajouter la recette
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Script pour le filtrage et modal -->
+    <script define:vars={{ recipes, pays }}>
+      // Rendre les pays disponibles globalement pour Alpine.js
+      window.allPays = pays;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Initialisation de la page recettes...");
+
+        // Variables globales
+        let selectedContinents = [];
+        let selectedMealTypes = [];
+        let selectedCountry = "tous";
+        let searchQuery = "";
+        let ratingFilterEnabled = false;
+        let minRating = 0;
+        let availableCountries = [];
+        let filteredRecipes = [...recipes];
+        let currentPage = 1;
+        const recipesPerPage = 12;
+
+        // Éléments DOM
+        const addRecipeBtn = document.getElementById("add-recipe-btn");
+        const addRecipeModal = document.getElementById("add-recipe-modal");
+        const closeModalBtn = document.getElementById("close-modal-btn");
+        const cancelRecipeBtn = document.getElementById("cancel-recipe-btn");
+        const recipeForm = document.getElementById("recipe-form");
+        const submitRecipeBtn = document.getElementById("submit-recipe-btn");
+
+        // Gestion du modal
+        function openModal() {
+          addRecipeModal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+          addRecipeModal.classList.add("hidden");
+          document.body.style.overflow = "auto";
+          resetForm();
+        }
+
+        function resetForm() {
+          recipeForm.reset();
+          submitRecipeBtn.textContent = "AJOUTER LA RECETTE";
+          submitRecipeBtn.disabled = false;
+
+          // Réinitialiser aussi le dropdown pays
+          const countrySelect = document.getElementById("recipe-country");
+          countrySelect.disabled = true;
+          countrySelect.innerHTML =
+            '<option value="">Sélectionner d\'abord un continent</option>';
+        }
+
+        // Event listeners pour le modal
+        addRecipeBtn.addEventListener("click", openModal);
+        closeModalBtn.addEventListener("click", closeModal);
+        cancelRecipeBtn.addEventListener("click", closeModal);
+
+        // Fermer le modal en cliquant sur l'overlay
+        addRecipeModal.addEventListener("click", function (e) {
+          if (e.target === addRecipeModal) {
+            closeModal();
+          }
+        });
+
+        // Gestion du changement de continent dans le formulaire
+        document
+          .getElementById("recipe-continent")
+          .addEventListener("change", function () {
+            const countrySelect = document.getElementById("recipe-country");
+            const selectedContinent = this.value;
+
+            if (selectedContinent) {
+              // Filtrer les pays par continent
+              const countriesForContinent = window.allPays.filter(
+                (country) => country.continent === selectedContinent
+              );
+
+              // Remplir le dropdown pays
+              countrySelect.disabled = false;
+              countrySelect.innerHTML =
+                '<option value="">Sélectionner un pays</option>';
+
+              countriesForContinent.forEach((country) => {
+                const option = document.createElement("option");
+                option.value = country.id;
+                option.textContent = country.nom;
+                countrySelect.appendChild(option);
+              });
+            } else {
+              // Réinitialiser si aucun continent sélectionné
+              countrySelect.disabled = true;
+              countrySelect.innerHTML =
+                '<option value="">Sélectionner d\'abord un continent</option>';
+            }
+          });
+
+        // Gestion de la soumission du formulaire
+        recipeForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          submitRecipeBtn.textContent = "AJOUT EN COURS...";
+          submitRecipeBtn.disabled = true;
+
+          try {
+            const formData = new FormData();
+
+            formData.append(
+              "nom",
+              document.getElementById("recipe-name").value
+            );
+            formData.append(
+              "description",
+              document.getElementById("recipe-description").value
+            );
+            formData.append(
+              "ingredients",
+              document.getElementById("recipe-ingredients").value
+            );
+            formData.append(
+              "etapes",
+              document.getElementById("recipe-steps").value
+            );
+            formData.append(
+              "continent",
+              document.getElementById("recipe-continent").value
+            );
+            formData.append(
+              "pays",
+              document.getElementById("recipe-country").value
+            );
+            formData.append(
+              "type",
+              document.getElementById("recipe-type").value
+            );
+            formData.append(
+              "temps",
+              document.getElementById("recipe-time").value
+            );
+            formData.append(
+              "difficulte",
+              document.getElementById("recipe-difficulty").value
+            );
+
+            const imageFile = document.getElementById("recipe-image").files[0];
+            if (imageFile) {
+              formData.append("img", imageFile);
+            }
+
+            const response = await fetch("/api/recipes", {
+              method: "POST",
+              body: formData,
+            });
+
+            if (response.ok) {
+              alert("Recette ajoutée avec succès !");
+              closeModal();
+              window.location.reload();
+            } else {
+              throw new Error("Erreur lors de l'ajout de la recette");
+            }
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Erreur lors de l'ajout de la recette. Veuillez réessayer.");
+            submitRecipeBtn.textContent = "AJOUTER LA RECETTE";
+            submitRecipeBtn.disabled = false;
+          }
+        });
+
+        // Gestion des filtres - Recherche
+        const searchInput = document.getElementById("search-input");
+        const searchIcon = document.getElementById("search-icon");
+        const clearSearchBtn = document.getElementById("clear-search-btn");
+
+        searchInput.addEventListener("input", function () {
+          searchQuery = this.value.toLowerCase();
+
+          if (searchQuery) {
+            searchIcon.classList.add("hidden");
+            clearSearchBtn.classList.remove("hidden");
+          } else {
+            searchIcon.classList.remove("hidden");
+            clearSearchBtn.classList.add("hidden");
+          }
+
+          filterRecipes();
+        });
+
+        clearSearchBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          searchQuery = "";
+          searchIcon.classList.remove("hidden");
+          clearSearchBtn.classList.add("hidden");
+          filterRecipes();
+        });
+
+        // Gestion des filtres - Continents
+        const allContinentsBtn = document.getElementById("all-continents-btn");
+        const continentBtns = document.querySelectorAll(".continent-btn");
+
+        allContinentsBtn.addEventListener("click", function () {
+          selectedContinents = [
+            "Afrique",
+            "Amérique Latine",
+            "Asie",
+            "Maghreb",
+          ];
+          updateContinentButtons();
+          updateCountriesDropdown();
+          filterRecipes();
+        });
+
+        continentBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const continent = this.dataset.continent;
+
+            if (selectedContinents.includes(continent)) {
+              selectedContinents = selectedContinents.filter(
+                (c) => c !== continent
+              );
+            } else {
+              selectedContinents.push(continent);
+            }
+
+            updateContinentButtons();
+            updateCountriesDropdown();
+            filterRecipes();
+          });
+        });
+
+        function updateContinentButtons() {
+          // Bouton "TOUT"
+          const allSelected =
+            selectedContinents.length === 4 &&
+            selectedContinents.includes("Afrique") &&
+            selectedContinents.includes("Amérique Latine") &&
+            selectedContinents.includes("Asie") &&
+            selectedContinents.includes("Maghreb");
+
+          if (allSelected) {
+            allContinentsBtn.classList.add("bg-gray-200");
+          } else {
+            allContinentsBtn.classList.remove("bg-gray-200");
+          }
+
+          // Boutons continents
+          continentBtns.forEach((btn) => {
+            const continent = btn.dataset.continent;
+            if (selectedContinents.includes(continent)) {
+              btn.classList.remove("bg-white", "text-black", "border-black");
+              btn.classList.add("bg-jaune", "text-black");
+            } else {
+              btn.classList.remove("bg-jaune");
+              btn.classList.add("bg-white", "text-black", "border-black");
+            }
+          });
+        }
+
+        // Gestion des pays
+        function updateCountriesDropdown() {
+          const countriesSelect = document.getElementById("countries-select");
+          const allCountriesBtn = document.getElementById("all-countries-btn");
+
+          if (selectedContinents.length === 0) {
+            availableCountries = [];
+            selectedCountry = "tous";
+            countriesSelect.disabled = true;
+            allCountriesBtn.disabled = true;
+            countriesSelect.style.opacity = "0.5";
+            countriesSelect.style.cursor = "not-allowed";
+            allCountriesBtn.style.opacity = "0.5";
+            allCountriesBtn.style.cursor = "not-allowed";
+          } else {
+            availableCountries = window.allPays.filter((p) =>
+              selectedContinents.includes(p.continent)
+            );
+            countriesSelect.disabled = false;
+            allCountriesBtn.disabled = false;
+            countriesSelect.style.opacity = "1";
+            countriesSelect.style.cursor = "pointer";
+            allCountriesBtn.style.opacity = "1";
+            allCountriesBtn.style.cursor = "pointer";
+
+            // Mettre à jour les options
+            countriesSelect.innerHTML =
+              '<option value="tous">Tous les pays</option>';
+            availableCountries.forEach((country) => {
+              const option = document.createElement("option");
+              option.value = country.id;
+              option.textContent = country.nom;
+              countriesSelect.appendChild(option);
+            });
+          }
+        }
+
+        document
+          .getElementById("all-countries-btn")
+          .addEventListener("click", function () {
+            if (!this.disabled) {
+              selectedCountry = "tous";
+              document.getElementById("countries-select").value = "tous";
+              filterRecipes();
+            }
+          });
+
+        document
+          .getElementById("countries-select")
+          .addEventListener("change", function () {
+            selectedCountry = this.value;
+            filterRecipes();
+          });
+
+        // Gestion des types de repas
+        const allMealTypesBtn = document.getElementById("all-meal-types-btn");
+        const mealTypeCheckboxes = document.querySelectorAll(
+          ".meal-type-checkbox"
+        );
+
+        allMealTypesBtn.addEventListener("click", function () {
+          selectedMealTypes = [
+            "Entrée",
+            "Plats",
+            "Desserts",
+            "Accompagnements",
+          ];
+          mealTypeCheckboxes.forEach((cb) => (cb.checked = true));
+          updateMealTypesButton();
+          filterRecipes();
+        });
+
+        mealTypeCheckboxes.forEach((cb) => {
+          cb.addEventListener("change", function () {
+            if (this.checked) {
+              selectedMealTypes.push(this.value);
+            } else {
+              selectedMealTypes = selectedMealTypes.filter(
+                (t) => t !== this.value
+              );
+            }
+            updateMealTypesButton();
+            filterRecipes();
+          });
+        });
+
+        function updateMealTypesButton() {
+          const allSelected =
+            selectedMealTypes.length === 4 &&
+            selectedMealTypes.includes("Entrée") &&
+            selectedMealTypes.includes("Plats") &&
+            selectedMealTypes.includes("Desserts") &&
+            selectedMealTypes.includes("Accompagnements");
+
+          if (allSelected) {
+            allMealTypesBtn.classList.add("bg-gray-200");
+          } else {
+            allMealTypesBtn.classList.remove("bg-gray-200");
+          }
+        }
+
+        // Gestion du filtre de notes
+        const ratingToggleBtn = document.getElementById("rating-toggle-btn");
+        const ratingSection = document.getElementById("rating-section");
+        const ratingDisabledMessage = document.getElementById(
+          "rating-disabled-message"
+        );
+        const starBtns = document.querySelectorAll(".star-btn");
+        const allRatingsBtn = document.getElementById("all-ratings-btn");
+        const ratingText = document.getElementById("rating-text");
+
+        ratingToggleBtn.addEventListener("click", function () {
+          ratingFilterEnabled = !ratingFilterEnabled;
+
+          if (ratingFilterEnabled) {
+            this.textContent = "ACTIVÉ";
+            this.classList.add(
+              "border-saumon",
+              "bg-saumon-hover",
+              "text-black"
+            );
+            this.classList.remove("border-gray-600");
+            ratingSection.style.display = "block";
+            ratingDisabledMessage.style.display = "none";
+          } else {
+            this.textContent = "DÉSACTIVÉ";
+            this.classList.remove(
+              "border-saumon",
+              "bg-saumon-hover",
+              "text-black"
+            );
+            this.classList.add("border-gray-600");
+            ratingSection.style.display = "none";
+            ratingDisabledMessage.style.display = "block";
+            minRating = 0;
+            updateStars();
+          }
+
+          filterRecipes();
+        });
+
+        starBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            minRating = parseInt(this.dataset.rating);
+            updateStars();
+            filterRecipes();
+          });
+        });
+
+        allRatingsBtn.addEventListener("click", function () {
+          minRating = 0;
+          updateStars();
+          filterRecipes();
+        });
+
+        function updateStars() {
+          starBtns.forEach((btn, index) => {
+            if (index < minRating) {
+              btn.classList.remove("text-gray-300");
+              btn.classList.add("text-yellow-500");
+            } else {
+              btn.classList.remove("text-yellow-500");
+              btn.classList.add("text-gray-300");
+            }
+          });
+
+          if (minRating === 0) {
+            ratingText.textContent = "0 étoile et plus";
+            allRatingsBtn.classList.add("bg-gray-200");
+          } else {
+            ratingText.textContent = `${minRating} étoile${minRating > 1 ? "s" : ""} et plus`;
+            allRatingsBtn.classList.remove("bg-gray-200");
+          }
+        }
+
+        // Bouton de réinitialisation
+        document
+          .getElementById("reset-filters-btn")
+          .addEventListener("click", function () {
+            selectedContinents = [];
+            selectedMealTypes = [];
+            selectedCountry = "tous";
+            searchQuery = "";
+            ratingFilterEnabled = false;
+            minRating = 0;
+
+            // Réinitialiser l'interface
+            searchInput.value = "";
+            searchIcon.classList.remove("hidden");
+            clearSearchBtn.classList.add("hidden");
+
+            mealTypeCheckboxes.forEach((cb) => (cb.checked = false));
+
+            ratingToggleBtn.textContent = "DÉSACTIVÉ";
+            ratingToggleBtn.classList.remove(
+              "border-saumon",
+              "bg-saumon-hover",
+              "text-black"
+            );
+            ratingToggleBtn.classList.add("border-gray-600");
+            ratingSection.style.display = "none";
+            ratingDisabledMessage.style.display = "block";
+
+            updateContinentButtons();
+            updateCountriesDropdown();
+            updateMealTypesButton();
+            updateStars();
+            filterRecipes();
+          });
+
+        // Fonction de filtrage des recettes
+        function filterRecipes() {
+          currentPage = 1; // Reset à la page 1 lors du filtrage
+
+          filteredRecipes = recipes.filter((recipe) => {
+            let shouldShow = true;
+
+            // Filtre par recherche textuelle
+            if (
+              searchQuery &&
+              !recipe.nom.toLowerCase().includes(searchQuery)
+            ) {
+              shouldShow = false;
+            }
+
+            // Filtre par continent
+            if (selectedContinents.length > 0) {
+              const recipeContinent =
+                recipe.expand?.pays?.continent || recipe.continent;
+              if (!selectedContinents.includes(recipeContinent)) {
+                shouldShow = false;
+              }
+            }
+
+            // Filtre par pays
+            if (selectedCountry !== "tous") {
+              const recipePaysId = recipe.expand?.pays?.id || recipe.pays;
+              if (recipePaysId !== selectedCountry) {
+                shouldShow = false;
+              }
+            }
+
+            // Filtre par type de repas
+            if (selectedMealTypes.length > 0) {
+              const recipeType =
+                recipe.type || recipe.typeRepas || recipe.categorie;
+              if (!selectedMealTypes.includes(recipeType)) {
+                shouldShow = false;
+              }
+            }
+
+            // Filtre par notes
+            if (ratingFilterEnabled && minRating > 0) {
+              const recipeRating = recipe.note || 0;
+              if (recipeRating < minRating) {
+                shouldShow = false;
+              }
+            }
+
+            return shouldShow;
+          });
+
+          updateDisplay();
+        }
+
+        // Fonction de mise à jour de l'affichage avec pagination
+        function updateDisplay() {
+          const totalRecipes = filteredRecipes.length;
+          const totalPages = Math.ceil(totalRecipes / recipesPerPage);
+          const startIndex = (currentPage - 1) * recipesPerPage;
+          const endIndex = startIndex + recipesPerPage;
+          const recipesToShow = filteredRecipes.slice(startIndex, endIndex);
+
+          // Mettre à jour les infos
+          document.getElementById("visible-count").textContent = totalRecipes;
+          document.getElementById("current-page").textContent = currentPage;
+          document.getElementById("total-pages").textContent = Math.max(
+            1,
+            totalPages
+          );
+
+          // Afficher/masquer toutes les recettes
+          const allRecipeCards = document.querySelectorAll(
+            "#recipes-container > div"
+          );
+          allRecipeCards.forEach((card, index) => {
+            card.style.display = "none";
+          });
+
+          // Afficher uniquement les recettes de la page courante
+          recipesToShow.forEach((recipe) => {
+            const recipeIndex = recipes.findIndex((r) => r.id === recipe.id);
+            if (recipeIndex !== -1 && allRecipeCards[recipeIndex]) {
+              allRecipeCards[recipeIndex].style.display = "flex";
+            }
+          });
+
+          // Afficher/masquer le message "aucune recette"
+          const noRecipesMessage =
+            document.getElementById("no-recipes-message");
+          if (totalRecipes === 0) {
+            noRecipesMessage.classList.remove("hidden");
+          } else {
+            noRecipesMessage.classList.add("hidden");
+          }
+
+          // Mettre à jour la pagination
+          updatePagination(totalPages);
+        }
+
+        // Fonction de mise à jour de la pagination
+        function updatePagination(totalPages) {
+          const paginationControls = document.getElementById(
+            "pagination-controls"
+          );
+          paginationControls.innerHTML = "";
+
+          if (totalPages <= 1) {
+            document.getElementById("pagination-container").style.display =
+              "none";
+            return;
+          }
+
+          document.getElementById("pagination-container").style.display =
+            "flex";
+
+          // Bouton précédent
+          const prevBtn = document.createElement("button");
+          prevBtn.innerHTML = "&lt;";
+          prevBtn.className =
+            "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors";
+          prevBtn.disabled = currentPage === 1;
+          if (currentPage === 1) {
+            prevBtn.classList.add("opacity-50", "cursor-not-allowed");
+          } else {
+            prevBtn.classList.add("cursor-pointer");
+          }
+          prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+              currentPage--;
+              updateDisplay();
+            }
+          });
+          paginationControls.appendChild(prevBtn);
+
+          // Calculer les pages à afficher
+          const maxVisiblePages = 7; // Afficher max 7 numéros de pages
+          let startPage = Math.max(
+            1,
+            currentPage - Math.floor(maxVisiblePages / 2)
+          );
+          let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+          // Ajuster si on n'a pas assez de pages à la fin
+          if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+          }
+
+          // Numéros de pages
+          for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement("button");
+            pageBtn.textContent = i;
+            pageBtn.className =
+              "w-8 h-8 flex items-center justify-center text-sm font-medium transition-colors cursor-pointer";
+
+            if (i === currentPage) {
+              pageBtn.classList.add("bg-black", "text-white");
+            } else {
+              pageBtn.classList.add(
+                "text-gray-900",
+                "bg-white",
+                "hover:bg-gray-100"
+              );
+            }
+
+            pageBtn.addEventListener("click", () => {
+              currentPage = i;
+              updateDisplay();
+            });
+            paginationControls.appendChild(pageBtn);
+          }
+
+          // Points de suspension et dernière page si nécessaire
+          if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+              const dotsSpan = document.createElement("span");
+              dotsSpan.textContent = "...";
+              dotsSpan.className =
+                "w-8 h-8 flex items-center justify-center text-sm text-gray-500";
+              paginationControls.appendChild(dotsSpan);
+            }
+
+            const lastPageBtn = document.createElement("button");
+            lastPageBtn.textContent = totalPages;
+            lastPageBtn.className =
+              "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors cursor-pointer";
+            lastPageBtn.addEventListener("click", () => {
+              currentPage = totalPages;
+              updateDisplay();
+            });
+            paginationControls.appendChild(lastPageBtn);
+          }
+
+          // Bouton suivant
+          const nextBtn = document.createElement("button");
+          nextBtn.innerHTML = "&gt;";
+          nextBtn.className =
+            "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors";
+          nextBtn.disabled = currentPage === totalPages;
+          if (currentPage === totalPages) {
+            nextBtn.classList.add("opacity-50", "cursor-not-allowed");
+          } else {
+            nextBtn.classList.add("cursor-pointer");
+          }
+          nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+              currentPage++;
+              updateDisplay();
+            }
+          });
+          paginationControls.appendChild(nextBtn);
+        }
+
+        // Initialisation
+        filterRecipes();
+        console.log("Page recettes initialisée avec succès");
+      });
+    </script>
+  </div>
+</LayoutApplicatif>
