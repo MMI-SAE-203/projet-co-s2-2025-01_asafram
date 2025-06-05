@@ -5,9 +5,9 @@
 Éléménts à renseigner pour la soutenance :
 
 - [ ] Nom du projet : ASAFRAM
-- [ ] URL de la landing page :
-- [ ] URL de l'application finale :
-- [ ] URL de connexion au back office :
+- [ ] URL de la landing page : https://asafram.netlify.app/
+- [ ] URL de l'application finale : https://asafram.netlify.app/site-applicatif
+- [ ] URL de connexion au back office : https://asafram.andrea-mestre.eu/_/
 - [ ] Identifiant de connexion au backoffice : nicolas.thai@edu.univ-fcomte.fr
 - [ ] Mot de passe de connexion au backoffice : asaframprojet123
 - [ ] URL de la maquette FIGMA : https://www.figma.com/design/RIVVRZcKv17FWN0uJyr5EZ/ASAFRAM-(Andr%C3%A9a%2C-Nico%2C-Fran%C3%A7ois)?node-id=1-1354&t=sPRbu9QBhnHyD2nU-1
