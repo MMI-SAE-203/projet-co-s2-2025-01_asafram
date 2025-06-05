@@ -1,0 +1,499 @@
+---
+import LayoutApplicatif from "../../../layouts/LayoutApplicatif.astro";
+import CardProduits from "../../../components/site-applicatif/CardProduits.astro";
+import CardRecettes from "../../../components/site-applicatif/CardRecettes.astro";
+import {
+  getProductsByContinent,
+  getRecipesByContinent,
+  getPaysByContinent,
+} from "../../../../backend/backend.js";
+
+// Récupération des données pour le Maghreb
+const paysMaghreb = await getPaysByContinent("Maghreb");
+const produitsMaghreb = await getProductsByContinent("Maghreb", {
+  limit: 8,
+});
+const recettesMaghreb = await getRecipesByContinent("Maghreb", {
+  limit: 6,
+});
+
+// Données pour la hero section
+const continentData = {
+  nom: "Maghreb",
+  description:
+    "Découvrez les trésors culinaires du Maghreb, terre de saveurs intenses où se mêlent épices précieuses et traditions séculaires.",
+  stats: {
+    produits: produitsMaghreb.items?.length || produitsMaghreb.totalItems || 0,
+    recettes: recettesMaghreb.items?.length || recettesMaghreb.totalItems || 0,
+    pays: paysMaghreb.length,
+  },
+  couleurs: {
+    primary: "from-orange-700 to-red-600",
+    secondary: "bg-orange-100",
+    accent: "text-orange-800",
+  },
+};
+---
+
+<LayoutApplicatif
+  title="Maghreb - ASAFRAM"
+  description="Découvrez les produits et recettes authentiques du Maghreb"
+>
+  <!-- Hero Section Maghreb -->
+  <section
+    class="relative min-h-[70vh] bg-gradient-to-br from-orange-400 via-orange-500 to-amber-500 overflow-hidden"
+  >
+    <!-- Contenu principal de la hero -->
+    <div
+      class="relative z-10 container mx-auto px-6 py-20 text-center text-white"
+    >
+      <div class="max-w-4xl mx-auto">
+        <!-- Badge continent -->
+        <div
+          class="inline-block bg-white bg-opacity-20 backdrop-blur-sm rounded-full px-6 py-2 mb-6"
+        >
+          <span
+            class="text-sm font-raleway text-black font-bold uppercase tracking-wider"
+            >Continent</span
+          >
+        </div>
+
+        <!-- Titre principal -->
+        <h1
+          class="text-6xl md:text-8xl font-radio-canada-big font-black mb-6 drop-shadow-2xl"
+        >
+          MAGHREB
+        </h1>
+
+        <!-- Description -->
+        <p
+          class="text-xl md:text-2xl font-raleway mb-8 max-w-3xl mx-auto leading-relaxed drop-shadow-lg"
+        >
+          {continentData.description}
+        </p>
+
+        <!-- Statistiques avec drapeaux maghrébins -->
+        <div class="grid grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+          <div
+            class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-30"
+            >
+              {
+                paysMaghreb[0] && paysMaghreb[0].drapeauUrl && (
+                  <img
+                    src={paysMaghreb[0].drapeauUrl}
+                    alt={paysMaghreb[0].nom}
+                    class="w-24 h-16 object-cover rounded-lg"
+                  />
+                )
+              }
+            </div>
+            <div class="relative z-10">
+              <div class="text-3xl font-black mb-2 text-black drop-shadow-lg">
+                {continentData.stats.produits}
+              </div>
+              <div
+                class="text-sm uppercase tracking-wider text-black font-bold"
+              >
+                Produits
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-30"
+            >
+              {
+                paysMaghreb[1] && paysMaghreb[1].drapeauUrl && (
+                  <img
+                    src={paysMaghreb[1].drapeauUrl}
+                    alt={paysMaghreb[1].nom}
+                    class="w-24 h-16 object-cover rounded-lg"
+                  />
+                )
+              }
+            </div>
+            <div class="relative z-10">
+              <div class="text-3xl font-black mb-2 text-black drop-shadow-lg">
+                {continentData.stats.recettes}
+              </div>
+              <div
+                class="text-sm uppercase tracking-wider text-black font-bold"
+              >
+                Recettes
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-30"
+            >
+              {
+                paysMaghreb[2] && paysMaghreb[2].drapeauUrl && (
+                  <img
+                    src={paysMaghreb[2].drapeauUrl}
+                    alt={paysMaghreb[2].nom}
+                    class="w-24 h-16 object-cover rounded-lg"
+                  />
+                )
+              }
+            </div>
+            <div class="relative z-10">
+              <div class="text-3xl font-black mb-2 text-black drop-shadow-lg">
+                {continentData.stats.pays}
+              </div>
+              <div
+                class="text-sm uppercase tracking-wider text-black font-bold"
+              >
+                Pays
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ligne de drapeaux maghrébins -->
+        <div class="max-w-5xl mx-auto mb-8">
+          <div class="flex justify-center items-center gap-4 flex-wrap">
+            {
+              paysMaghreb.slice(0, 8).map((pays) => (
+                <div class="group cursor-pointer">
+                  <div class="relative">
+                    <img
+                      src={pays.drapeauUrl}
+                      alt={`Drapeau ${pays.nom}`}
+                      class="w-20 h-14 rounded-lg shadow-lg border-2 border-white group-hover:scale-110 transition-transform duration-300"
+                      title={pays.nom}
+                    />
+                    <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                        {pays.nom}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Filtres -->
+  <section class="bg-gray-50 py-8 sticky top-0 z-40 shadow-md">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <!-- Filtres par pays -->
+        <div class="flex items-center gap-4">
+          <span class="font-raleway font-bold text-gray-700"
+            >Filtrer par pays :</span
+          >
+          <select
+            id="country-filter"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 cursor-pointer"
+          >
+            <option value="tous">Tous les pays</option>
+            {
+              paysMaghreb.map((pays) => (
+                <option value={pays.id}>{pays.nom}</option>
+              ))
+            }
+          </select>
+        </div>
+
+        <!-- Toggle sections -->
+        <div class="flex items-center gap-4">
+          <button
+            id="toggle-products"
+            class="px-4 font-semibold py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors cursor-pointer"
+          >
+            Produits
+          </button>
+          <button
+            id="toggle-recipes"
+            class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors cursor-pointer font-semibold"
+          >
+            Recettes
+          </button>
+          <button
+            id="show-all"
+            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+          >
+            Tout afficher
+          </button>
+        </div>
+
+        <!-- Bouton réinitialiser -->
+        <button
+          id="reset-filters"
+          class="px-4 py-2 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 transition-colors cursor-pointer font-semibold"
+        >
+          Réinitialiser
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Produits du Maghreb -->
+  <section id="products-section" class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <!-- En-tête section -->
+      <div class="text-center mb-12">
+        <h2
+          class="text-4xl font-radio-canada-big font-black text-gray-800 mb-4"
+        >
+          ÉPICES ET PRODUITS DU MAGHREB
+        </h2>
+        <p class="text-gray-600 font-raleway max-w-2xl mx-auto">
+          Découvrez une sélection de produits authentiques venus des terres
+          ensoleillées du Maghreb et de ses marchés colorés
+        </p>
+      </div>
+
+      <!-- Grille des produits -->
+      <div
+        id="products-grid"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center"
+      >
+        {
+          (produitsMaghreb.items || []).map((produit) => (
+            <div class="product-card" data-country={produit.expand?.pays?.id}>
+              <CardProduits product={produit} />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Message si aucun produit -->
+      <div id="no-products-message" class="hidden text-center py-12">
+        <p class="text-gray-500 text-lg font-raleway">
+          Aucun produit trouvé pour ce filtre.
+        </p>
+      </div>
+
+      <!-- Bouton voir plus -->
+      <div class="text-center mt-12">
+        <a
+          href="/site-applicatif/produits?continent=Maghreb"
+          class="inline-block bg-orange-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors cursor-pointer"
+        >
+          Voir tous les produits du Maghreb
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Recettes du Maghreb -->
+  <section id="recipes-section" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <!-- En-tête section -->
+      <div class="text-center mb-12">
+        <h2
+          class="text-4xl font-radio-canada-big font-black text-gray-800 mb-4"
+        >
+          RECETTES TRADITIONNELLES
+        </h2>
+        <p class="text-gray-600 font-raleway max-w-2xl mx-auto">
+          Explorez les secrets culinaires transmis de génération en génération à
+          travers le Maghreb
+        </p>
+      </div>
+
+      <!-- Grille des recettes -->
+      <div
+        id="recipes-grid"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center"
+      >
+        {
+          (recettesMaghreb.items || []).map((recette) => (
+            <div class="recipe-card" data-country={recette.expand?.pays?.id}>
+              <CardRecettes recette={recette} />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Message si aucune recette -->
+      <div id="no-recipes-message" class="hidden text-center py-12">
+        <p class="text-gray-500 text-lg font-raleway">
+          Aucune recette trouvée pour ce filtre.
+        </p>
+      </div>
+
+      <!-- Bouton voir plus -->
+      <div class="text-center mt-12">
+        <a
+          href="/site-applicatif/recettes?continent=Maghreb"
+          class="inline-block bg-amber-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-amber-600 transition-colors cursor-pointer"
+        >
+          Découvrir toutes les recettes du Maghreb
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section
+    class="py-16 bg-gradient-to-br from-orange-400 via-orange-500 to-amber-500 text-white"
+  >
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-radio-canada-big font-black mb-4">
+        EXPLOREZ LES AUTRES CONTINENTS
+      </h2>
+      <p class="text-xl font-raleway mb-8 max-w-2xl mx-auto">
+        Continuez votre voyage culinaire à travers les saveurs du monde entier
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <a
+          href="/site-applicatif/continents/asie"
+          class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 hover:bg-opacity-30 transition-all cursor-pointer group"
+        >
+          <h3 class="text-xl font-bold mb-2 group-hover:text-yellow-200">
+            Asie
+          </h3>
+          <p class="text-sm opacity-90">Traditions millénaires</p>
+        </a>
+        <a
+          href="/site-applicatif/continents/amerique-latine"
+          class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 hover:bg-opacity-30 transition-all cursor-pointer group"
+        >
+          <h3 class="text-xl font-bold mb-2 group-hover:text-yellow-200">
+            Amérique Latine
+          </h3>
+          <p class="text-sm opacity-90">Saveurs tropicales</p>
+        </a>
+        <a
+          href="/site-applicatif/continents/afrique"
+          class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 hover:bg-opacity-30 transition-all cursor-pointer group"
+        >
+          <h3 class="text-xl font-bold mb-2 group-hover:text-yellow-200">
+            Afrique
+          </h3>
+          <p class="text-sm opacity-90">Terre ancestrale</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Éléments DOM
+      const countryFilter = document.getElementById(
+        "country-filter"
+      ) as HTMLSelectElement;
+      const toggleProducts = document.getElementById("toggle-products");
+      const toggleRecipes = document.getElementById("toggle-recipes");
+      const showAll = document.getElementById("show-all");
+      const resetFilters = document.getElementById("reset-filters");
+
+      const productsSection = document.getElementById("products-section");
+      const recipesSection = document.getElementById("recipes-section");
+      const productsGrid = document.getElementById("products-grid");
+      const recipesGrid = document.getElementById("recipes-grid");
+      const noProductsMessage = document.getElementById("no-products-message");
+      const noRecipesMessage = document.getElementById("no-recipes-message");
+
+      // Vérification que tous les éléments existent
+      if (
+        !countryFilter ||
+        !toggleProducts ||
+        !toggleRecipes ||
+        !showAll ||
+        !resetFilters ||
+        !productsSection ||
+        !recipesSection ||
+        !productsGrid ||
+        !recipesGrid ||
+        !noProductsMessage ||
+        !noRecipesMessage
+      ) {
+        console.error("Certains éléments DOM sont manquants");
+        return;
+      }
+
+      // Fonction de filtrage
+      function filterContent() {
+        const selectedCountry = countryFilter!.value;
+
+        // Filtrer les produits
+        const productCards = productsGrid!.querySelectorAll(".product-card");
+        let visibleProducts = 0;
+
+        productCards.forEach((card) => {
+          const cardCountry = card.getAttribute("data-country");
+          if (selectedCountry === "tous" || cardCountry === selectedCountry) {
+            (card as HTMLElement).style.display = "block";
+            visibleProducts++;
+          } else {
+            (card as HTMLElement).style.display = "none";
+          }
+        });
+
+        // Filtrer les recettes
+        const recipeCards = recipesGrid!.querySelectorAll(".recipe-card");
+        let visibleRecipes = 0;
+
+        recipeCards.forEach((card) => {
+          const cardCountry = card.getAttribute("data-country");
+          if (selectedCountry === "tous" || cardCountry === selectedCountry) {
+            (card as HTMLElement).style.display = "block";
+            visibleRecipes++;
+          } else {
+            (card as HTMLElement).style.display = "none";
+          }
+        });
+
+        // Afficher/masquer les messages "aucun résultat"
+        noProductsMessage!.style.display =
+          visibleProducts === 0 ? "block" : "none";
+        noRecipesMessage!.style.display =
+          visibleRecipes === 0 ? "block" : "none";
+      }
+
+      // Fonction pour masquer/afficher les sections
+      function toggleSections(showProducts: boolean, showRecipes: boolean) {
+        productsSection!.style.display = showProducts ? "block" : "none";
+        recipesSection!.style.display = showRecipes ? "block" : "none";
+
+        // Mise à jour des styles des boutons
+        toggleProducts!.classList.toggle("bg-orange-500", showProducts);
+        toggleProducts!.classList.toggle("bg-gray-400", !showProducts);
+        toggleRecipes!.classList.toggle("bg-amber-500", showRecipes);
+        toggleRecipes!.classList.toggle("bg-gray-400", !showRecipes);
+      }
+
+      // Event listeners
+      countryFilter!.addEventListener("change", filterContent);
+
+      toggleProducts!.addEventListener("click", () => {
+        toggleSections(true, false);
+      });
+
+      toggleRecipes!.addEventListener("click", () => {
+        toggleSections(false, true);
+      });
+
+      showAll!.addEventListener("click", () => {
+        toggleSections(true, true);
+      });
+
+      resetFilters!.addEventListener("click", () => {
+        countryFilter!.value = "tous";
+        toggleSections(true, true);
+        filterContent();
+      });
+
+      // Initialisation
+      filterContent();
+    });
+  </script>
+</LayoutApplicatif>

@@ -1534,23 +1534,15 @@ export async function getPaysByContinent(continent) {
 
 export async function getProductsByContinent(continent, options = {}) {
   try {
-    // Options par défaut
-    const {
-      page = 1,
-      perPage = 20,
-      limit = null,
-      sort = "created",
-      addFixedDistance = false,
-      distanceValue = 15,
-      randomize = false,
-    } = options;
+    // Options par défaut simplifiées
+    const { page = 1, perPage = 20, limit = null, sort = "created" } = options;
 
     // On récupère d'abord tous les pays de ce continent
     const paysIds = await pb
       .collection("pays")
       .getFullList({
         filter: `continent="${continent}"`,
-        fields: "id", // On ne récupère que les IDs pour optimiser
+        fields: "id",
       })
       .then((list) => list.map((item) => item.id));
 
@@ -1567,28 +1559,25 @@ export async function getProductsByContinent(continent, options = {}) {
     // On construit le filtre pour récupérer les produits de ces pays
     const paysFilter = paysIds.map((id) => `pays="${id}"`).join(" || ");
 
-    // Configuration de la requête
+    // Configuration de la requête - simplifiée
     const queryConfig = {
       filter: `(${paysFilter})`,
       expand: "pays",
-      sort: randomize ? "random()" : sort,
+      sort: sort,
     };
 
     // Si on souhaite limiter les résultats sans pagination
     if (limit !== null && limit > 0) {
-      // On récupère directement le nombre de produits demandé
       let produits = await pb
         .collection("produits")
         .getList(1, limit, queryConfig);
 
       // Traitement des images et des drapeaux
       produits.items = produits.items.map((product) => {
-        // Traitement de l'image du produit
         if (product.img) {
           product.img = pb.files.getURL(product, product.img);
         }
 
-        // Traitement de l'image du drapeau du pays
         if (
           product.expand &&
           product.expand.pays &&
@@ -1600,22 +1589,19 @@ export async function getProductsByContinent(continent, options = {}) {
           );
         }
 
-        // Ajout d'une distance fixe si demandé
-        if (addFixedDistance) {
-          product.distance = distanceValue;
-        }
+        // Ajout d'une distance par défaut
+        product.distance = 15;
 
         return product;
       });
 
       return produits;
     } else {
-      // Sinon on utilise la pagination standard
+      // Pagination standard
       const resultList = await pb
         .collection("produits")
         .getList(page, perPage, queryConfig);
 
-      // Traitement des images et des drapeaux
       resultList.items = resultList.items.map((product) => {
         if (product.img) {
           product.img = pb.files.getURL(product, product.img);
@@ -1632,10 +1618,7 @@ export async function getProductsByContinent(continent, options = {}) {
           );
         }
 
-        // Ajout d'une distance fixe si demandé
-        if (addFixedDistance) {
-          product.distance = distanceValue;
-        }
+        product.distance = 15;
 
         return product;
       });
@@ -1694,6 +1677,88 @@ export async function getPopularProducts(limit = 8) {
   } catch (error) {
     console.error(
       `Erreur lors de la récupération des ${limit} produits populaires:`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function getRecipesByContinent(continent, options = {}) {
+  try {
+    const { page = 1, perPage = 20, limit = null, sort = "created" } = options;
+
+    // Récupérer les pays de ce continent
+    const paysIds = await pb
+      .collection("pays")
+      .getFullList({
+        filter: `continent="${continent}"`,
+        fields: "id",
+      })
+      .then((list) => list.map((item) => item.id));
+
+    if (paysIds.length === 0) {
+      return {
+        items: [],
+        totalItems: 0,
+        totalPages: 0,
+        page: page,
+      };
+    }
+
+    const paysFilter = paysIds.map((id) => `pays="${id}"`).join(" || ");
+
+    const queryConfig = {
+      filter: `(${paysFilter})`,
+      expand: "pays,auteur",
+      sort: sort,
+    };
+
+    if (limit !== null && limit > 0) {
+      let recettes = await pb
+        .collection("recettes")
+        .getList(1, limit, queryConfig);
+
+      recettes.items = recettes.items.map((recipe) => {
+        if (recipe.img) {
+          recipe.img = pb.files.getURL(recipe, recipe.img);
+        }
+
+        if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+          recipe.expand.pays.drapeauUrl = pb.files.getURL(
+            recipe.expand.pays,
+            recipe.expand.pays.drapeau
+          );
+        }
+
+        return recipe;
+      });
+
+      return recettes;
+    } else {
+      const resultList = await pb
+        .collection("recettes")
+        .getList(page, perPage, queryConfig);
+
+      resultList.items = resultList.items.map((recipe) => {
+        if (recipe.img) {
+          recipe.img = pb.files.getURL(recipe, recipe.img);
+        }
+
+        if (recipe.expand && recipe.expand.pays && recipe.expand.pays.drapeau) {
+          recipe.expand.pays.drapeauUrl = pb.files.getURL(
+            recipe.expand.pays,
+            recipe.expand.pays.drapeau
+          );
+        }
+
+        return recipe;
+      });
+
+      return resultList;
+    }
+  } catch (error) {
+    console.error(
+      `Erreur lors de la récupération des recettes du continent ${continent}:`,
       error
     );
     throw error;
