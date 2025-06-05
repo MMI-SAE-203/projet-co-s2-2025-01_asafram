@@ -26,6 +26,9 @@ export async function getAllProducts() {
         );
       }
 
+      // Ajouter une distance aléatoire entre 1 et 50 km
+      product.distance = Math.floor(Math.random() * 50) + 1;
+
       return product;
     });
     return products;

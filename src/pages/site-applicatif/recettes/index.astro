@@ -30,7 +30,7 @@ const pays = await getAllPays();
         <div class="p-6">
           <!-- En-tête des filtres -->
           <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-raleway font-black uppercase text-black">
+            <h2 class="!text-3xl font-raleway font-black uppercase text-black">
               FILTRES
             </h2>
             <button
@@ -42,12 +42,12 @@ const pays = await getAllPays();
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-black mb-6"></div>
+          <div class="w-full border-t border-dashed border-black mb-6"></div>
 
           <!-- Section Barre de recherche -->
           <div class="mb-6">
             <h3
-              class="text-sm font-raleway font-bold uppercase text-black mb-4"
+              class="!text-2xl font-raleway font-bold uppercase text-black mb-4"
             >
               RECHERCHE
             </h3>
@@ -90,19 +90,19 @@ const pays = await getAllPays();
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-gray-400 mb-6"></div>
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
 
           <!-- Section Continents -->
           <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sm font-raleway font-bold uppercase text-black">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
                 CONTINENTS
               </h3>
               <button
                 id="all-continents-btn"
                 class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
               >
-                TOUS
+                TOUT
               </button>
             </div>
 
@@ -140,7 +140,7 @@ const pays = await getAllPays();
           <!-- Section Pays -->
           <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sm font-raleway font-bold uppercase text-black">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
                 PAYS
               </h3>
               <button
@@ -149,7 +149,7 @@ const pays = await getAllPays();
                 disabled
                 style="opacity: 0.5; cursor: not-allowed;"
               >
-                TOUS
+                TOUT
               </button>
             </div>
 
@@ -179,19 +179,19 @@ const pays = await getAllPays();
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-gray-400 mb-6"></div>
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
 
           <!-- Section Types de repas -->
           <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sm font-raleway font-bold uppercase text-black">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
                 TYPE DE REPAS
               </h3>
               <button
                 id="all-meal-types-btn"
                 class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer bg-gray-200"
               >
-                TOUS
+                TOUT
               </button>
             </div>
 
@@ -243,12 +243,12 @@ const pays = await getAllPays();
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-gray-400 mb-6"></div>
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
 
           <!-- Section Notes -->
           <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sm font-raleway font-bold uppercase text-black">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
                 NOTES
               </h3>
               <button
@@ -369,6 +369,12 @@ const pays = await getAllPays();
                 Découvrez toutes nos recettes du monde entier, de la plus
                 récente à la plus ancienne.
               </p>
+              <div id="results-info" class="text-lg text-gray-600 mt-4">
+                <span id="visible-count">{recipes.length}</span> recettes • Page
+                <span id="current-page">1</span> sur <span id="total-pages"
+                  >1</span
+                >
+              </div>
             </div>
 
             <!-- Bouton Ajouter une recette en haut à droite -->
@@ -382,7 +388,7 @@ const pays = await getAllPays();
 
           <!-- Zone des recettes -->
           <div
-            class="mt-30 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 mb-40"
+            class="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 mb-40"
             id="recipes-container"
           >
             {
@@ -399,6 +405,16 @@ const pays = await getAllPays();
             <p class="text-gray-500 text-lg font-raleway">
               Aucune recette ne correspond à vos critères de recherche.
             </p>
+          </div>
+
+          <!-- Pagination -->
+          <div id="pagination-container" class="flex justify-center mt-10">
+            <div
+              class="inline-flex items-center gap-1"
+              id="pagination-controls"
+            >
+              <!-- Généré dynamiquement par JavaScript -->
+            </div>
           </div>
         </div>
       </div>
@@ -648,13 +664,16 @@ const pays = await getAllPays();
         console.log("Initialisation de la page recettes...");
 
         // Variables globales
-        let selectedContinents = ["tous"];
+        let selectedContinents = [];
         let selectedMealTypes = [];
         let selectedCountry = "tous";
         let searchQuery = "";
         let ratingFilterEnabled = false;
         let minRating = 0;
         let availableCountries = [];
+        let filteredRecipes = [...recipes];
+        let currentPage = 1;
+        const recipesPerPage = 12;
 
         // Éléments DOM
         const addRecipeBtn = document.getElementById("add-recipe-btn");
@@ -836,7 +855,12 @@ const pays = await getAllPays();
         const continentBtns = document.querySelectorAll(".continent-btn");
 
         allContinentsBtn.addEventListener("click", function () {
-          selectedContinents = ["tous"];
+          selectedContinents = [
+            "Afrique",
+            "Amérique Latine",
+            "Asie",
+            "Maghreb",
+          ];
           updateContinentButtons();
           updateCountriesDropdown();
           filterRecipes();
@@ -846,15 +870,10 @@ const pays = await getAllPays();
           btn.addEventListener("click", function () {
             const continent = this.dataset.continent;
 
-            if (selectedContinents.includes("tous")) {
-              selectedContinents = [continent];
-            } else if (selectedContinents.includes(continent)) {
+            if (selectedContinents.includes(continent)) {
               selectedContinents = selectedContinents.filter(
                 (c) => c !== continent
               );
-              if (selectedContinents.length === 0) {
-                selectedContinents = ["tous"];
-              }
             } else {
               selectedContinents.push(continent);
             }
@@ -866,8 +885,15 @@ const pays = await getAllPays();
         });
 
         function updateContinentButtons() {
-          // Bouton "TOUS"
-          if (selectedContinents.includes("tous")) {
+          // Bouton "TOUT"
+          const allSelected =
+            selectedContinents.length === 4 &&
+            selectedContinents.includes("Afrique") &&
+            selectedContinents.includes("Amérique Latine") &&
+            selectedContinents.includes("Asie") &&
+            selectedContinents.includes("Maghreb");
+
+          if (allSelected) {
             allContinentsBtn.classList.add("bg-gray-200");
           } else {
             allContinentsBtn.classList.remove("bg-gray-200");
@@ -891,7 +917,7 @@ const pays = await getAllPays();
           const countriesSelect = document.getElementById("countries-select");
           const allCountriesBtn = document.getElementById("all-countries-btn");
 
-          if (selectedContinents.includes("tous")) {
+          if (selectedContinents.length === 0) {
             availableCountries = [];
             selectedCountry = "tous";
             countriesSelect.disabled = true;
@@ -947,8 +973,13 @@ const pays = await getAllPays();
         );
 
         allMealTypesBtn.addEventListener("click", function () {
-          selectedMealTypes = [];
-          mealTypeCheckboxes.forEach((cb) => (cb.checked = false));
+          selectedMealTypes = [
+            "Entrée",
+            "Plats",
+            "Desserts",
+            "Accompagnements",
+          ];
+          mealTypeCheckboxes.forEach((cb) => (cb.checked = true));
           updateMealTypesButton();
           filterRecipes();
         });
@@ -968,7 +999,14 @@ const pays = await getAllPays();
         });
 
         function updateMealTypesButton() {
-          if (selectedMealTypes.length === 0) {
+          const allSelected =
+            selectedMealTypes.length === 4 &&
+            selectedMealTypes.includes("Entrée") &&
+            selectedMealTypes.includes("Plats") &&
+            selectedMealTypes.includes("Desserts") &&
+            selectedMealTypes.includes("Accompagnements");
+
+          if (allSelected) {
             allMealTypesBtn.classList.add("bg-gray-200");
           } else {
             allMealTypesBtn.classList.remove("bg-gray-200");
@@ -1053,7 +1091,7 @@ const pays = await getAllPays();
         document
           .getElementById("reset-filters-btn")
           .addEventListener("click", function () {
-            selectedContinents = ["tous"];
+            selectedContinents = [];
             selectedMealTypes = [];
             selectedCountry = "tous";
             searchQuery = "";
@@ -1086,22 +1124,9 @@ const pays = await getAllPays();
 
         // Fonction de filtrage des recettes
         function filterRecipes() {
-          console.log("Filtres appliqués:", {
-            searchQuery,
-            continents: selectedContinents,
-            mealTypes: selectedMealTypes,
-            country: selectedCountry,
-            ratingFilterEnabled,
-            minRating,
-          });
+          currentPage = 1; // Reset à la page 1 lors du filtrage
 
-          const recipeCards = document.querySelectorAll(
-            "#recipes-container > div"
-          );
-          let visibleCount = 0;
-
-          recipeCards.forEach((cardContainer, index) => {
-            const recipe = recipes[index];
+          filteredRecipes = recipes.filter((recipe) => {
             let shouldShow = true;
 
             // Filtre par recherche textuelle
@@ -1113,7 +1138,7 @@ const pays = await getAllPays();
             }
 
             // Filtre par continent
-            if (!selectedContinents.includes("tous")) {
+            if (selectedContinents.length > 0) {
               const recipeContinent =
                 recipe.expand?.pays?.continent || recipe.continent;
               if (!selectedContinents.includes(recipeContinent)) {
@@ -1146,27 +1171,172 @@ const pays = await getAllPays();
               }
             }
 
-            // Afficher ou masquer la recette
-            if (shouldShow) {
-              cardContainer.style.display = "flex";
-              visibleCount++;
-            } else {
-              cardContainer.style.display = "none";
+            return shouldShow;
+          });
+
+          updateDisplay();
+        }
+
+        // Fonction de mise à jour de l'affichage avec pagination
+        function updateDisplay() {
+          const totalRecipes = filteredRecipes.length;
+          const totalPages = Math.ceil(totalRecipes / recipesPerPage);
+          const startIndex = (currentPage - 1) * recipesPerPage;
+          const endIndex = startIndex + recipesPerPage;
+          const recipesToShow = filteredRecipes.slice(startIndex, endIndex);
+
+          // Mettre à jour les infos
+          document.getElementById("visible-count").textContent = totalRecipes;
+          document.getElementById("current-page").textContent = currentPage;
+          document.getElementById("total-pages").textContent = Math.max(
+            1,
+            totalPages
+          );
+
+          // Afficher/masquer toutes les recettes
+          const allRecipeCards = document.querySelectorAll(
+            "#recipes-container > div"
+          );
+          allRecipeCards.forEach((card, index) => {
+            card.style.display = "none";
+          });
+
+          // Afficher uniquement les recettes de la page courante
+          recipesToShow.forEach((recipe) => {
+            const recipeIndex = recipes.findIndex((r) => r.id === recipe.id);
+            if (recipeIndex !== -1 && allRecipeCards[recipeIndex]) {
+              allRecipeCards[recipeIndex].style.display = "flex";
             }
           });
 
           // Afficher/masquer le message "aucune recette"
           const noRecipesMessage =
             document.getElementById("no-recipes-message");
-          if (visibleCount === 0) {
+          if (totalRecipes === 0) {
             noRecipesMessage.classList.remove("hidden");
           } else {
             noRecipesMessage.classList.add("hidden");
           }
 
-          console.log(`${visibleCount} recettes affichées`);
+          // Mettre à jour la pagination
+          updatePagination(totalPages);
         }
 
+        // Fonction de mise à jour de la pagination
+        function updatePagination(totalPages) {
+          const paginationControls = document.getElementById(
+            "pagination-controls"
+          );
+          paginationControls.innerHTML = "";
+
+          if (totalPages <= 1) {
+            document.getElementById("pagination-container").style.display =
+              "none";
+            return;
+          }
+
+          document.getElementById("pagination-container").style.display =
+            "flex";
+
+          // Bouton précédent
+          const prevBtn = document.createElement("button");
+          prevBtn.innerHTML = "&lt;";
+          prevBtn.className =
+            "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors";
+          prevBtn.disabled = currentPage === 1;
+          if (currentPage === 1) {
+            prevBtn.classList.add("opacity-50", "cursor-not-allowed");
+          } else {
+            prevBtn.classList.add("cursor-pointer");
+          }
+          prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+              currentPage--;
+              updateDisplay();
+            }
+          });
+          paginationControls.appendChild(prevBtn);
+
+          // Calculer les pages à afficher
+          const maxVisiblePages = 7; // Afficher max 7 numéros de pages
+          let startPage = Math.max(
+            1,
+            currentPage - Math.floor(maxVisiblePages / 2)
+          );
+          let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+          // Ajuster si on n'a pas assez de pages à la fin
+          if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+          }
+
+          // Numéros de pages
+          for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement("button");
+            pageBtn.textContent = i;
+            pageBtn.className =
+              "w-8 h-8 flex items-center justify-center text-sm font-medium transition-colors cursor-pointer";
+
+            if (i === currentPage) {
+              pageBtn.classList.add("bg-black", "text-white");
+            } else {
+              pageBtn.classList.add(
+                "text-gray-900",
+                "bg-white",
+                "hover:bg-gray-100"
+              );
+            }
+
+            pageBtn.addEventListener("click", () => {
+              currentPage = i;
+              updateDisplay();
+            });
+            paginationControls.appendChild(pageBtn);
+          }
+
+          // Points de suspension et dernière page si nécessaire
+          if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+              const dotsSpan = document.createElement("span");
+              dotsSpan.textContent = "...";
+              dotsSpan.className =
+                "w-8 h-8 flex items-center justify-center text-sm text-gray-500";
+              paginationControls.appendChild(dotsSpan);
+            }
+
+            const lastPageBtn = document.createElement("button");
+            lastPageBtn.textContent = totalPages;
+            lastPageBtn.className =
+              "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors cursor-pointer";
+            lastPageBtn.addEventListener("click", () => {
+              currentPage = totalPages;
+              updateDisplay();
+            });
+            paginationControls.appendChild(lastPageBtn);
+          }
+
+          // Bouton suivant
+          const nextBtn = document.createElement("button");
+          nextBtn.innerHTML = "&gt;";
+          nextBtn.className =
+            "w-8 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 transition-colors";
+          nextBtn.disabled = currentPage === totalPages;
+          if (currentPage === totalPages) {
+            nextBtn.classList.add("opacity-50", "cursor-not-allowed");
+          } else {
+            nextBtn.classList.add("cursor-pointer");
+          }
+          nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+              currentPage++;
+              updateDisplay();
+            }
+          });
+          paginationControls.appendChild(nextBtn);
+        }
+
+        // Initialisation
+        filterRecipes();
         console.log("Page recettes initialisée avec succès");
       });
     </script>

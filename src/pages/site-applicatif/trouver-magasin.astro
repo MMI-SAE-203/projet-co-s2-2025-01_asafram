@@ -120,9 +120,9 @@ const shops = await getAllShops();
       transform: none !important;
     }
 
-    /* Zone de détails de boutique fixe à droite */
+    /* Zone de détails de boutique à droite */
     .shop-details-panel {
-      position: fixed !important;
+      position: absolute !important;
       top: 240px !important;
       right: 16px !important;
       bottom: 16px !important;
@@ -253,7 +253,7 @@ const shops = await getAllShops();
 
   <div
     class="main-container bg-gray-50"
-    x-data="{ filtersOpen: true, selectedContinents: ['tous'], selectedCategories: [], searchQuery: '', selectedShopType: 'tous' }"
+    x-data="{ filtersOpen: true, selectedContinents: [], selectedCategories: [], searchQuery: '', selectedShopType: 'tous' }"
   >
     <!-- Bouton pour toggle les filtres - Position normale -->
     <div
@@ -285,63 +285,63 @@ const shops = await getAllShops();
         <div class="p-8 flex-1">
           <!-- En-tête des filtres -->
           <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-raleway font-black uppercase text-black">
+            <h2 class="!text-3xl font-raleway font-black uppercase text-black">
               FILTRES
             </h2>
             <button
-              @click="selectedContinents = ['tous']; selectedCategories = []; searchQuery = ''; selectedShopType = 'tous'"
-              class="text-xs font-raleway border border-gray-600 px-4 py-1.5 rounded hover:bg-gray-100 transition-colors"
+              @click="selectedContinents = []; selectedCategories = []; searchQuery = ''; selectedShopType = 'tous'"
+              class="text-xs font-raleway border border-gray-600 px-4 py-1.5 rounded hover:bg-gray-100 transition-colors cursor-pointer"
             >
               RÉINITIALISER
             </button>
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-black mb-6"></div>
+          <div class="w-full border-t border-dashed border-black mb-6"></div>
 
           <!-- Section Continents -->
           <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sm font-raleway font-bold uppercase text-black">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
                 CONTINENTS
               </h3>
               <button
-                @click="selectedContinents = ['tous']"
-                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors"
-                :class="selectedContinents.includes('tous') ? 'bg-gray-200' : ''"
+                @click="selectedContinents = ['Afrique', 'Amérique Latine', 'Asie', 'Maghreb']"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+                :class="selectedContinents.length === 4 && selectedContinents.includes('Afrique') && selectedContinents.includes('Amérique Latine') && selectedContinents.includes('Asie') && selectedContinents.includes('Maghreb') ? 'bg-gray-200' : ''"
               >
-                TOUS
+                TOUT
               </button>
             </div>
 
             <div class="space-y-2">
               <button
-                @click="selectedContinents.includes('tous') ? (selectedContinents = ['Afrique']) : selectedContinents.includes('Afrique') ? (selectedContinents = selectedContinents.filter(c => c !== 'Afrique'), selectedContinents.length === 0 ? selectedContinents = ['tous'] : null) : selectedContinents.push('Afrique')"
-                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors"
+                @click="selectedContinents.includes('Afrique') ? (selectedContinents = selectedContinents.filter(c => c !== 'Afrique')) : selectedContinents.push('Afrique')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
                 :class="selectedContinents.includes('Afrique') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
               >
                 AFRIQUE
               </button>
 
               <button
-                @click="selectedContinents.includes('tous') ? (selectedContinents = ['Amérique Latine']) : selectedContinents.includes('Amérique Latine') ? (selectedContinents = selectedContinents.filter(c => c !== 'Amérique Latine'), selectedContinents.length === 0 ? selectedContinents = ['tous'] : null) : selectedContinents.push('Amérique Latine')"
-                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors"
+                @click="selectedContinents.includes('Amérique Latine') ? (selectedContinents = selectedContinents.filter(c => c !== 'Amérique Latine')) : selectedContinents.push('Amérique Latine')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
                 :class="selectedContinents.includes('Amérique Latine') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
               >
                 AMÉRIQUE LATINE
               </button>
 
               <button
-                @click="selectedContinents.includes('tous') ? (selectedContinents = ['Asie']) : selectedContinents.includes('Asie') ? (selectedContinents = selectedContinents.filter(c => c !== 'Asie'), selectedContinents.length === 0 ? selectedContinents = ['tous'] : null) : selectedContinents.push('Asie')"
-                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors"
+                @click="selectedContinents.includes('Asie') ? (selectedContinents = selectedContinents.filter(c => c !== 'Asie')) : selectedContinents.push('Asie')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
                 :class="selectedContinents.includes('Asie') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
               >
                 ASIE
               </button>
 
               <button
-                @click="selectedContinents.includes('tous') ? (selectedContinents = ['Maghreb']) : selectedContinents.includes('Maghreb') ? (selectedContinents = selectedContinents.filter(c => c !== 'Maghreb'), selectedContinents.length === 0 ? selectedContinents = ['tous'] : null) : selectedContinents.push('Maghreb')"
-                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors"
+                @click="selectedContinents.includes('Maghreb') ? (selectedContinents = selectedContinents.filter(c => c !== 'Maghreb')) : selectedContinents.push('Maghreb')"
+                class="px-4 py-1.5 rounded text-xs font-raleway font-bold uppercase transition-colors cursor-pointer"
                 :class="selectedContinents.includes('Maghreb') ? 'bg-jaune text-black' : 'bg-white text-black border border-black'"
               >
                 MAGHREB
@@ -350,20 +350,20 @@ const shops = await getAllShops();
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-gray-400 mb-6"></div>
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
 
           <!-- Section Catégories -->
           <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sm font-raleway font-bold uppercase text-black">
+              <h3 class="!text-2xl font-raleway font-bold uppercase text-black">
                 CATÉGORIES
               </h3>
               <button
-                @click="selectedCategories = []"
-                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors"
-                :class="selectedCategories.length === 0 ? 'bg-gray-200' : ''"
+                @click="selectedCategories = ['viande', 'snack', 'poisson', 'epices', 'fruit', 'sauces', 'feculent', 'boissons']"
+                class="text-xs font-raleway border border-gray-600 px-3 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+                :class="selectedCategories.length === 8 && selectedCategories.includes('viande') && selectedCategories.includes('snack') && selectedCategories.includes('poisson') && selectedCategories.includes('epices') && selectedCategories.includes('fruit') && selectedCategories.includes('sauces') && selectedCategories.includes('feculent') && selectedCategories.includes('boissons') ? 'bg-gray-200' : ''"
               >
-                TOUS
+                TOUT
               </button>
             </div>
 
@@ -371,7 +371,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="viande"
                   @change="$event.target.checked ? selectedCategories.push('viande') : selectedCategories = selectedCategories.filter(c => c !== 'viande')"
                   :checked="selectedCategories.includes('viande')"
@@ -384,7 +384,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="snack"
                   @change="$event.target.checked ? selectedCategories.push('snack') : selectedCategories = selectedCategories.filter(c => c !== 'snack')"
                   :checked="selectedCategories.includes('snack')"
@@ -397,7 +397,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="poisson"
                   @change="$event.target.checked ? selectedCategories.push('poisson') : selectedCategories = selectedCategories.filter(c => c !== 'poisson')"
                   :checked="selectedCategories.includes('poisson')"
@@ -410,7 +410,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="epices"
                   @change="$event.target.checked ? selectedCategories.push('epices') : selectedCategories = selectedCategories.filter(c => c !== 'epices')"
                   :checked="selectedCategories.includes('epices')"
@@ -423,7 +423,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="fruit"
                   @change="$event.target.checked ? selectedCategories.push('fruit') : selectedCategories = selectedCategories.filter(c => c !== 'fruit')"
                   :checked="selectedCategories.includes('fruit')"
@@ -436,7 +436,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="sauces"
                   @change="$event.target.checked ? selectedCategories.push('sauces') : selectedCategories = selectedCategories.filter(c => c !== 'sauces')"
                   :checked="selectedCategories.includes('sauces')"
@@ -449,7 +449,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="feculent"
                   @change="$event.target.checked ? selectedCategories.push('feculent') : selectedCategories = selectedCategories.filter(c => c !== 'feculent')"
                   :checked="selectedCategories.includes('feculent')"
@@ -462,7 +462,7 @@ const shops = await getAllShops();
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  class="mr-2 w-4 h-4 border-2 border-black rounded-none"
+                  class="mr-2 w-4 h-4 border-2 border-black rounded-none cursor-pointer"
                   value="boissons"
                   @change="$event.target.checked ? selectedCategories.push('boissons') : selectedCategories = selectedCategories.filter(c => c !== 'boissons')"
                   :checked="selectedCategories.includes('boissons')"
@@ -475,18 +475,18 @@ const shops = await getAllShops();
           </div>
 
           <!-- Ligne de séparation -->
-          <div class="w-full h-px bg-gray-400 mb-6"></div>
+          <div class="w-full border-t border-dashed border-gray-400 mb-6"></div>
 
           <!-- Section Magasins -->
           <div>
             <h3
-              class="text-sm font-raleway font-bold uppercase mb-4 text-black"
+              class="!text-2xl font-raleway font-bold uppercase mb-4 text-black"
             >
               MAGASINS
             </h3>
             <div class="relative">
               <select
-                class="w-full p-2.5 border border-gray-400 rounded-lg text-xs font-raleway bg-white appearance-none pr-8"
+                class="w-full p-2.5 border border-gray-400 rounded-lg text-xs font-raleway bg-white appearance-none pr-8 cursor-pointer"
                 x-model="selectedShopType"
               >
                 <option value="tous">Tous les magasins</option>
@@ -566,10 +566,10 @@ const shops = await getAllShops();
     </div>
   </div>
 
-  <!-- Panneau de détails de boutique fixe à droite -->
+  <!-- Panneau de détails de boutique à droite -->
   <div
     id="shop-details-panel"
-    class="fixed top-60 right-4 bottom-4 w-80 z-[9999] bg-white rounded-xl shadow-2xl border border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out opacity-0 translate-x-5 pointer-events-none"
+    class="absolute top-60 right-4 bottom-4 w-80 z-[9999] bg-white rounded-xl shadow-2xl border border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out opacity-0 translate-x-5 pointer-events-none"
   >
     <div class="p-5 relative">
       <div id="shop-details-content-inner">
@@ -1172,7 +1172,7 @@ const shops = await getAllShops();
             const shop = markerData.shop;
 
             // Filtre par continent
-            if (!selectedContinents.includes("tous")) {
+            if (selectedContinents.length > 0) {
               const shopContinents = Array.isArray(shop.continent)
                 ? shop.continent
                 : [shop.continent];
@@ -1258,7 +1258,7 @@ const shops = await getAllShops();
             else if (text === "MAGHREB") selected.push("Maghreb");
           });
 
-          return selected.length > 0 ? selected : ["tous"];
+          return selected;
         }
 
         function getSelectedCategories() {

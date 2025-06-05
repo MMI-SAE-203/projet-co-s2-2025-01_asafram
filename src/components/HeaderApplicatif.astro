@@ -5,6 +5,7 @@ import IconeRecherche from "../assets/icones/icone-recherche.svg";
 import IconeProfil from "../assets/icones/icone-compte.webp";
 import IconeBurger from "../assets/icones/icone-burger.svg";
 import IconeEtoile from "../assets/icones/icone-etoile.svg";
+import IconeChevron from "../assets/icones/chevron.svg";
 import { isUserLoggedIn, getCurrentUser } from "../../backend/backend.js";
 
 // Vérifier si l'utilisateur est connecté
@@ -137,12 +138,73 @@ if (userLoggedIn) {
                     Trouver un magasin
                   </a>
                 </li>
+                <li class="flex justify-center relative">
+                  <button
+                    id="continents-btn"
+                    class="flex items-center gap-2 text-lg font-bold hover:scale-105 transition-all duration-200 px-2 cursor-pointer"
+                    aria-label="Voir les continents"
+                    aria-expanded="false"
+                    aria-controls="menu-continents"
+                  >
+                    <span>Continents</span>
+                    <img
+                      src={IconeChevron.src}
+                      alt=""
+                      class="w-2 h-3 transform rotate-90 transition-transform duration-300"
+                      style="filter: brightness(0);"
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  <div
+                    id="menu-continents"
+                    class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200 z-50"
+                    aria-hidden="true"
+                  >
+                    <nav class="py-2">
+                      <ul>
+                        <li>
+                          <a
+                            href="/site-applicatif/continents/afrique"
+                            class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-150"
+                          >
+                            Afrique
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="/site-applicatif/continents/amerique-latine"
+                            class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-150"
+                          >
+                            Amérique Latine
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="/site-applicatif/continents/asie"
+                            class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-150"
+                          >
+                            Asie
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="/site-applicatif/continents/maghreb"
+                            class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-150"
+                          >
+                            Maghreb
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </li>
                 <li class="flex justify-center">
                   <a
-                    href="/site-applicatif/continents"
+                    href="/site-applicatif/produits"
                     class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2"
                   >
-                    Continent
+                    Produits
                   </a>
                 </li>
                 <li class="flex justify-center">
@@ -151,14 +213,6 @@ if (userLoggedIn) {
                     class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2"
                   >
                     Recettes
-                  </a>
-                </li>
-                <li class="flex justify-center">
-                  <a
-                    href="/apropos"
-                    class="text-lg font-bold hover:scale-105 transition-all duration-200 px-2"
-                  >
-                    A Propos
                   </a>
                 </li>
               </ul>
@@ -178,7 +232,7 @@ if (userLoggedIn) {
                   class="w-4 h-3"
                   aria-hidden="true"
                 />
-                <span class="font-bold uppercase">Tous les produits</span>
+                <span class="font-bold uppercase">Les catégories</span>
               </button>
             </div>
           </div>
@@ -309,6 +363,10 @@ if (userLoggedIn) {
         const menuProduits = document.getElementById("menu-produits");
         const closeMenuBtn = document.getElementById("close-menu-btn");
 
+        const continentsBtn = document.getElementById("continents-btn");
+        const menuContinents = document.getElementById("menu-continents");
+        const chevronIcon = continentsBtn?.querySelector("img");
+
         function openMenu() {
           if (menuBtn) menuBtn.setAttribute("aria-expanded", "true");
           if (menuProduits) {
@@ -325,19 +383,77 @@ if (userLoggedIn) {
           }
         }
 
+        function openContinentsMenu() {
+          if (continentsBtn)
+            continentsBtn.setAttribute("aria-expanded", "true");
+          if (menuContinents) {
+            menuContinents.classList.remove("opacity-0", "invisible");
+            menuContinents.classList.add("opacity-100", "visible");
+            menuContinents.setAttribute("aria-hidden", "false");
+          }
+          if (chevronIcon) {
+            chevronIcon.classList.add("-rotate-90");
+            chevronIcon.classList.remove("rotate-90");
+          }
+        }
+
+        function closeContinentsMenu() {
+          if (continentsBtn)
+            continentsBtn.setAttribute("aria-expanded", "false");
+          if (menuContinents) {
+            menuContinents.classList.add("opacity-0", "invisible");
+            menuContinents.classList.remove("opacity-100", "visible");
+            menuContinents.setAttribute("aria-hidden", "true");
+          }
+          if (chevronIcon) {
+            chevronIcon.classList.remove("-rotate-90");
+            chevronIcon.classList.add("rotate-90");
+          }
+        }
+
+        function toggleContinentsMenu() {
+          const isExpanded =
+            continentsBtn?.getAttribute("aria-expanded") === "true";
+          if (isExpanded) {
+            closeContinentsMenu();
+          } else {
+            openContinentsMenu();
+          }
+        }
+
         if (menuBtn && menuProduits && closeMenuBtn) {
           menuBtn.addEventListener("click", openMenu);
           closeMenuBtn.addEventListener("click", closeMenu);
+        }
 
-          document.addEventListener("keydown", (event) => {
+        if (continentsBtn && menuContinents) {
+          continentsBtn.addEventListener("click", toggleContinentsMenu);
+
+          // Fermer le dropdown si on clique ailleurs
+          document.addEventListener("click", (event) => {
+            const target = event.target as Element;
             if (
-              event.key === "Escape" &&
-              menuBtn.getAttribute("aria-expanded") === "true"
+              !continentsBtn.contains(target) &&
+              !menuContinents.contains(target)
             ) {
-              closeMenu();
+              closeContinentsMenu();
             }
           });
         }
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            if (menuBtn && menuBtn.getAttribute("aria-expanded") === "true") {
+              closeMenu();
+            }
+            if (
+              continentsBtn &&
+              continentsBtn.getAttribute("aria-expanded") === "true"
+            ) {
+              closeContinentsMenu();
+            }
+          }
+        });
       });
     </script>
   </nav>
