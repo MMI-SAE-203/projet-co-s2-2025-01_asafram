@@ -63,10 +63,10 @@ const shops = await getAllShops();
       margin-top: 10px !important;
     }
 
-    /* Styles pour le bouton de filtre vraiment fixe */
+    /* Styles pour le bouton de filtre - Position normale */
     .filter-toggle-btn {
-      position: fixed !important;
-      top: 280px !important;
+      position: absolute !important;
+      top: 240px !important;
       left: 0 !important;
       z-index: 9999 !important;
       transform: translateX(0) !important;
@@ -79,35 +79,42 @@ const shops = await getAllShops();
 
     /* Styles pour la sidebar vraiment fixe avec scroll interne */
     .filter-sidebar {
-      position: fixed !important;
-      top: 160px !important;
-      left: 0 !important;
-      bottom: 0 !important;
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      bottom: auto !important;
       width: 384px !important;
       z-index: 9998 !important;
       transform: translateX(-384px) !important;
       transition: transform 0.3s ease !important;
       overflow-y: auto !important;
+      min-height: calc(100vh - 160px) !important;
     }
 
     .filter-sidebar.open {
       transform: translateX(0) !important;
     }
 
-    /* Zone de carte normale dans le flow de la page */
+    /* Zone de carte remise en position normale */
     .map-zone {
       transition: margin-left 0.3s ease !important;
       margin-left: 0 !important;
+      position: absolute !important;
+      top: 160px !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      min-height: calc(100vh - 160px) !important;
     }
 
     .map-zone.shifted {
-      margin-left: 384px !important;
+      left: 384px !important;
     }
 
-    /* Barre de recherche vraiment fixe */
+    /* Barre de recherche - Position normale en haut à droite */
     .search-bar-fixed {
-      position: fixed !important;
-      top: 176px !important;
+      position: absolute !important;
+      top: 200px !important;
       right: 16px !important;
       z-index: 10000 !important;
       transform: none !important;
@@ -248,7 +255,7 @@ const shops = await getAllShops();
     class="main-container bg-gray-50"
     x-data="{ filtersOpen: true, selectedContinents: ['tous'], selectedCategories: [], searchQuery: '', selectedShopType: 'tous' }"
   >
-    <!-- Bouton pour toggle les filtres - Vraiment fixe -->
+    <!-- Bouton pour toggle les filtres - Position normale -->
     <div
       @click="filtersOpen = !filtersOpen"
       class="filter-toggle-btn bg-sable hover:bg-sable-hover text-black font-bold p-3 rounded-r-lg shadow-lg cursor-pointer"
@@ -511,18 +518,15 @@ const shops = await getAllShops();
     <div
       class="map-zone w-full relative"
       :class="filtersOpen ? 'shifted' : ''"
-      style="height: calc(100vh - 160px);"
+      style="height: calc(100vh - 160px); min-height: 600px;"
     >
       <!-- Carte -->
       <div id="map" class="w-full h-full"></div>
     </div>
   </div>
 
-  <!-- Barre de recherche VRAIMENT fixe - complètement sortie du conteneur -->
-  <div
-    style="position: fixed !important; top: 176px !important; right: 16px !important; z-index: 99999 !important; pointer-events: auto !important;"
-    x-data="{ searchQuery: '' }"
-  >
+  <!-- Barre de recherche - Position normale en haut à droite -->
+  <div class="search-bar-fixed" x-data="{ searchQuery: '' }">
     <div class="relative">
       <input
         type="text"
